@@ -5,10 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Star, MessageCircle, Users, Search, Award, Clock } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const MentorDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("all");
+  const { toast } = useToast();
 
   const mentors = [
     {
@@ -93,6 +95,27 @@ const MentorDirectory = () => {
 
   const specialties = [...new Set(mentors.map(mentor => mentor.specialty))];
 
+  const handleConnectMentor = (mentorName: string, available: boolean) => {
+    if (available) {
+      toast({
+        title: "Connection Request Sent!",
+        description: `Your request to connect with ${mentorName} has been sent. They'll respond within 24 hours.`,
+      });
+    } else {
+      toast({
+        title: "Mentor Currently Full",
+        description: `${mentorName} is not taking new mentees right now. Try again later!`,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleViewProfile = (mentorName: string) => {
+    toast({
+      title: "Profile Details",
+      description: `Opening detailed profile for ${mentorName}...`,
+    });
+  };
   const filteredMentors = mentors.filter(mentor => {
     const matchesSearch = mentor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          mentor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -212,12 +235,17 @@ const MentorDirectory = () => {
                     size="sm" 
                     className="flex-1 text-xs" 
                     variant={mentor.availability === "Available" ? "default" : "outline"}
-                    disabled={mentor.availability !== "Available"}
+                    onClick={() => handleConnectMentor(mentor.name, mentor.availability === "Available")}
                   >
                     <MessageCircle className="h-3 w-3 mr-1" />
                     {mentor.availability === "Available" ? "Connect" : "Full"}
                   </Button>
-                  <Button size="sm" variant="outline" className="text-xs">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="text-xs"
+                    onClick={() => handleViewProfile(mentor.name)}
+                  >
                     <Award className="h-3 w-3" />
                   </Button>
                 </div>

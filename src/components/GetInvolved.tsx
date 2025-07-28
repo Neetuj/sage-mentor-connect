@@ -6,9 +6,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserPlus, GraduationCap, Heart, Mail, Phone, MapPin } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const GetInvolved = () => {
   const [formType, setFormType] = useState("student");
+  const { toast } = useToast();
 
   const opportunities = [
     {
@@ -33,6 +35,14 @@ const GetInvolved = () => {
       action: "Volunteer"
     }
   ];
+
+  const handleSubmitApplication = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Application Submitted!",
+      description: `Your ${formType} application has been received. We'll contact you within 3-5 business days.`,
+    });
+  };
 
   return (
     <section id="get-involved" className="py-20">
@@ -93,7 +103,7 @@ const GetInvolved = () => {
                 </p>
               </div>
 
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmitApplication}>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">First Name</label>

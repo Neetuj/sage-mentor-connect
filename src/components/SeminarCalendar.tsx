@@ -2,8 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin, Users, ExternalLink } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const SeminarCalendar = () => {
+  const { toast } = useToast();
   const upcomingSeminars = [
     {
       id: 1,
@@ -109,6 +111,34 @@ const SeminarCalendar = () => {
     return colors[category as keyof typeof colors] || "bg-muted text-muted-foreground";
   };
 
+  const handleRegister = (seminarTitle: string, registered: number, capacity: number) => {
+    if (registered >= capacity) {
+      toast({
+        title: "Seminar Full",
+        description: `${seminarTitle} is currently at capacity. You've been added to the waitlist.`,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Registration Successful!",
+        description: `You've been registered for "${seminarTitle}". Check your email for details.`,
+      });
+    }
+  };
+
+  const handleLearnMore = (seminarTitle: string) => {
+    toast({
+      title: "More Information",
+      description: `Opening detailed information for "${seminarTitle}"...`,
+    });
+  };
+
+  const handleViewCalendar = () => {
+    toast({
+      title: "Full Calendar",
+      description: "Opening complete seminar calendar with all upcoming events...",
+    });
+  };
   const getRegistrationStatus = (registered: number, capacity: number) => {
     const percentage = (registered / capacity) * 100;
     if (percentage >= 90) return { status: "Almost Full", color: "destructive" };
@@ -179,10 +209,18 @@ const SeminarCalendar = () => {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <Button className="flex-1" variant="default">
+                    <Button 
+                      className="flex-1" 
+                      variant="default"
+                      onClick={() => handleRegister(seminar.title, seminar.registered, parseInt(seminar.capacity.split(' ')[0]))}
+                    >
                       Register Now
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => handleLearnMore(seminar.title)}
+                    >
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Learn More
                     </Button>
@@ -194,7 +232,11 @@ const SeminarCalendar = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
+          <Button 
+            variant="outline" 
+            size="lg"
+            onClick={handleViewCalendar}
+          >
             <Calendar className="h-5 w-5 mr-2" />
             View Full Calendar
           </Button>
