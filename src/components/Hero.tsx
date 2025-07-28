@@ -9,7 +9,7 @@ const Hero = () => {
   return (
     <section id="home" className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center">
-        <h1 className="text-8xl sm:text-9xl lg:text-[12rem] font-light text-primary tracking-wider mb-8">
+        <h1 className="text-8xl sm:text-9xl lg:text-[12rem] font-black text-primary tracking-wider mb-8">
           SAGE
         </h1>
         <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-md mx-auto">
