@@ -98,28 +98,42 @@ const About = () => {
           <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-6">
             The Students Behind SAGE
           </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Three passionate high school students who saw a gap and decided to fill it.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Founders Timeline */}
+        <div className="space-y-12">
           {founders.map((founder, index) => (
-            <Card key={index} className="shadow-card hover:shadow-card-hover transition-all duration-300">
-              <CardContent className="p-6">
-                <div className="text-center mb-4">
-                  <div className="w-20 h-20 bg-hero-gradient rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl font-bold text-primary-foreground">
-                      {founder.name.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-primary">{founder.name}</h3>
-                  <p className="text-secondary font-medium">{founder.role}</p>
-                  <p className="text-sm text-muted-foreground">{founder.school}</p>
-                  <Badge variant="outline" className="mt-2">{founder.expertise}</Badge>
+            <div key={index} className={`flex flex-col lg:flex-row gap-8 items-center ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
+              {/* Profile */}
+              <div className="lg:w-1/3">
+                <Card className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-24 h-24 bg-hero-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-3xl font-bold text-primary-foreground">
+                        {founder.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-primary mb-1">{founder.name}</h3>
+                    <p className="text-secondary font-medium mb-1">{founder.role}</p>
+                    <p className="text-sm text-muted-foreground mb-2">{founder.school}</p>
+                    <Badge variant="outline">{founder.expertise}</Badge>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Story */}
+              <div className="lg:w-2/3">
+                <div className="bg-muted/30 rounded-lg p-6 relative">
+                  <div className={`absolute top-6 ${index % 2 === 1 ? 'right-[-12px]' : 'left-[-12px]'} w-6 h-6 bg-secondary rotate-45 transform`}></div>
+                  <blockquote className="text-lg text-muted-foreground italic leading-relaxed">
+                    "{founder.story}"
+                  </blockquote>
                 </div>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {founder.story}
-                </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       </div>

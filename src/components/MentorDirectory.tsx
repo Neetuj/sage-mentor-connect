@@ -1,9 +1,9 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Star, MessageCircle, Users, Search } from "lucide-react";
+import { Star, MessageCircle, Users, Search, Award, Clock } from "lucide-react";
 import { useState } from "react";
 
 const MentorDirectory = () => {
@@ -142,65 +142,85 @@ const MentorDirectory = () => {
         </div>
 
         {/* Mentors Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredMentors.map((mentor) => (
-            <Card key={mentor.id} className="shadow-card hover:shadow-card-hover transition-all duration-300">
-              <CardContent className="p-6">
-                {/* Header */}
-                <div className="text-center mb-4">
-                  <div className="w-16 h-16 bg-hero-gradient rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-xl font-bold text-primary-foreground">
-                      {mentor.name.split(' ').map(n => n[0]).join('')}
-                    </span>
+            <Card key={mentor.id} className="shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden">
+              {/* Header with availability indicator */}
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-hero-gradient rounded-full flex items-center justify-center">
+                      <span className="text-sm font-bold text-primary-foreground">
+                        {mentor.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-primary text-sm">{mentor.name}</h3>
+                      <p className="text-xs text-muted-foreground">{mentor.school}</p>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-primary">{mentor.name}</h3>
-                  <p className="text-sm text-muted-foreground">{mentor.school} • {mentor.grade}</p>
-                  <Badge variant="outline" className="mt-1">{mentor.specialty}</Badge>
+                  <div className={`w-3 h-3 rounded-full ${mentor.availability === "Available" ? "bg-secondary" : "bg-muted"}`}></div>
+                </div>
+              </CardHeader>
+
+              <CardContent className="pt-0">
+                {/* Quick stats bar */}
+                <div className="flex items-center justify-between mb-3 p-2 bg-muted/30 rounded-lg">
+                  <div className="flex items-center gap-1 text-xs">
+                    <Star className="h-3 w-3 text-accent fill-current" />
+                    <span className="font-medium">{mentor.rating}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs">
+                    <Users className="h-3 w-3 text-secondary" />
+                    <span>{mentor.mentees}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs">
+                    <Clock className="h-3 w-3 text-primary" />
+                    <span>{mentor.experience}</span>
+                  </div>
                 </div>
 
-                {/* Stats */}
-                <div className="flex justify-center items-center gap-4 mb-4 text-sm">
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-accent fill-current" />
-                    <span>{mentor.rating}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Users className="h-4 w-4 text-secondary" />
-                    <span>{mentor.mentees} mentees</span>
-                  </div>
-                  <Badge 
-                    variant={mentor.availability === "Available" ? "default" : "secondary"}
-                    className="text-xs"
-                  >
-                    {mentor.availability}
-                  </Badge>
+                {/* Specialty badge */}
+                <div className="mb-3">
+                  <Badge variant="secondary" className="text-xs">{mentor.specialty}</Badge>
                 </div>
 
                 {/* Bio */}
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                <p className="text-xs text-muted-foreground mb-3 leading-relaxed line-clamp-3">
                   {mentor.bio}
                 </p>
 
-                {/* Skills */}
+                {/* Skills tags */}
                 <div className="mb-4">
                   <div className="flex flex-wrap gap-1">
-                    {mentor.skills.map((skill, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
+                    {mentor.skills.slice(0, 3).map((skill, index) => (
+                      <Badge key={index} variant="outline" className="text-xs px-2 py-0">
                         {skill}
                       </Badge>
                     ))}
+                    {mentor.skills.length > 3 && (
+                      <Badge variant="outline" className="text-xs px-2 py-0">
+                        +{mentor.skills.length - 3}
+                      </Badge>
+                    )}
                   </div>
                 </div>
 
-                {/* Connect Button */}
-                <Button 
-                  className="w-full" 
-                  variant={mentor.availability === "Available" ? "default" : "outline"}
-                  disabled={mentor.availability !== "Available"}
-                >
-                  <MessageCircle className="h-4 w-4 mr-2" />
-                  {mentor.availability === "Available" ? "Connect with Mentor" : "Currently Full"}
-                </Button>
+                {/* Action buttons */}
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm" 
+                    className="flex-1 text-xs" 
+                    variant={mentor.availability === "Available" ? "default" : "outline"}
+                    disabled={mentor.availability !== "Available"}
+                  >
+                    <MessageCircle className="h-3 w-3 mr-1" />
+                    {mentor.availability === "Available" ? "Connect" : "Full"}
+                  </Button>
+                  <Button size="sm" variant="outline" className="text-xs">
+                    <Award className="h-3 w-3" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
