@@ -7,9 +7,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UserPlus, GraduationCap, Heart, Mail, Phone, MapPin } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { applicationFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_MESSAGES } from "@/lib/security";
+import { z } from "zod";
 
 const GetInvolved = () => {
   const [formType, setFormType] = useState("student");
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    school: "",
+    gradeLevel: "",
+    interests: "",
+    additionalInfo: "",
+    parentEmail: ""
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const opportunities = [
@@ -36,12 +50,99 @@ const GetInvolved = () => {
     }
   ];
 
-  const handleSubmitApplication = (e: React.FormEvent) => {
+  const handleInputChange = (field: string, value: string) => {
+    const sanitizedValue = sanitizeString(value);
+    setFormData(prev => ({ ...prev, [field]: sanitizedValue }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const validateForm = () => {
+    try {
+      const dataToValidate = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        school: formData.school,
+        gradeLevel: formData.gradeLevel,
+        interests: formData.interests,
+        additionalInfo: formData.additionalInfo,
+        ...(formType === 'student' && { parentEmail: formData.parentEmail })
+      };
+      
+      applicationFormSchema.parse(dataToValidate);
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.issues.forEach((issue) => {
+          if (issue.path[0]) {
+            newErrors[issue.path[0].toString()] = issue.message;
+          }
+        });
+        setErrors(newErrors);
+      }
+      return false;
+    }
+  };
+
+  const handleSubmitApplication = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Application Submitted!",
-      description: `Your ${formType} application has been received. We'll contact you within 3-5 business days.`,
-    });
+    
+    if (isSubmitting) return;
+    
+    // Rate limiting check
+    if (!checkRateLimit(`application_${formType}`, 3, 300000)) { // 3 attempts per 5 minutes
+      toast({
+        title: "Error",
+        description: SECURITY_ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!validateForm()) {
+      toast({
+        title: "Validation Error",
+        description: "Please check your inputs and try again.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: "Application Submitted!",
+        description: `Your ${formType} application has been received. We'll contact you within 3-5 business days.`,
+      });
+      
+      // Reset form
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        school: "",
+        gradeLevel: "",
+        interests: "",
+        additionalInfo: "",
+        parentEmail: ""
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: SECURITY_ERROR_MESSAGES.SUBMISSION_FAILED,
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -106,30 +207,58 @@ const GetInvolved = () => {
               <form className="space-y-6" onSubmit={handleSubmitApplication}>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">First Name</label>
-                    <Input placeholder="Enter your first name" />
+                    <label className="block text-sm font-medium mb-2">First Name *</label>
+                    <Input 
+                      placeholder="Enter your first name" 
+                      value={formData.firstName}
+                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      maxLength={25}
+                      required
+                    />
+                    {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Last Name</label>
-                    <Input placeholder="Enter your last name" />
+                    <label className="block text-sm font-medium mb-2">Last Name *</label>
+                    <Input 
+                      placeholder="Enter your last name" 
+                      value={formData.lastName}
+                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      maxLength={25}
+                      required
+                    />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Email</label>
-                  <Input type="email" placeholder="Enter your email address" />
+                  <label className="block text-sm font-medium mb-2">Email *</label>
+                  <Input 
+                    type="email" 
+                    placeholder="Enter your email address" 
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    maxLength={100}
+                    required
+                  />
+                  {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
                 </div>
 
                 {formType !== 'volunteer' && (
                   <>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2">School</label>
-                        <Input placeholder="Enter your school name" />
+                        <label className="block text-sm font-medium mb-2">School *</label>
+                        <Input 
+                          placeholder="Enter your school name" 
+                          value={formData.school}
+                          onChange={(e) => handleInputChange('school', e.target.value)}
+                          maxLength={100}
+                          required
+                        />
+                        {errors.school && <p className="text-sm text-destructive mt-1">{errors.school}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-2">Grade Level</label>
-                        <Select>
+                        <label className="block text-sm font-medium mb-2">Grade Level *</label>
+                        <Select value={formData.gradeLevel} onValueChange={(value) => handleInputChange('gradeLevel', value)}>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your grade" />
                           </SelectTrigger>
@@ -158,9 +287,9 @@ const GetInvolved = () => {
 
                     <div>
                       <label className="block text-sm font-medium mb-2">
-                        {formType === 'student' ? 'Engineering Interests' : 'Engineering Specialty'}
+                        {formType === 'student' ? 'Engineering Interests *' : 'Engineering Specialty *'}
                       </label>
-                      <Select>
+                      <Select value={formData.interests} onValueChange={(value) => handleInputChange('interests', value)}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select your area of interest" />
                         </SelectTrigger>
@@ -180,24 +309,38 @@ const GetInvolved = () => {
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    {formType === 'student' ? 'What interests you about engineering?' : 
-                     formType === 'mentor' ? 'Why do you want to be a mentor?' : 'How would you like to help?'}
+                    {formType === 'student' ? 'What interests you about engineering? *' : 
+                     formType === 'mentor' ? 'Why do you want to be a mentor? *' : 'How would you like to help? *'}
                   </label>
                   <Textarea 
                     placeholder="Tell us about yourself and your interests..."
                     rows={4}
+                    value={formData.additionalInfo}
+                    onChange={(e) => handleInputChange('additionalInfo', e.target.value)}
+                    maxLength={1000}
+                    required
                   />
+                  {errors.additionalInfo && <p className="text-sm text-destructive mt-1">{errors.additionalInfo}</p>}
+                  <p className="text-xs text-muted-foreground mt-1">{formData.additionalInfo.length}/1000 characters</p>
                 </div>
 
                 {formType === 'student' && (
                   <div>
-                    <label className="block text-sm font-medium mb-2">Parent/Guardian Email</label>
-                    <Input type="email" placeholder="Parent or guardian email address" />
+                    <label className="block text-sm font-medium mb-2">Parent/Guardian Email *</label>
+                    <Input 
+                      type="email" 
+                      placeholder="Parent or guardian email address" 
+                      value={formData.parentEmail}
+                      onChange={(e) => handleInputChange('parentEmail', e.target.value)}
+                      maxLength={100}
+                      required
+                    />
+                    {errors.parentEmail && <p className="text-sm text-destructive mt-1">{errors.parentEmail}</p>}
                   </div>
                 )}
 
-                <Button type="submit" className="w-full" size="lg">
-                  Submit Application
+                <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                  {isSubmitting ? "Submitting..." : "Submit Application"}
                 </Button>
               </form>
             </CardContent>

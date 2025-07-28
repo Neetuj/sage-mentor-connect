@@ -6,11 +6,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Star, MessageCircle, Users, Search, Award, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { sanitizeString, searchSchema } from "@/lib/security";
+import { z } from "zod";
 
 const MentorDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("all");
+  const [searchError, setSearchError] = useState("");
   const { toast } = useToast();
+
+  const handleSearchChange = (value: string) => {
+    const sanitizedValue = sanitizeString(value);
+    try {
+      searchSchema.parse({ query: sanitizedValue });
+      setSearchTerm(sanitizedValue);
+      setSearchError("");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setSearchError(error.issues[0]?.message || "Invalid search query");
+      }
+    }
+  };
 
   const mentors = [
     {
@@ -145,9 +161,11 @@ const MentorDirectory = () => {
             <Input
               placeholder="Search mentors by name, specialty, or skills..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10"
+              maxLength={100}
             />
+            {searchError && <p className="text-sm text-destructive mt-1">{searchError}</p>}
           </div>
           <Select value={filterSpecialty} onValueChange={setFilterSpecialty}>
             <SelectTrigger className="w-full sm:w-48">
