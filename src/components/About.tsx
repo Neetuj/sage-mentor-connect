@@ -103,37 +103,30 @@ const About = () => {
           </p>
         </div>
 
-        {/* Founders Timeline */}
-        <div className="space-y-12">
+        <div className="grid md:grid-cols-3 gap-8">
           {founders.map((founder, index) => (
-            <div key={index} className={`flex flex-col lg:flex-row gap-8 items-center ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
-              {/* Profile */}
-              <div className="lg:w-1/3">
-                <Card className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-24 h-24 bg-hero-gradient rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-3xl font-bold text-primary-foreground">
-                        {founder.name.split(' ').map(n => n[0]).join('')}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-primary mb-1">{founder.name}</h3>
-                    <p className="text-secondary font-medium mb-1">{founder.role}</p>
-                    <p className="text-sm text-muted-foreground mb-2">{founder.school}</p>
-                    <Badge variant="outline">{founder.expertise}</Badge>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Story */}
-              <div className="lg:w-2/3">
-                <div className="bg-muted/30 rounded-lg p-6 relative">
-                  <div className={`absolute top-6 ${index % 2 === 1 ? 'right-[-12px]' : 'left-[-12px]'} w-6 h-6 bg-secondary rotate-45 transform`}></div>
-                  <blockquote className="text-lg text-muted-foreground italic leading-relaxed">
-                    "{founder.story}"
-                  </blockquote>
+            <Card key={index} className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary">
+              <CardContent className="p-6">
+                <div className="text-center mb-6">
+                  <div className="w-24 h-24 bg-hero-gradient rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <span className="text-2xl font-bold text-primary-foreground">
+                      {founder.name.split(' ').map(n => n[0]).join('')}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-primary mb-2">{founder.name}</h3>
+                  <p className="text-secondary font-medium mb-1">{founder.role}</p>
+                  <p className="text-sm text-muted-foreground mb-3">{founder.school}</p>
+                  <Badge variant="outline" className="mb-4">{founder.expertise}</Badge>
                 </div>
-              </div>
-            </div>
+                
+                <div className="bg-muted/30 rounded-lg p-4 relative">
+                  <div className="absolute top-[-8px] left-1/2 transform -translate-x-1/2 w-4 h-4 bg-muted/30 rotate-45"></div>
+                  <p className="text-muted-foreground text-sm leading-relaxed italic">
+                    "{founder.story}"
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>
