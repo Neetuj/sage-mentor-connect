@@ -17,24 +17,35 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    /* SAGE Engineering Colors */
+    --primary: 210 100% 12%; /* Deep Engineering Blue */
     --primary-foreground: 210 40% 98%;
+    --primary-light: 210 100% 20%;
+    
+    --secondary: 142 76% 36%; /* Growth Green */
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 142 76% 50%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 25 95% 53%; /* Innovation Orange */
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 25 95% 65%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 210 100% 12%;
+
+    /* SAGE Design System */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--background)), hsl(210 40% 98%));
+    --shadow-card: 0 4px 6px -1px hsl(var(--primary) / 0.1), 0 2px 4px -2px hsl(var(--primary) / 0.1);
+    --shadow-card-hover: 0 10px 15px -3px hsl(var(--primary) / 0.1), 0 4px 6px -4px hsl(var(--primary) / 0.1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.5rem;
 
