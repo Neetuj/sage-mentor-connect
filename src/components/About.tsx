@@ -6,23 +6,23 @@ const About = () => {
   const founders = [
     {
       name: "Isabel Conejo",
-      role: "Co-Founder & President",
-      school: "Lincoln High School",
-      expertise: "Robotics & Computer Science",
+      role: "Founder & President",
+      school: "Bellevue High School, WA",
+      expertise: "Mechanical & Industrial",
       story: "Started SAGE after noticing the lack of early engineering exposure in elementary schools. Alex believes every child deserves to discover the wonder of engineering."
     },
     {
-      name: "Maya Patel",
-      role: "Co-Founder & VP of Mentorship",
-      school: "Roosevelt High School", 
-      expertise: "Biomedical Engineering",
+      name: "Rohan Jain",
+      role: "Vice President",
+      school: "Coppell High School, TX", 
+      expertise: "Aerospace Engineering",
       story: "Passionate about making STEM accessible to all students, especially those from underrepresented communities. Maya coordinates our mentor training programs."
     },
     {
-      name: "Jordan Williams",
-      role: "Co-Founder & Events Director",
-      school: "Washington High School",
-      expertise: "Environmental Engineering",
+      name: "Hannah Shin",
+      role: "Marketing & Social Media Outreach Director",
+      school: "West Ranch High School, CA",
+      expertise: "Biomedical Engineering",
       story: "Organizes our industry seminars and connects students with professionals. Jordan envisions a future where every young person sees engineering as approachable and exciting."
     }
   ];
