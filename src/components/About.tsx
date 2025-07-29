@@ -5,7 +5,7 @@ import { Lightbulb, Heart, Target } from "lucide-react";
 const About = () => {
   const founders = [
     {
-      name: "Isabel Conejo",
+      name: "Rohan Jain",
       role: "Co-Founder & President",
       school: "Lincoln High School",
       expertise: "Robotics & Computer Science",
