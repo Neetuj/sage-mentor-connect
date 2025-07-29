@@ -9,21 +9,21 @@ const About = () => {
       role: "Founder & President",
       school: "Bellevue High School, WA",
       expertise: "Mechanical & Industrial",
-      story: "Started SAGE after noticing the lack of early engineering exposure in elementary schools. Alex believes every child deserves to discover the wonder of engineering."
+      bio: "Isabel founded SAGE to address the lack of early engineering exposure in elementary schools. She is passionate about inspiring young minds to discover engineering."
     },
     {
       name: "Rohan Jain",
       role: "Vice President",
       school: "Coppell High School, TX", 
       expertise: "Aerospace Engineering",
-      story: "Passionate about making STEM accessible to all students, especially those from underrepresented communities. Maya coordinates our tutor training programs."
+      bio: "Rohan is dedicated to making STEM accessible to all students, especially those from underrepresented communities. He coordinates our tutor training programs."
     },
     {
       name: "Hannah Shin",
       role: "Marketing & Social Media Outreach Director",
       school: "West Ranch High School, CA",
       expertise: "Biomedical Engineering",
-      story: "Organizes our industry seminars and connects students with professionals. Jordan envisions a future where every young person sees engineering as approachable and exciting."
+      bio: "Hannah organizes our industry seminars and connects students with professionals. She works to make engineering approachable and exciting for young people."
     }
   ];
 
@@ -122,8 +122,8 @@ const About = () => {
                 
                 <div className="bg-muted/30 rounded-lg p-4 relative">
                   <div className="absolute top-[-8px] left-1/2 transform -translate-x-1/2 w-4 h-4 bg-muted/30 rotate-45"></div>
-                  <p className="text-muted-foreground text-sm leading-relaxed italic">
-                    "{founder.story}"
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {founder.bio}
                   </p>
                 </div>
               </CardContent>
