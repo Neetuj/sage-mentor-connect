@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { sanitizeString, searchSchema } from "@/lib/security";
 import { z } from "zod";
 
-const MentorDirectory = () => {
+const TutorDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("all");
   const [searchError, setSearchError] = useState("");
@@ -28,128 +28,128 @@ const MentorDirectory = () => {
     }
   };
 
-  const mentors = [
+  const tutors = [
     {
       id: 1,
-      name: "MENTOR NAME",
-      school: "MENTOR SCHOOL",
-      grade: "MENTOR GRADE",
-      specialty: "MENTOR SPECIALTY",
-      experience: "MENTOR EXPERIENCE",
+      name: "TUTOR NAME",
+      school: "TUTOR SCHOOL",
+      grade: "TUTOR GRADE",
+      specialty: "TUTOR SPECIALTY",
+      experience: "TUTOR EXPERIENCE",
       rating: 5.0,
-      mentees: 8,
-      bio: "MENTOR BIO",
+      students: 8,
+      bio: "TUTOR BIO",
       skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
       availability: "Available"
     },
     {
       id: 2,
-      name: "MENTOR NAME",
-      school: "MENTOR SCHOOL",
-      grade: "MENTOR GRADE",
-      specialty: "MENTOR SPECIALTY",
-      experience: "MENTOR EXPERIENCE",
+      name: "TUTOR NAME",
+      school: "TUTOR SCHOOL",
+      grade: "TUTOR GRADE",
+      specialty: "TUTOR SPECIALTY",
+      experience: "TUTOR EXPERIENCE",
       rating: 5.0,
-      mentees: 8,
-      bio: "MENTOR BIO",
+      students: 8,
+      bio: "TUTOR BIO",
       skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
       availability: "Available"
     },
     {
       id: 3,
-      name: "MENTOR NAME",
-      school: "MENTOR SCHOOL",
-      grade: "MENTOR GRADE",
-      specialty: "MENTOR SPECIALTY",
-      experience: "MENTOR EXPERIENCE",
+      name: "TUTOR NAME",
+      school: "TUTOR SCHOOL",
+      grade: "TUTOR GRADE",
+      specialty: "TUTOR SPECIALTY",
+      experience: "TUTOR EXPERIENCE",
       rating: 5.0,
-      mentees: 8,
-      bio: "MENTOR BIO",
+      students: 8,
+      bio: "TUTOR BIO",
       skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
       availability: "Available"
     },
     {
       id: 4,
-      name: "MENTOR NAME",
-      school: "MENTOR SCHOOL",
-      grade: "MENTOR GRADE",
-      specialty: "MENTOR SPECIALTY",
-      experience: "MENTOR EXPERIENCE",
+      name: "TUTOR NAME",
+      school: "TUTOR SCHOOL",
+      grade: "TUTOR GRADE",
+      specialty: "TUTOR SPECIALTY",
+      experience: "TUTOR EXPERIENCE",
       rating: 5.0,
-      mentees: 8,
-      bio: "MENTOR BIO",
+      students: 8,
+      bio: "TUTOR BIO",
       skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
       availability: "Available"
     },
     {
       id: 5,
-      name: "MENTOR NAME",
-      school: "MENTOR SCHOOL",
-      grade: "MENTOR GRADE",
-      specialty: "MENTOR SPECIALTY",
-      experience: "MENTOR EXPERIENCE",
+      name: "TUTOR NAME",
+      school: "TUTOR SCHOOL",
+      grade: "TUTOR GRADE",
+      specialty: "TUTOR SPECIALTY",
+      experience: "TUTOR EXPERIENCE",
       rating: 5.0,
-      mentees: 8,
-      bio: "MENTOR BIO",
+      students: 8,
+      bio: "TUTOR BIO",
       skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
       availability: "Available"
     },
     {
       id: 6,
-      name: "MENTOR NAME",
-      school: "MENTOR SCHOOL",
-      grade: "MENTOR GRADE",
-      specialty: "MENTOR SPECIALTY",
-      experience: "MENTOR EXPERIENCE",
+      name: "TUTOR NAME",
+      school: "TUTOR SCHOOL",
+      grade: "TUTOR GRADE",
+      specialty: "TUTOR SPECIALTY",
+      experience: "TUTOR EXPERIENCE",
       rating: 5.0,
-      mentees: 8,
-      bio: "MENTOR BIO",
+      students: 8,
+      bio: "TUTOR BIO",
       skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
       availability: "Available"
     }
   ];
 
-  const specialties = [...new Set(mentors.map(mentor => mentor.specialty))];
+  const specialties = [...new Set(tutors.map(tutor => tutor.specialty))];
 
-  const handleConnectMentor = (mentorName: string, available: boolean) => {
+  const handleConnectTutor = (tutorName: string, available: boolean) => {
     if (available) {
       toast({
         title: "Connection Request Sent!",
-        description: `Your request to connect with ${mentorName} has been sent. They'll respond within 24 hours.`,
+        description: `Your request to connect with ${tutorName} has been sent. They'll respond within 24 hours.`,
       });
     } else {
       toast({
-        title: "Mentor Currently Full",
-        description: `${mentorName} is not taking new mentees right now. Try again later!`,
+        title: "Tutor Currently Full",
+        description: `${tutorName} is not taking new students right now. Try again later!`,
         variant: "destructive",
       });
     }
   };
 
-  const handleViewProfile = (mentorName: string) => {
+  const handleViewProfile = (tutorName: string) => {
     toast({
       title: "Profile Details",
-      description: `Opening detailed profile for ${mentorName}...`,
+      description: `Opening detailed profile for ${tutorName}...`,
     });
   };
-  const filteredMentors = mentors.filter(mentor => {
-    const matchesSearch = mentor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         mentor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         mentor.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesSpecialty = filterSpecialty === "all" || mentor.specialty === filterSpecialty;
+  const filteredTutors = tutors.filter(tutor => {
+    const matchesSearch = tutor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         tutor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         tutor.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSpecialty = filterSpecialty === "all" || tutor.specialty === filterSpecialty;
     return matchesSearch && matchesSpecialty;
   });
 
   return (
-    <section id="mentors" className="py-20">
+    <section id="tutors" className="py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <Badge variant="secondary" className="mb-4">Find Your Mentor</Badge>
+          <Badge variant="secondary" className="mb-4">Find Your Tutor</Badge>
           <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-6">
-            Connect with Amazing Student Mentors
+            Connect with Amazing Student Tutors
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Our high school mentors are passionate about sharing their knowledge and helping 
+            Our high school tutors are passionate about sharing their knowledge and helping 
             younger students discover the excitement of engineering.
           </p>
         </div>
@@ -159,7 +159,7 @@ const MentorDirectory = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search mentors by name, specialty, or skills..."
+              placeholder="Search tutors by name, specialty, or skills..."
               value={searchTerm}
               onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10"
@@ -182,25 +182,25 @@ const MentorDirectory = () => {
           </Select>
         </div>
 
-        {/* Mentors Grid */}
+        {/* Tutors Grid */}
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredMentors.map((mentor) => (
-            <Card key={mentor.id} className="shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden">
+          {filteredTutors.map((tutor) => (
+            <Card key={tutor.id} className="shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden">
               {/* Header with availability indicator */}
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-hero-gradient rounded-full flex items-center justify-center">
                       <span className="text-sm font-bold text-primary-foreground">
-                        {mentor.name.split(' ').map(n => n[0]).join('')}
+                        {tutor.name.split(' ').map(n => n[0]).join('')}
                       </span>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary text-sm">{mentor.name}</h3>
-                      <p className="text-xs text-muted-foreground">{mentor.school}</p>
+                      <h3 className="font-semibold text-primary text-sm">{tutor.name}</h3>
+                      <p className="text-xs text-muted-foreground">{tutor.school}</p>
                     </div>
                   </div>
-                  <div className={`w-3 h-3 rounded-full ${mentor.availability === "Available" ? "bg-secondary" : "bg-muted"}`}></div>
+                  <div className={`w-3 h-3 rounded-full ${tutor.availability === "Available" ? "bg-secondary" : "bg-muted"}`}></div>
                 </div>
               </CardHeader>
 
@@ -209,39 +209,39 @@ const MentorDirectory = () => {
                 <div className="flex items-center justify-between mb-3 p-2 bg-muted/30 rounded-lg">
                   <div className="flex items-center gap-1 text-xs">
                     <Star className="h-3 w-3 text-accent fill-current" />
-                    <span className="font-medium">{mentor.rating}</span>
+                    <span className="font-medium">{tutor.rating}</span>
                   </div>
                   <div className="flex items-center gap-1 text-xs">
                     <Users className="h-3 w-3 text-secondary" />
-                    <span>{mentor.mentees}</span>
+                    <span>{tutor.students}</span>
                   </div>
                   <div className="flex items-center gap-1 text-xs">
                     <Clock className="h-3 w-3 text-primary" />
-                    <span>{mentor.experience}</span>
+                    <span>{tutor.experience}</span>
                   </div>
                 </div>
 
                 {/* Specialty badge */}
                 <div className="mb-3">
-                  <Badge variant="secondary" className="text-xs">{mentor.specialty}</Badge>
+                  <Badge variant="secondary" className="text-xs">{tutor.specialty}</Badge>
                 </div>
 
                 {/* Bio */}
                 <p className="text-xs text-muted-foreground mb-3 leading-relaxed line-clamp-3">
-                  {mentor.bio}
+                  {tutor.bio}
                 </p>
 
                 {/* Skills tags */}
                 <div className="mb-4">
                   <div className="flex flex-wrap gap-1">
-                    {mentor.skills.slice(0, 3).map((skill, index) => (
+                    {tutor.skills.slice(0, 3).map((skill, index) => (
                       <Badge key={index} variant="outline" className="text-xs px-2 py-0">
                         {skill}
                       </Badge>
                     ))}
-                    {mentor.skills.length > 3 && (
+                    {tutor.skills.length > 3 && (
                       <Badge variant="outline" className="text-xs px-2 py-0">
-                        +{mentor.skills.length - 3}
+                        +{tutor.skills.length - 3}
                       </Badge>
                     )}
                   </div>
@@ -252,17 +252,17 @@ const MentorDirectory = () => {
                   <Button 
                     size="sm" 
                     className="flex-1 text-xs" 
-                    variant={mentor.availability === "Available" ? "default" : "outline"}
-                    onClick={() => handleConnectMentor(mentor.name, mentor.availability === "Available")}
+                    variant={tutor.availability === "Available" ? "default" : "outline"}
+                    onClick={() => handleConnectTutor(tutor.name, tutor.availability === "Available")}
                   >
                     <MessageCircle className="h-3 w-3 mr-1" />
-                    {mentor.availability === "Available" ? "Connect" : "Full"}
+                    {tutor.availability === "Available" ? "Connect" : "Full"}
                   </Button>
                   <Button 
                     size="sm" 
                     variant="outline" 
                     className="text-xs"
-                    onClick={() => handleViewProfile(mentor.name)}
+                    onClick={() => handleViewProfile(tutor.name)}
                   >
                     <Award className="h-3 w-3" />
                   </Button>
@@ -272,10 +272,10 @@ const MentorDirectory = () => {
           ))}
         </div>
 
-        {filteredMentors.length === 0 && (
+        {filteredTutors.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground text-lg">
-              No mentors found matching your search criteria.
+              No tutors found matching your search criteria.
             </p>
           </div>
         )}
@@ -284,4 +284,4 @@ const MentorDirectory = () => {
   );
 };
 
-export default MentorDirectory;
+export default TutorDirectory;

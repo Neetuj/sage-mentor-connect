@@ -25,7 +25,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-primary-foreground/80 text-sm leading-relaxed">
-              Connecting young minds with engineering mentors and inspiring the next generation of problem solvers.
+              Connecting young minds with engineering tutors and inspiring the next generation of problem solvers.
             </p>
           </div>
 
@@ -46,10 +46,10 @@ const Footer = () => {
                 About Us
               </button>
               <button 
-                onClick={() => scrollToSection('mentors')}
+                onClick={() => scrollToSection('tutors')}
                 className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
               >
-                Find Mentors
+                Find Tutors
               </button>
               <button 
                 onClick={() => scrollToSection('seminars')}
@@ -64,7 +64,7 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Programs</h4>
             <div className="space-y-2 text-sm text-primary-foreground/80">
-              <p>Student Mentorship</p>
+              <p>Student Tutoring</p>
               <p>Industry Seminars</p>
               <p>Hands-on Workshops</p>
               <p>Engineering Exposure</p>

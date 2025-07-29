@@ -16,7 +16,7 @@ const About = () => {
       role: "Vice President",
       school: "Coppell High School, TX", 
       expertise: "Aerospace Engineering",
-      story: "Passionate about making STEM accessible to all students, especially those from underrepresented communities. Maya coordinates our mentor training programs."
+      story: "Passionate about making STEM accessible to all students, especially those from underrepresented communities. Maya coordinates our tutor training programs."
     },
     {
       name: "Hannah Shin",
@@ -44,7 +44,7 @@ const About = () => {
             </p>
             <p>
               What started as a small after-school program has grown into a thriving community connecting hundreds 
-              of young minds with inspiring mentors and industry professionals. Our mission is to spark the 
+              of young minds with inspiring tutors and industry professionals. Our mission is to spark the 
               engineering passion early and nurture it through meaningful relationships.
             </p>
           </div>
@@ -60,7 +60,7 @@ const About = () => {
               <h3 className="text-xl font-semibold mb-3">Our Mission</h3>
               <p className="text-muted-foreground">
                 SAGE empowers students to explore engineering through engaging, student/professional-led learning experiences, both online and in person. 
-                Our goal is to make engineering education and exploration more accessible, inclusive, and inspiring by fostering curiosity, mentorship, and creativity.
+                Our goal is to make engineering education and exploration more accessible, inclusive, and inspiring by fostering curiosity, tutoring, and creativity.
               </p>
             </CardContent>
           </Card>
@@ -73,7 +73,7 @@ const About = () => {
               <h3 className="text-xl font-semibold mb-3">Our Vision</h3>
               <p className="text-muted-foreground">
                 SAGE envisions a future where all students, regardless of background or resources, see themselves as capable engineers and problem solvers.
-                We aim to build a world where mentorship, exploration, and access to engineering opportunities are the norm, empowering young minds to shape and solve the challenges our world might face.
+                We aim to build a world where tutoring, exploration, and access to engineering opportunities are the norm, empowering young minds to shape and solve the challenges our world might face.
               </p>
             </CardContent>
           </Card>

@@ -42,10 +42,10 @@ const Header = () => {
               About
             </button>
             <button 
-              onClick={() => scrollToSection('mentors')}
+              onClick={() => scrollToSection('tutors')}
               className="text-foreground hover:text-primary transition-colors"
             >
-              Mentors
+              Tutors
             </button>
             <button 
               onClick={() => scrollToSection('seminars')}
@@ -84,10 +84,10 @@ const Header = () => {
                 About
               </button>
               <button 
-                onClick={() => scrollToSection('mentors')}
+                onClick={() => scrollToSection('tutors')}
                 className="text-left text-foreground hover:text-primary transition-colors"
               >
-                Mentors
+                Tutors
               </button>
               <button 
                 onClick={() => scrollToSection('seminars')}

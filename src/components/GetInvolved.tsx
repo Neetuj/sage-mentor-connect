@@ -29,17 +29,17 @@ const GetInvolved = () => {
   const opportunities = [
     {
       icon: UserPlus,
-      title: "Become a Mentee",
-      description: "Elementary and middle school students can join our program to connect with inspiring high school mentors.",
+      title: "Get Tutoring",
+      description: "Elementary and middle school students can join our program to connect with inspiring high school tutors.",
       requirements: "Grades 3-8 • Curiosity about engineering • Weekly commitment",
       action: "Apply as Student"
     },
     {
       icon: GraduationCap, 
-      title: "Become a Mentor",
+      title: "Become a Tutor",
       description: "High school students with engineering passion can guide younger students and share their knowledge.",
       requirements: "Grades 9-12 • Engineering interest • 2-3 hours per week",
-      action: "Apply as Mentor"
+      action: "Apply as Tutor"
     },
     {
       icon: Heart,
@@ -154,7 +154,7 @@ const GetInvolved = () => {
             Get Involved with SAGE
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Whether you're a student looking for mentorship, a high schooler ready to mentor, 
+            Whether you're a student looking for tutoring, a high schooler ready to tutor, 
             or a community member wanting to support engineering education, there's a place for you.
           </p>
         </div>
@@ -181,7 +181,7 @@ const GetInvolved = () => {
                 <Button 
                   className="w-full" 
                   onClick={() => setFormType(opportunity.action.toLowerCase().includes('student') ? 'student' : 
-                                           opportunity.action.toLowerCase().includes('mentor') ? 'mentor' : 'volunteer')}
+                                           opportunity.action.toLowerCase().includes('tutor') ? 'tutor' : 'volunteer')}
                 >
                   {opportunity.action}
                 </Button>
@@ -197,7 +197,7 @@ const GetInvolved = () => {
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-primary mb-2">
                   {formType === 'student' ? 'Student Application' : 
-                   formType === 'mentor' ? 'Mentor Application' : 'Volunteer Registration'}
+                   formType === 'tutor' ? 'Tutor Application' : 'Volunteer Registration'}
                 </h3>
                 <p className="text-muted-foreground">
                   Fill out this form to get started with SAGE
@@ -310,7 +310,7 @@ const GetInvolved = () => {
                 <div>
                   <label className="block text-sm font-medium mb-2">
                     {formType === 'student' ? 'What interests you about engineering? *' : 
-                     formType === 'mentor' ? 'Why do you want to be a mentor? *' : 'How would you like to help? *'}
+                     formType === 'tutor' ? 'Why do you want to be a tutor? *' : 'How would you like to help? *'}
                   </label>
                   <Textarea 
                     placeholder="Tell us about yourself and your interests..."
