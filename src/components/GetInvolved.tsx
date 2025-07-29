@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserPlus, GraduationCap, Heart, Mail, Phone, MapPin } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { applicationFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_MESSAGES } from "@/lib/security";
 import { z } from "zod";
@@ -20,11 +20,26 @@ const GetInvolved = () => {
     gradeLevel: "",
     interests: "",
     additionalInfo: "",
-    parentEmail: ""
+    parentEmail: "",
+    selectedTutor: ""
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  // Listen for tutor selection from TutorDirectory
+  useEffect(() => {
+    const handleTutorSelection = (event: CustomEvent) => {
+      const { tutorName, formType: selectedFormType } = event.detail;
+      setFormType(selectedFormType);
+      setFormData(prev => ({ ...prev, selectedTutor: tutorName }));
+    };
+
+    window.addEventListener('selectTutor', handleTutorSelection as EventListener);
+    return () => {
+      window.removeEventListener('selectTutor', handleTutorSelection as EventListener);
+    };
+  }, []);
 
   const opportunities = [
     {
@@ -132,7 +147,8 @@ const GetInvolved = () => {
         gradeLevel: "",
         interests: "",
         additionalInfo: "",
-        parentEmail: ""
+        parentEmail: "",
+        selectedTutor: ""
       });
     } catch (error) {
       toast({
@@ -320,6 +336,26 @@ const GetInvolved = () => {
                       </Select>
                     </div>
                   </>
+                )}
+
+                {formType === 'student' && (
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Preferred Tutor (Optional)</label>
+                    <Select value={formData.selectedTutor} onValueChange={(value) => handleInputChange('selectedTutor', value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose a specific tutor or leave blank for any available tutor" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">Any Available Tutor</SelectItem>
+                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
+                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
+                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
+                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
+                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
+                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 )}
 
                 <div>

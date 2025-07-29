@@ -113,10 +113,16 @@ const TutorDirectory = () => {
 
   const handleConnectTutor = (tutorName: string, available: boolean) => {
     if (available) {
-      toast({
-        title: "Connection Request Sent!",
-        description: `Your request to connect with ${tutorName} has been sent. They'll respond within 24 hours.`,
-      });
+      // Scroll to form and set tutor selection
+      const formElement = document.querySelector('#tutoring-form');
+      if (formElement) {
+        formElement.scrollIntoView({ behavior: 'smooth' });
+        // Trigger custom event to set selected tutor
+        const event = new CustomEvent('selectTutor', { 
+          detail: { tutorName, formType: 'student' } 
+        });
+        window.dispatchEvent(event);
+      }
     } else {
       toast({
         title: "Tutor Currently Full",
