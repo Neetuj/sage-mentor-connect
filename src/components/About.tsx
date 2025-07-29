@@ -40,10 +40,12 @@ const About = () => {
           <div className="max-w-4xl mx-auto text-lg text-muted-foreground leading-relaxed">
             <p className="mb-6">
               We founded SAGE as three high school students who met at an engineering exploration camp at the University of Michigan. Brought together by a shared curiosity and love for building, designing, and problem-solving, we quickly realized how powerful that experience was—not just because of what we learned, but because of how it made us feel: capable, excited, and inspired.
-After the camp, we kept thinking about one thing: what if more students had access to experiences like this? Opportunities to learn about engineering in a way that’s fun, hands-on, and led by people who truly care. We created SAGE to bring that spark to others, to make engineering feel possible and personal instead of distant or intimidating.
+            </p>
+            <p className="mb-6">
+              After the camp, we kept thinking about one thing: what if more students had access to experiences like this? Opportunities to learn about engineering in a way that's fun, hands-on, and led by people who truly care. We created SAGE to bring that spark to others, to make engineering feel possible and personal instead of distant or intimidating.
             </p>
             <p>
-              Today, SAGE is more than just an idea. It’s a growing student-led nonprofit that empowers young people to explore engineering through workshops, mentorship, and real-world conversations. We believe that everyone should have the chance to discover what engineering is really about: solving problems, working together, and creating things that matter.
+              Today, SAGE is more than just an idea. It's a growing student-led nonprofit that empowers young people to explore engineering through workshops, mentorship, and real-world conversations. We believe that everyone should have the chance to discover what engineering is really about: solving problems, working together, and creating things that matter.
             </p>
           </div>
         </div>
