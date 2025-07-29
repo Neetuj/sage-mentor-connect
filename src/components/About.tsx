@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Lightbulb, Heart, Target } from "lucide-react";
 
 const About = () => {
@@ -109,11 +110,12 @@ const About = () => {
             <Card key={index} className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary">
               <CardContent className="p-6">
                 <div className="text-center mb-6">
-                  <div className="w-24 h-24 bg-hero-gradient rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span className="text-2xl font-bold text-primary-foreground">
+                  <Avatar className="w-24 h-24 mx-auto mb-4 shadow-lg">
+                    <AvatarImage src="" alt={`${founder.name} profile photo`} />
+                    <AvatarFallback className="bg-hero-gradient text-2xl font-bold text-primary-foreground">
                       {founder.name.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  </div>
+                    </AvatarFallback>
+                  </Avatar>
                   <h3 className="text-xl font-semibold text-primary mb-2">{founder.name}</h3>
                   <p className="text-secondary font-medium mb-1">{founder.role}</p>
                   <p className="text-sm text-muted-foreground mb-3">{founder.school}</p>
