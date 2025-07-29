@@ -10,7 +10,7 @@ const About = () => {
       role: "Founder & President",
       school: "Bellevue High School, WA",
       expertise: "Mechanical & Industrial",
-      bio: "Isabel founded SAGE to address the lack of early engineering exposure in elementary schools. She is passionate about inspiring young minds to discover engineering."
+      bio: "Originally from Manhattan, New York, Isa was raised in Madrid, Spain from the age of ten. She is interested in machine design and manufacturing, 3D modeling and simulation and systems optimization. She enjoys singing, rock climbing and thinking every dog she meets is her new best friend."
     },
     {
       name: "Rohan Jain",
