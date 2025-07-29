@@ -39,7 +39,7 @@ const About = () => {
           </h2>
           <div className="max-w-4xl mx-auto text-lg text-muted-foreground leading-relaxed">
             <p className="mb-6">
-       We founded SAGE as three high school students who met at an engineering exploration camp at the University of Michigan. That experience sparked a shared passion for building, designing, and solving problems, but more than anything, it made us feel empowered, inspired, and capable. We left wondering: What if more students had access to opportunities like this?
+       We founded SAGE as three high school students who met at an engineering exploration camp at the University of Michigan. That experience sparked a shared passion for building, designing, and solving problems, but more than anything, it made us feel empowered, inspired, and capable. We left wondering: <em>What if more students had access to opportunities like this?</em>
             </p>
             <p>
             SAGE was born from that question. What started as an idea is now a growing student-led nonprofit dedicated to making engineering exploration more accessible, engaging, and personal. Through hands-on workshops, mentorship, and conversations with professionals, we help students discover the excitement of engineering, and remind them that age, background, or experience should never be a barrier to creating things that matter.
