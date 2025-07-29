@@ -17,7 +17,7 @@ const About = () => {
       role: "Vice President",
       school: "Coppell High School, TX", 
       expertise: "Aerospace Engineering",
-      bio: "Rohan is from Dallas, Texas. He interested in flight mechanics, rocketry propulsion, and aerodynamics. He loves doing card tricks, taekwondo, and making really good guacamole. "
+      bio: "Rohan is from Dallas, Texas. He is interested in flight mechanics, rocketry propulsion, and aerodynamics. He loves doing card tricks, taekwondo, and making really good guacamole. "
     },
     {
       name: "Hannah Shin",
@@ -39,13 +39,14 @@ const About = () => {
           </h2>
           <div className="max-w-4xl mx-auto text-lg text-muted-foreground leading-relaxed">
             <p className="mb-6">
-              We founded SAGE as three high school students who met at an engineering exploration camp at the University of Michigan. Brought together by a shared curiosity and love for building, designing, and problem-solving, we quickly realized how powerful that experience was—not just because of what we learned, but because of how it made us feel: capable, excited, and inspired.
-            </p>
-            <p className="mb-6">
-              After the camp, we kept thinking about one thing: <em>what if more students had access to experiences like this?</em> Opportunities to learn about engineering in a way that's fun, hands-on, and led by people who truly care. We created SAGE to bring that spark to others, to make engineering feel possible and personal instead of distant or intimidating.
+              SAGE was born from a simple observation: young students are naturally curious about how things work, 
+              but many never get the chance to explore engineering until it's too late. Three high school students 
+              decided to change that.
             </p>
             <p>
-              Today, SAGE is more than just an idea. It's a growing student-led nonprofit that empowers young people to explore engineering through workshops, mentorship, and real-world conversations. We believe that everyone should have the chance to discover what engineering is really about: solving problems, working together, and creating things that matter.
+              What started as a small after-school program has grown into a thriving community connecting hundreds 
+              of young minds with inspiring tutors and industry professionals. Our mission is to spark the 
+              engineering passion early and nurture it through meaningful relationships.
             </p>
           </div>
         </div>
