@@ -59,8 +59,8 @@ const About = () => {
               </div>
               <h3 className="text-xl font-semibold mb-3">Our Mission</h3>
               <p className="text-muted-foreground">
-                To inspire and support the next generation of engineers through mentorship, 
-                hands-on learning, and exposure to engineering possibilities.
+                SAGE empowers students to explore engineering through engaging, student/professional-led learning experiences, both online and in person. 
+                Our goal is to make engineering education and exploration more accessible, inclusive, and inspiring by fostering curiosity, mentorship, and creativity.
               </p>
             </CardContent>
           </Card>
