@@ -72,8 +72,8 @@ const About = () => {
               </div>
               <h3 className="text-xl font-semibold mb-3">Our Vision</h3>
               <p className="text-muted-foreground">
-                A world where every young person has access to engineering mentorship and 
-                sees themselves as capable of solving tomorrow's biggest challenges.
+                SAGE envisions a future where all students, regardless of background or resources, see themselves as capable engineers and problem solvers.
+                We aim to build a world where mentorship, exploration, and access to engineering opportunities are the norm, empowering young minds to shape and solve the challenges our world might face.
               </p>
             </CardContent>
           </Card>
