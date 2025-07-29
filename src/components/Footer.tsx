@@ -77,15 +77,11 @@ const Footer = () => {
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
-                <span>info@sageengineering.org</span>
+                <span>sageoutreach3@gmail.com</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4" />
-                <span>(555) 123-SAGE</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
-                <span>Lincoln High School District</span>
+                <span>(214)-470-8192</span>
               </div>
             </div>
             <Button 
