@@ -85,8 +85,9 @@ const About = () => {
               </div>
               <h3 className="text-xl font-semibold mb-3">Our Values</h3>
               <p className="text-muted-foreground">
-                Inclusivity, curiosity, collaboration, and the belief that age is no barrier 
-                to making a meaningful impact in engineering.
+                At SAGE, we believe that engineering exploration should be open to everyone. 
+                We value inclusivity, curiosity, and collaboration, creating spaces where students feel encouraged to ask questions, explore ideas, and support each other. 
+
               </p>
             </CardContent>
           </Card>
