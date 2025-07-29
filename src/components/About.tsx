@@ -16,7 +16,7 @@ const About = () => {
       role: "Vice President",
       school: "Coppell High School, TX", 
       expertise: "Aerospace Engineering",
-      bio: "Rohan is dedicated to making STEM accessible to all students, especially those from underrepresented communities. He coordinates our tutor training programs."
+      bio: "Rohan is a sophomore from Dallas, interested in aeronautics, rocketry, and aerospace engineering. He loves doing card tricks, taekwondo, and making really good guacamole. "
     },
     {
       name: "Hannah Shin",
