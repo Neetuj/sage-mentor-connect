@@ -346,7 +346,7 @@ const GetInvolved = () => {
                         <SelectValue placeholder="Choose a specific tutor or leave blank for any available tutor" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Any Available Tutor</SelectItem>
+                        <SelectItem value="any">Any Available Tutor</SelectItem>
                         <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
                         <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
                         <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
