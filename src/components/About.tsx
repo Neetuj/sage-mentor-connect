@@ -10,21 +10,21 @@ const About = () => {
       role: "Founder & President",
       school: "Bellevue High School, WA",
       expertise: "Mechanical & Industrial",
-      bio: "Originally from Manhattan, New York, Isa was raised in Madrid, Spain from the age of ten. She is interested in machine design and manufacturing, 3D modeling and simulation and systems optimization. She enjoys singing, rock climbing and thinking every dog she meets is her new best friend."
+      bio: "Isabel founded SAGE to address the lack of early engineering exposure in elementary schools. She is passionate about inspiring young minds to discover engineering."
     },
     {
       name: "Rohan Jain",
       role: "Vice President",
       school: "Coppell High School, TX", 
       expertise: "Aerospace Engineering",
-      bio: "Rohan is a sophomore from Dallas, Texas. He is interested in flight mechanics, rocketry propulsion, and aerodynamics. He loves doing card tricks, taekwondo, and making really good guacamole."
+      bio: "Rohan is from Dallas, Texas. He interested in flight mechanics, rocketry propulsion, and aerodynamics. He loves doing card tricks, taekwondo, and making really good guacamole. "
     },
     {
       name: "Hannah Shin",
       role: "Marketing & Social Media Outreach Director",
       school: "West Ranch High School, CA",
       expertise: "Biomedical Engineering",
-      bio: "Hannah is located in Los Angeles, California and is passionate about biomedical engineering like tissue engineering, medical robotics and artificial intelligence in medicine. In her free time she enjoys reading, snowboarding and watching F1. "
+      bio: "Hannah organizes our industry seminars and connects students with professionals. She works to make engineering approachable and exciting for young people."
     }
   ];
 
@@ -39,14 +39,10 @@ const About = () => {
           </h2>
           <div className="max-w-4xl mx-auto text-lg text-muted-foreground leading-relaxed">
             <p className="mb-6">
-              SAGE was born from a simple observation: young students are naturally curious about how things work, 
-              but many never get the chance to explore engineering until it's too late. Three high school students 
-              decided to change that.
+       We founded SAGE as three high school students who met at an engineering exploration camp at the University of Michigan. That experience sparked a shared passion for building, designing, and solving problems, but more than anything, it made us feel empowered, inspired, and capable. We left wondering: What if more students had access to opportunities like this?
             </p>
             <p>
-              What started as a small after-school program has grown into a thriving community connecting hundreds 
-              of young minds with inspiring tutors and industry professionals. Our mission is to spark the 
-              engineering passion early and nurture it through meaningful relationships.
+            SAGE was born from that question. What started as an idea is now a growing student-led nonprofit dedicated to making engineering exploration more accessible, engaging, and personal. Through hands-on workshops, mentorship, and conversations with professionals, we help students discover the excitement of engineering, and remind them that age, background, or experience should never be a barrier to creating things that matter.
             </p>
           </div>
         </div>
