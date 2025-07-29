@@ -345,15 +345,15 @@ const GetInvolved = () => {
                       <SelectTrigger>
                         <SelectValue placeholder="Choose a specific tutor or leave blank for any available tutor" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="any">Any Available Tutor</SelectItem>
-                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
-                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
-                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
-                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
-                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
-                        <SelectItem value="TUTOR NAME">TUTOR NAME</SelectItem>
-                      </SelectContent>
+                        <SelectContent>
+                          <SelectItem value="any">Any Available Tutor</SelectItem>
+                          <SelectItem value="tutor1">Sarah Chen</SelectItem>
+                          <SelectItem value="tutor2">Marcus Johnson</SelectItem>
+                          <SelectItem value="tutor3">Emma Rodriguez</SelectItem>
+                          <SelectItem value="tutor4">David Kim</SelectItem>
+                          <SelectItem value="tutor5">Alex Thompson</SelectItem>
+                          <SelectItem value="tutor6">Hannah Wilson</SelectItem>
+                        </SelectContent>
                     </Select>
                   </div>
                 )}

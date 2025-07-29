@@ -63,7 +63,7 @@ export const applicationFormSchema = z.object({
 export const searchSchema = z.object({
   query: z.string()
     .max(100, 'Search query too long')
-    .regex(/^[a-zA-Z0-9\s\-_.,!?]+$/, 'Search contains invalid characters')
+    .regex(/^[a-zA-Z0-9\s\-_.,!?]*$/, 'Search contains invalid characters')
 });
 
 export const contactFormSchema = z.object({
