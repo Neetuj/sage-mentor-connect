@@ -10,7 +10,7 @@ const About = () => {
       role: "Founder & President",
       school: "Bellevue High School, WA",
       expertise: "Mechanical & Industrial",
-      bio: "Originally from Manhattan, New York, Isa was raised in Madrid, Spain from the age of ten. She is interested in machine design and manufacturing, 3D modeling and simulation and systems optimization. She enjoys singing, rock climbing and thinking every dog she meets is her new best friend."
+      bio: "Isabel founded SAGE to address the lack of early engineering exposure in elementary schools. She is passionate about inspiring young minds to discover engineering."
     },
     {
       name: "Rohan Jain",
@@ -24,7 +24,7 @@ const About = () => {
       role: "Marketing & Social Media Outreach Director",
       school: "West Ranch High School, CA",
       expertise: "Biomedical Engineering",
-      bio: "Hannah organizes our industry seminars and connects students with professionals. She works to make engineering approachable and exciting for young people."
+      bio: "Hannah is located in Los Angeles, California and is passionate about biomedical engineering like tissue engineering, medical robotics and artificial intelligence in medicine. In her free time she enjoys reading, snowboarding and curating her 100 Spotify playlists. "
     }
   ];
 
