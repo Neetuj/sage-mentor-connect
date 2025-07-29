@@ -31,15 +31,15 @@ const MentorDirectory = () => {
   const mentors = [
     {
       id: 1,
-      name: "Sarah Johnson",
-      school: "Lincoln High School",
-      grade: "12th Grade",
-      specialty: "Computer Science",
-      experience: "3 years",
-      rating: 4.9,
+      name: "MENTOR NAME",
+      school: "MENTOR SCHOOL",
+      grade: "MENTOR GRADE",
+      specialty: "MENTOR SPECIALTY",
+      experience: "MENTOR EXPERIENCE",
+      rating: 5.0,
       mentees: 8,
-      bio: "Passionate about making coding accessible to younger students. Specializes in Python, web development, and game design.",
-      skills: ["Python", "JavaScript", "Game Development", "Web Design"],
+      bio: "MENTOR BIO",
+      skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
       availability: "Available"
     },
     {
