@@ -180,8 +180,22 @@ const GetInvolved = () => {
                 </div>
                 <Button 
                   className="w-full" 
-                  onClick={() => setFormType(opportunity.action.toLowerCase().includes('student') ? 'student' : 
-                                           opportunity.action.toLowerCase().includes('tutor') ? 'tutor' : 'volunteer')}
+                  onClick={() => {
+                    if (opportunity.action.toLowerCase().includes('student')) {
+                      setFormType('student');
+                      // Scroll to form
+                      setTimeout(() => {
+                        const formElement = document.querySelector('#tutoring-form');
+                        if (formElement) {
+                          formElement.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }, 100);
+                    } else if (opportunity.action.toLowerCase().includes('tutor')) {
+                      setFormType('tutor');
+                    } else {
+                      setFormType('volunteer');
+                    }
+                  }}
                 >
                   {opportunity.action}
                 </Button>
@@ -190,17 +204,18 @@ const GetInvolved = () => {
           ))}
         </div>
 
-        {/* Application Form */}
-        <div className="max-w-2xl mx-auto">
+        {/* Tutoring Request Form */}
+        <div id="tutoring-form" className="max-w-2xl mx-auto">
           <Card className="shadow-card">
             <CardContent className="p-8">
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-primary mb-2">
-                  {formType === 'student' ? 'Student Application' : 
+                  {formType === 'student' ? 'Request Tutoring' : 
                    formType === 'tutor' ? 'Tutor Application' : 'Volunteer Registration'}
                 </h3>
                 <p className="text-muted-foreground">
-                  Fill out this form to get started with SAGE
+                  {formType === 'student' ? 'Connect with a high school engineering tutor to accelerate your learning' :
+                   'Fill out this form to get started with SAGE'}
                 </p>
               </div>
 
@@ -287,11 +302,11 @@ const GetInvolved = () => {
 
                     <div>
                       <label className="block text-sm font-medium mb-2">
-                        {formType === 'student' ? 'Engineering Interests *' : 'Engineering Specialty *'}
+                        {formType === 'student' ? 'Which area would you like tutoring in? *' : 'Engineering Specialty *'}
                       </label>
                       <Select value={formData.interests} onValueChange={(value) => handleInputChange('interests', value)}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select your area of interest" />
+                          <SelectValue placeholder={formType === 'student' ? "Select tutoring subject" : "Select your area of interest"} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="computer">Computer Science</SelectItem>
@@ -309,11 +324,13 @@ const GetInvolved = () => {
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    {formType === 'student' ? 'What interests you about engineering? *' : 
+                    {formType === 'student' ? 'What would you like help with? *' : 
                      formType === 'tutor' ? 'Why do you want to be a tutor? *' : 'How would you like to help? *'}
                   </label>
                   <Textarea 
-                    placeholder="Tell us about yourself and your interests..."
+                    placeholder={formType === 'student' ? 
+                      "Tell us about specific topics, projects, or skills you'd like tutoring help with..." : 
+                      "Tell us about yourself and your interests..."}
                     rows={4}
                     value={formData.additionalInfo}
                     onChange={(e) => handleInputChange('additionalInfo', e.target.value)}
@@ -340,7 +357,8 @@ const GetInvolved = () => {
                 )}
 
                 <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
-                  {isSubmitting ? "Submitting..." : "Submit Application"}
+                  {isSubmitting ? "Submitting..." : 
+                   formType === 'student' ? "Request Tutoring" : "Submit Application"}
                 </Button>
               </form>
             </CardContent>
