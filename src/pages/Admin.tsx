@@ -78,11 +78,6 @@ const Admin = () => {
 
       setIsComingSoonHidden(newState);
       
-      // Dispatch global event to update all components
-      window.dispatchEvent(new CustomEvent('siteSettingsChanged', { 
-        detail: { key: 'seminar_section_visible', visible: newState }
-      }));
-      
       toast.success(newState ? "Seminar section is now visible to all users" : "Seminar section is now hidden for all users");
     } catch (error) {
       console.error('Error updating site settings:', error);

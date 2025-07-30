@@ -20,6 +20,26 @@ const TutorDirectory = () => {
 
   useEffect(() => {
     fetchTutors();
+    
+    // Set up real-time subscription for tutors
+    const channel = supabase
+      .channel('tutors-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tutors'
+        },
+        () => {
+          fetchTutors(); // Refetch when tutors change
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fetchTutors = async () => {

@@ -15,6 +15,26 @@ const SeminarCalendar = () => {
 
   useEffect(() => {
     fetchSeminars();
+    
+    // Set up real-time subscription for seminars
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'seminars'
+        },
+        () => {
+          fetchSeminars(); // Refetch when seminars change
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fetchSeminars = async () => {
@@ -61,19 +81,27 @@ const SeminarCalendar = () => {
     };
 
     loadSiteSettings();
-  }, []);
 
-  // Listen for global events to toggle the overlay
-  useEffect(() => {
-    const handleSiteSettingsChange = (event: CustomEvent) => {
-      if (event.detail.key === 'seminar_section_visible') {
-        setIsComingSoonHidden(event.detail.visible);
-      }
-    };
+    // Set up real-time subscription for site settings
+    const settingsChannel = supabase
+      .channel('site-settings-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'site_settings',
+          filter: 'setting_key=eq.seminar_section_visible'
+        },
+        (payload) => {
+          const isVisible = (payload.new as any)?.setting_value?.visible ?? false;
+          setIsComingSoonHidden(isVisible);
+        }
+      )
+      .subscribe();
 
-    window.addEventListener('siteSettingsChanged', handleSiteSettingsChange as EventListener);
     return () => {
-      window.removeEventListener('siteSettingsChanged', handleSiteSettingsChange as EventListener);
+      supabase.removeChannel(settingsChannel);
     };
   }, []);
 
