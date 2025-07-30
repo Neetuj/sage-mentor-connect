@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      seminars: {
+        Row: {
+          audience: string
+          capacity: number
+          category: string
+          created_at: string
+          date: string
+          description: string
+          id: string
+          location: string
+          registered: number
+          speaker: string
+          time: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          audience: string
+          capacity?: number
+          category: string
+          created_at?: string
+          date: string
+          description: string
+          id?: string
+          location: string
+          registered?: number
+          speaker: string
+          time: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          audience?: string
+          capacity?: number
+          category?: string
+          created_at?: string
+          date?: string
+          description?: string
+          id?: string
+          location?: string
+          registered?: number
+          speaker?: string
+          time?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       submissions: {
         Row: {
           additional_info: string | null
@@ -50,6 +98,54 @@ export type Database = {
           name?: string
           parent_email?: string | null
           school?: string | null
+        }
+        Relationships: []
+      }
+      tutors: {
+        Row: {
+          availability: boolean
+          bio: string
+          created_at: string
+          experience: string
+          id: string
+          name: string
+          profile_image_url: string | null
+          rating: number
+          school: string
+          skills: string[]
+          specialty: string
+          students: number
+          updated_at: string
+        }
+        Insert: {
+          availability?: boolean
+          bio: string
+          created_at?: string
+          experience: string
+          id?: string
+          name: string
+          profile_image_url?: string | null
+          rating?: number
+          school: string
+          skills?: string[]
+          specialty: string
+          students?: number
+          updated_at?: string
+        }
+        Update: {
+          availability?: boolean
+          bio?: string
+          created_at?: string
+          experience?: string
+          id?: string
+          name?: string
+          profile_image_url?: string | null
+          rating?: number
+          school?: string
+          skills?: string[]
+          specialty?: string
+          students?: number
+          updated_at?: string
         }
         Relationships: []
       }
