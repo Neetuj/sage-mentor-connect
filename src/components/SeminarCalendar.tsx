@@ -147,7 +147,7 @@ const SeminarCalendar = () => {
   };
 
   return (
-    <section id="seminars" className="py-20 bg-muted/30">
+    <section id="seminars" className="py-20 bg-muted/30 relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <Badge variant="secondary" className="mb-4">Upcoming Events</Badge>
@@ -160,7 +160,7 @@ const SeminarCalendar = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-6 blur-sm">
           {upcomingSeminars.map((seminar) => {
             const regStatus = getRegistrationStatus(seminar.registered, parseInt(seminar.capacity.split(' ')[0]));
             
@@ -231,7 +231,7 @@ const SeminarCalendar = () => {
           })}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-12 blur-sm">
           <Button 
             variant="outline" 
             size="lg"
@@ -240,6 +240,18 @@ const SeminarCalendar = () => {
             <Calendar className="h-5 w-5 mr-2" />
             View Full Calendar
           </Button>
+        </div>
+      </div>
+
+      {/* Coming Soon Overlay */}
+      <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+        <div className="text-center space-y-4">
+          <h3 className="text-4xl sm:text-5xl font-bold text-primary animate-pulse">
+            COMING SOON
+          </h3>
+          <p className="text-xl text-muted-foreground max-w-md mx-auto">
+            We're preparing amazing seminars and workshops for you. Stay tuned!
+          </p>
         </div>
       </div>
     </section>
