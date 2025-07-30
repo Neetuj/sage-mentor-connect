@@ -3,9 +3,33 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin, Users, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
 
 const SeminarCalendar = () => {
   const { toast } = useToast();
+  const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
+
+  // Load hidden state from localStorage on component mount
+  useEffect(() => {
+    const savedState = localStorage.getItem('seminar-coming-soon-hidden');
+    if (savedState === 'true') {
+      setIsComingSoonHidden(true);
+    }
+  }, []);
+
+  // Listen for global events to toggle the overlay
+  useEffect(() => {
+    const handleToggleComingSoon = () => {
+      const newState = !isComingSoonHidden;
+      setIsComingSoonHidden(newState);
+      localStorage.setItem('seminar-coming-soon-hidden', newState.toString());
+    };
+
+    window.addEventListener('toggleSeminarComingSoon', handleToggleComingSoon);
+    return () => {
+      window.removeEventListener('toggleSeminarComingSoon', handleToggleComingSoon);
+    };
+  }, [isComingSoonHidden]);
   const upcomingSeminars = [
     {
       id: 1,
@@ -160,7 +184,7 @@ const SeminarCalendar = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6 blur-sm">
+        <div className={`grid lg:grid-cols-2 gap-6 ${isComingSoonHidden ? '' : 'blur-sm'}`}>
           {upcomingSeminars.map((seminar) => {
             const regStatus = getRegistrationStatus(seminar.registered, parseInt(seminar.capacity.split(' ')[0]));
             
@@ -231,7 +255,7 @@ const SeminarCalendar = () => {
           })}
         </div>
 
-        <div className="text-center mt-12 blur-sm">
+        <div className={`text-center mt-12 ${isComingSoonHidden ? '' : 'blur-sm'}`}>
           <Button 
             variant="outline" 
             size="lg"
@@ -243,17 +267,19 @@ const SeminarCalendar = () => {
         </div>
       </div>
 
-      {/* Coming Soon Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-        <div className="text-center space-y-4">
-          <h3 className="text-4xl sm:text-5xl font-bold text-primary animate-pulse">
-            COMING SOON
-          </h3>
-          <p className="text-xl text-muted-foreground max-w-md mx-auto">
-            We're preparing amazing seminars and workshops for you. Stay tuned!
-          </p>
+      {/* Coming Soon Overlay - only show if not hidden */}
+      {!isComingSoonHidden && (
+        <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="text-center space-y-4">
+            <h3 className="text-4xl sm:text-5xl font-bold text-primary animate-pulse">
+              COMING SOON
+            </h3>
+            <p className="text-xl text-muted-foreground max-w-md mx-auto">
+              We're preparing amazing seminars and workshops for you. Stay tuned!
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Download, RefreshCw } from "lucide-react";
+import { ArrowLeft, Download, RefreshCw, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -24,7 +24,25 @@ interface Submission {
 const Admin = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
   const navigate = useNavigate();
+
+  // Load coming soon state from localStorage
+  useEffect(() => {
+    const savedState = localStorage.getItem('seminar-coming-soon-hidden');
+    setIsComingSoonHidden(savedState === 'true');
+  }, []);
+
+  const toggleComingSoon = () => {
+    const newState = !isComingSoonHidden;
+    setIsComingSoonHidden(newState);
+    localStorage.setItem('seminar-coming-soon-hidden', newState.toString());
+    
+    // Dispatch global event to update the SeminarCalendar component
+    window.dispatchEvent(new CustomEvent('toggleSeminarComingSoon'));
+    
+    toast.success(newState ? "Seminar section is now visible" : "Seminar section is now hidden");
+  };
 
   const fetchSubmissions = async () => {
     setLoading(true);
@@ -126,6 +144,35 @@ const Admin = () => {
           </Button>
           <h1 className="text-3xl font-bold text-primary">SAGE Admin Dashboard</h1>
         </div>
+
+        {/* Site Controls */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Site Controls</CardTitle>
+            <p className="text-muted-foreground">
+              Manage website visibility and features
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium">Seminar Section</h3>
+                <p className="text-sm text-muted-foreground">
+                  {isComingSoonHidden ? "Currently visible to users" : "Currently showing 'Coming Soon' overlay"}
+                </p>
+              </div>
+              <Button 
+                variant={isComingSoonHidden ? "default" : "outline"}
+                size="sm"
+                onClick={toggleComingSoon}
+                className="flex items-center gap-2"
+              >
+                {isComingSoonHidden ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {isComingSoonHidden ? "Hide Section" : "Show Section"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         <Card>
           <CardHeader>
