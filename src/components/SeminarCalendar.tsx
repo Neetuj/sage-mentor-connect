@@ -88,16 +88,28 @@ const SeminarCalendar = () => {
   };
 
   const handleLearnMore = (seminarTitle: string) => {
+    // Scroll to the seminar details or show more info
+    const seminarElement = document.querySelector(`[data-seminar="${seminarTitle}"]`);
+    if (seminarElement) {
+      seminarElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
     toast({
       title: "More Information",
-      description: `Opening detailed information for "${seminarTitle}"...`,
+      description: `Showing details for "${seminarTitle}"`,
     });
   };
 
   const handleViewCalendar = () => {
+    // Scroll to seminars section to show all seminars
+    const seminarsSection = document.getElementById('seminars');
+    if (seminarsSection) {
+      seminarsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    
     toast({
       title: "Full Calendar",
-      description: "Opening complete seminar calendar with all upcoming events...",
+      description: "Showing all upcoming seminars below",
     });
   };
   const getRegistrationStatus = (registered: number, capacity: number) => {
@@ -132,7 +144,7 @@ const SeminarCalendar = () => {
               const regStatus = getRegistrationStatus(seminar.registered, seminar.capacity);
               
               return (
-                <Card key={seminar.id} className="shadow-card hover:shadow-card-hover transition-all duration-300">
+                <Card key={seminar.id} data-seminar={seminar.title} className="shadow-card hover:shadow-card-hover transition-all duration-300">
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between mb-2">
                       <Badge className={getCategoryColor(seminar.category)}>
