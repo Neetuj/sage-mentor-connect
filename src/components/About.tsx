@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Lightbulb, Heart, Target } from "lucide-react";
+import rohanProfile from "@/assets/rohan-profile.jpg";
 
 const About = () => {
   const founders = [
@@ -112,7 +113,10 @@ const About = () => {
               <CardContent className="p-6">
                 <div className="text-center mb-6">
                   <Avatar className="w-24 h-24 mx-auto mb-4 shadow-lg">
-                    <AvatarImage src="" alt={`${founder.name} profile photo`} />
+                    <AvatarImage 
+                      src={founder.name === "Rohan Jain" ? rohanProfile : ""} 
+                      alt={`${founder.name} profile photo`} 
+                    />
                     <AvatarFallback className="bg-hero-gradient text-2xl font-bold text-primary-foreground">
                       {founder.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
