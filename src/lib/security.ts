@@ -49,7 +49,7 @@ export const applicationFormSchema = z.object({
     .min(1, 'Grade level is required')
     .max(20, 'Grade level must be less than 20 characters'),
   interests: z.string()
-    .min(10, 'Please provide more details about your interests')
+    .min(1, 'Please select an area of interest')
     .max(500, 'Interests must be less than 500 characters'),
   additionalInfo: z.string()
     .max(1000, 'Additional information must be less than 1000 characters')
