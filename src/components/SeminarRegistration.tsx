@@ -47,7 +47,13 @@ const SeminarRegistration = ({ seminarTitle, seminarId, children }: SeminarRegis
       if (error) throw error;
 
       // Update seminar registration count
-      await supabase.rpc('increment_seminar_registration', { seminar_id: seminarId });
+      const { error: incrementError } = await (supabase.rpc as any)('increment_seminar_registration', { 
+        seminar_id: seminarId 
+      });
+      
+      if (incrementError) {
+        console.warn('Failed to update registration count:', incrementError);
+      }
 
       toast.success(`Successfully registered for "${seminarTitle}"!`);
       setOpen(false);
