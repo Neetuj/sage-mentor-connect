@@ -4,10 +4,38 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin, Users, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const SeminarCalendar = () => {
   const { toast } = useToast();
   const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
+  const [seminars, setSeminars] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSeminars();
+  }, []);
+
+  const fetchSeminars = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('seminars')
+        .select('*')
+        .order('date');
+
+      if (error) throw error;
+      setSeminars(data || []);
+    } catch (error) {
+      console.error('Error fetching seminars:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load seminars",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Load hidden state from localStorage on component mount
   useEffect(() => {
@@ -30,98 +58,6 @@ const SeminarCalendar = () => {
       window.removeEventListener('toggleSeminarComingSoon', handleToggleComingSoon);
     };
   }, [isComingSoonHidden]);
-  const upcomingSeminars = [
-    {
-      id: 1,
-      title: "SEMINAR NAME",
-      speaker: "SPEAKER NAME",
-      organization: "SPEAKER JOB",
-      date: "MM/DD/YY",
-      time: "X:XXPM - Y:YYPM",
-      location: "VIRTUAL",
-      type: "SEMINAR",
-      description: "SEMINAR DESCRIPTION",
-      audience: "AGE RANGE",
-      capacity: "CAPACITY",
-      registered: 32,
-      category: "CATEGORY"
-    },
-    {
-      id: 2,
-      title: "SEMINAR NAME",
-      speaker: "SPEAKER NAME",
-      organization: "SPEAKER JOB",
-      date: "MM/DD/YY",
-      time: "X:XXPM - Y:YYPM",
-      location: "VIRTUAL",
-      type: "SEMINAR",
-      description: "SEMINAR DESCRIPTION",
-      audience: "AGE RANGE",
-      capacity: "CAPACITY",
-      registered: 32,
-      category: "CATEGORY"
-    },
-    {
-      id: 3,
-      title: "SEMINAR NAME",
-      speaker: "SPEAKER NAME",
-      organization: "SPEAKER JOB",
-      date: "MM/DD/YY",
-      time: "X:XXPM - Y:YYPM",
-      location: "VIRTUAL",
-      type: "SEMINAR",
-      description: "SEMINAR DESCRIPTION",
-      audience: "AGE RANGE",
-      capacity: "CAPACITY",
-      registered: 32,
-      category: "CATEGORY"
-    },
-    {
-      id: 4,
-      title: "SEMINAR NAME",
-      speaker: "SPEAKER NAME",
-      organization: "SPEAKER JOB",
-      date: "MM/DD/YY",
-      time: "X:XXPM - Y:YYPM",
-      location: "VIRTUAL",
-      type: "SEMINAR",
-      description: "SEMINAR DESCRIPTION",
-      audience: "AGE RANGE",
-      capacity: "CAPACITY",
-      registered: 32,
-      category: "CATEGORY"
-    },
-    {
-      id: 5,
-      title: "SEMINAR NAME",
-      speaker: "SPEAKER NAME",
-      organization: "SPEAKER JOB",
-      date: "MM/DD/YY",
-      time: "X:XXPM - Y:YYPM",
-      location: "VIRTUAL",
-      type: "SEMINAR",
-      description: "SEMINAR DESCRIPTION",
-      audience: "AGE RANGE",
-      capacity: "CAPACITY",
-      registered: 32,
-      category: "CATEGORY"
-    },
-    {
-      id: 6,
-      title: "SEMINAR NAME",
-      speaker: "SPEAKER NAME",
-      organization: "SPEAKER JOB",
-      date: "MM/DD/YY",
-      time: "X:XXPM - Y:YYPM",
-      location: "VIRTUAL",
-      type: "SEMINAR",
-      description: "SEMINAR DESCRIPTION",
-      audience: "AGE RANGE",
-      capacity: "CAPACITY",
-      registered: 32,
-      category: "CATEGORY"
-    }
-  ];
 
   const getCategoryColor = (category: string) => {
     const colors = {
@@ -184,76 +120,90 @@ const SeminarCalendar = () => {
           </p>
         </div>
 
-        <div className={`grid lg:grid-cols-2 gap-6 ${isComingSoonHidden ? '' : 'blur-sm'}`}>
-          {upcomingSeminars.map((seminar) => {
-            const regStatus = getRegistrationStatus(seminar.registered, parseInt(seminar.capacity.split(' ')[0]));
-            
-            return (
-              <Card key={seminar.id} className="shadow-card hover:shadow-card-hover transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <Badge className={getCategoryColor(seminar.category)}>
-                      {seminar.category}
-                    </Badge>
-                    <Badge variant={regStatus.color as any}>
-                      {regStatus.status}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-xl text-primary mb-2">
-                    {seminar.title}
-                  </CardTitle>
-                  <div className="text-sm text-muted-foreground">
-                    <p className="font-medium">{seminar.speaker}</p>
-                    <p>{seminar.organization}</p>
-                  </div>
-                </CardHeader>
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+            <p className="text-muted-foreground mt-2">Loading seminars...</p>
+          </div>
+        ) : (
+          <div className={`grid lg:grid-cols-2 gap-6 ${isComingSoonHidden ? '' : 'blur-sm'}`}>
+            {seminars.map((seminar) => {
+              const regStatus = getRegistrationStatus(seminar.registered, seminar.capacity);
+              
+              return (
+                <Card key={seminar.id} className="shadow-card hover:shadow-card-hover transition-all duration-300">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <Badge className={getCategoryColor(seminar.category)}>
+                        {seminar.category}
+                      </Badge>
+                      <Badge variant={regStatus.color as any}>
+                        {regStatus.status}
+                      </Badge>
+                    </div>
+                    <CardTitle className="text-xl text-primary mb-2">
+                      {seminar.title}
+                    </CardTitle>
+                    <div className="text-sm text-muted-foreground">
+                      <p className="font-medium">{seminar.speaker}</p>
+                    </div>
+                  </CardHeader>
 
-                <CardContent>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
-                    {seminar.description}
-                  </p>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4 leading-relaxed">
+                      {seminar.description}
+                    </p>
 
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="h-4 w-4 text-primary" />
-                      <span>{seminar.date}</span>
+                    <div className="space-y-3 mb-6">
+                      <div className="flex items-center gap-2 text-sm">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <span>{new Date(seminar.date).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Clock className="h-4 w-4 text-primary" />
+                        <span>{seminar.time}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        <span>{seminar.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Users className="h-4 w-4 text-primary" />
+                        <span>{seminar.audience} • {seminar.registered}/{seminar.capacity} registered</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Clock className="h-4 w-4 text-primary" />
-                      <span>{seminar.time}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-4 w-4 text-primary" />
-                      <span>{seminar.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Users className="h-4 w-4 text-primary" />
-                      <span>{seminar.audience} • {seminar.registered}/{seminar.capacity.split(' ')[0]} registered</span>
-                    </div>
-                  </div>
 
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Button 
-                      className="flex-1" 
-                      variant="default"
-                      onClick={() => handleRegister(seminar.title, seminar.registered, parseInt(seminar.capacity.split(' ')[0]))}
-                    >
-                      Register Now
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleLearnMore(seminar.title)}
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Learn More
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Button 
+                        className="flex-1" 
+                        variant="default"
+                        onClick={() => handleRegister(seminar.title, seminar.registered, seminar.capacity)}
+                      >
+                        Register Now
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleLearnMore(seminar.title)}
+                      >
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Learn More
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+
+        {!loading && seminars.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">
+              No seminars scheduled at the moment.
+            </p>
+          </div>
+        )}
 
         <div className={`text-center mt-12 ${isComingSoonHidden ? '' : 'blur-sm'}`}>
           <Button 

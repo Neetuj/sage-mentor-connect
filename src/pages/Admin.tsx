@@ -3,10 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Download, RefreshCw, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import TutorForm from "@/components/TutorForm";
+import SeminarForm from "@/components/SeminarForm";
 
 interface Submission {
   id: string;
@@ -25,7 +28,12 @@ const Admin = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const navigate = useNavigate();
+
+  const refreshData = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   // Load coming soon state from localStorage
   useEffect(() => {
@@ -174,94 +182,112 @@ const Admin = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Form Submissions</CardTitle>
-                <p className="text-muted-foreground mt-1">
-                  Total submissions: {submissions.length}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={fetchSubmissions}
-                  disabled={loading}
-                  className="flex items-center gap-2"
-                >
-                  <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                  Refresh
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={exportToCSV}
-                  className="flex items-center gap-2"
-                >
-                  <Download className="h-4 w-4" />
-                  Export CSV
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                <p className="text-muted-foreground mt-2">Loading submissions...</p>
-              </div>
-            ) : submissions.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground">No submissions yet.</p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>School</TableHead>
-                      <TableHead>Grade</TableHead>
-                      <TableHead>Interests</TableHead>
-                      <TableHead>Parent Email</TableHead>
-                      <TableHead>Additional Info</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {submissions.map((submission) => (
-                      <TableRow key={submission.id}>
-                        <TableCell className="font-mono text-sm">
-                          {new Date(submission.created_at).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>
-                          {getFormTypeBadge(submission.form_type)}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {submission.name}
-                        </TableCell>
-                        <TableCell>{submission.email}</TableCell>
-                        <TableCell>{submission.school || '-'}</TableCell>
-                        <TableCell>{submission.grade_level || '-'}</TableCell>
-                        <TableCell>{submission.interests || '-'}</TableCell>
-                        <TableCell>{submission.parent_email || '-'}</TableCell>
-                        <TableCell className="max-w-xs">
-                          <div className="truncate" title={submission.additional_info}>
-                            {submission.additional_info}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <Tabs defaultValue="submissions" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="submissions">Form Submissions</TabsTrigger>
+            <TabsTrigger value="tutors">Manage Tutors</TabsTrigger>
+            <TabsTrigger value="seminars">Manage Seminars</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="submissions">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Form Submissions</CardTitle>
+                    <p className="text-muted-foreground mt-1">
+                      Total submissions: {submissions.length}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={fetchSubmissions}
+                      disabled={loading}
+                      className="flex items-center gap-2"
+                    >
+                      <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                      Refresh
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={exportToCSV}
+                      className="flex items-center gap-2"
+                    >
+                      <Download className="h-4 w-4" />
+                      Export CSV
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                    <p className="text-muted-foreground mt-2">Loading submissions...</p>
+                  </div>
+                ) : submissions.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">No submissions yet.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Name</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead>School</TableHead>
+                          <TableHead>Grade</TableHead>
+                          <TableHead>Interests</TableHead>
+                          <TableHead>Parent Email</TableHead>
+                          <TableHead>Additional Info</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {submissions.map((submission) => (
+                          <TableRow key={submission.id}>
+                            <TableCell className="font-mono text-sm">
+                              {new Date(submission.created_at).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell>
+                              {getFormTypeBadge(submission.form_type)}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {submission.name}
+                            </TableCell>
+                            <TableCell>{submission.email}</TableCell>
+                            <TableCell>{submission.school || '-'}</TableCell>
+                            <TableCell>{submission.grade_level || '-'}</TableCell>
+                            <TableCell>{submission.interests || '-'}</TableCell>
+                            <TableCell>{submission.parent_email || '-'}</TableCell>
+                            <TableCell className="max-w-xs">
+                              <div className="truncate" title={submission.additional_info}>
+                                {submission.additional_info}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="tutors">
+            <TutorForm onTutorAdded={refreshData} />
+          </TabsContent>
+          
+          <TabsContent value="seminars">
+            <SeminarForm onSeminarAdded={refreshData} />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

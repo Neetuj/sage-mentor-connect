@@ -4,16 +4,44 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Star, MessageCircle, Users, Search, Award, Clock } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { sanitizeString, searchSchema } from "@/lib/security";
+import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 
 const TutorDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("all");
   const [searchError, setSearchError] = useState("");
+  const [tutors, setTutors] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+
+  useEffect(() => {
+    fetchTutors();
+  }, []);
+
+  const fetchTutors = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('tutors')
+        .select('*')
+        .order('name');
+
+      if (error) throw error;
+      setTutors(data || []);
+    } catch (error) {
+      console.error('Error fetching tutors:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load tutors",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearchChange = (value: string) => {
     const sanitizedValue = sanitizeString(value);
@@ -28,86 +56,6 @@ const TutorDirectory = () => {
     }
   };
 
-  const tutors = [
-    {
-      id: 1,
-      name: "TUTOR NAME",
-      school: "TUTOR SCHOOL",
-      grade: "TUTOR GRADE",
-      specialty: "TUTOR SPECIALTY",
-      experience: "TUTOR EXPERIENCE",
-      rating: 5.0,
-      students: 8,
-      bio: "TUTOR BIO",
-      skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
-      availability: "Available"
-    },
-    {
-      id: 2,
-      name: "TUTOR NAME",
-      school: "TUTOR SCHOOL",
-      grade: "TUTOR GRADE",
-      specialty: "TUTOR SPECIALTY",
-      experience: "TUTOR EXPERIENCE",
-      rating: 5.0,
-      students: 8,
-      bio: "TUTOR BIO",
-      skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
-      availability: "Available"
-    },
-    {
-      id: 3,
-      name: "TUTOR NAME",
-      school: "TUTOR SCHOOL",
-      grade: "TUTOR GRADE",
-      specialty: "TUTOR SPECIALTY",
-      experience: "TUTOR EXPERIENCE",
-      rating: 5.0,
-      students: 8,
-      bio: "TUTOR BIO",
-      skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
-      availability: "Available"
-    },
-    {
-      id: 4,
-      name: "TUTOR NAME",
-      school: "TUTOR SCHOOL",
-      grade: "TUTOR GRADE",
-      specialty: "TUTOR SPECIALTY",
-      experience: "TUTOR EXPERIENCE",
-      rating: 5.0,
-      students: 8,
-      bio: "TUTOR BIO",
-      skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
-      availability: "Available"
-    },
-    {
-      id: 5,
-      name: "TUTOR NAME",
-      school: "TUTOR SCHOOL",
-      grade: "TUTOR GRADE",
-      specialty: "TUTOR SPECIALTY",
-      experience: "TUTOR EXPERIENCE",
-      rating: 5.0,
-      students: 8,
-      bio: "TUTOR BIO",
-      skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
-      availability: "Available"
-    },
-    {
-      id: 6,
-      name: "TUTOR NAME",
-      school: "TUTOR SCHOOL",
-      grade: "TUTOR GRADE",
-      specialty: "TUTOR SPECIALTY",
-      experience: "TUTOR EXPERIENCE",
-      rating: 5.0,
-      students: 8,
-      bio: "TUTOR BIO",
-      skills: ["SKILL", "SKILL", "SKILL", "SKILL"],
-      availability: "Available"
-    }
-  ];
 
   const specialties = [...new Set(tutors.map(tutor => tutor.specialty))];
 
@@ -189,8 +137,14 @@ const TutorDirectory = () => {
         </div>
 
         {/* Tutors Grid */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredTutors.map((tutor) => (
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+            <p className="text-muted-foreground mt-2">Loading tutors...</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredTutors.map((tutor) => (
             <Card key={tutor.id} className="shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden">
               {/* Header with availability indicator */}
               <CardHeader className="pb-3">
@@ -206,7 +160,7 @@ const TutorDirectory = () => {
                       <p className="text-xs text-muted-foreground">{tutor.school}</p>
                     </div>
                   </div>
-                  <div className={`w-3 h-3 rounded-full ${tutor.availability === "Available" ? "bg-secondary" : "bg-muted"}`}></div>
+                  <div className={`w-3 h-3 rounded-full ${tutor.availability ? "bg-secondary" : "bg-muted"}`}></div>
                 </div>
               </CardHeader>
 
@@ -258,11 +212,11 @@ const TutorDirectory = () => {
                   <Button 
                     size="sm" 
                     className="flex-1 text-xs" 
-                    variant={tutor.availability === "Available" ? "default" : "outline"}
-                    onClick={() => handleConnectTutor(tutor.name, tutor.availability === "Available")}
+                    variant={tutor.availability ? "default" : "outline"}
+                    onClick={() => handleConnectTutor(tutor.name, tutor.availability)}
                   >
                     <MessageCircle className="h-3 w-3 mr-1" />
-                    {tutor.availability === "Available" ? "Connect" : "Full"}
+                    {tutor.availability ? "Connect" : "Full"}
                   </Button>
                   <Button 
                     size="sm" 
@@ -275,10 +229,11 @@ const TutorDirectory = () => {
                 </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
-        {filteredTutors.length === 0 && (
+        {!loading && filteredTutors.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground text-lg">
               No tutors found matching your search criteria.
