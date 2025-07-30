@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin, Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+  
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -103,7 +106,10 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-1 text-sm text-primary-foreground/80">
               <span>Made with</span>
-              <Heart className="h-4 w-4 text-accent fill-current" />
+              <Heart 
+                className="h-4 w-4 text-accent fill-current cursor-pointer hover:opacity-80 transition-opacity" 
+                onClick={() => navigate('/admin')}
+              />
               <span>by student volunteers</span>
             </div>
           </div>
