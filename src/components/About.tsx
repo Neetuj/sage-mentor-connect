@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Lightbulb, Heart, Target } from "lucide-react";
 import rohanProfile from "@/assets/rohan-profile.jpg";
+import isabelProfile from "@/assets/isabel-profile.jpg";
 
 const About = () => {
   const founders = [
@@ -114,7 +115,8 @@ const About = () => {
                 <div className="text-center mb-6">
                   <Avatar className="w-24 h-24 mx-auto mb-4 shadow-lg">
                     <AvatarImage 
-                      src={founder.name === "Rohan Jain" ? rohanProfile : ""} 
+                      src={founder.name === "Rohan Jain" ? rohanProfile : 
+                           founder.name === "Isabel Conejo" ? isabelProfile : ""} 
                       alt={`${founder.name} profile photo`} 
                     />
                     <AvatarFallback className="bg-hero-gradient text-2xl font-bold text-primary-foreground">
