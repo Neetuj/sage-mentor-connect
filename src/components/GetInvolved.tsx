@@ -335,20 +335,27 @@ const GetInvolved = () => {
 
                     <div>
                       <label className="block text-sm font-medium mb-2">
-                        {formType === 'student' ? 'Which area would you like tutoring in? *' : 'Engineering Specialty *'}
+                        {formType === 'student' ? 'Which subject would you like tutoring in? *' : 'Subject Area of Interest *'}
                       </label>
                       <Select value={formData.interests} onValueChange={(value) => handleInputChange('interests', value)}>
                         <SelectTrigger>
                           <SelectValue placeholder={formType === 'student' ? "Select tutoring subject" : "Select your area of interest"} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="computer">Computer Science</SelectItem>
-                          <SelectItem value="mechanical">Mechanical Engineering</SelectItem>
-                          <SelectItem value="electrical">Electrical Engineering</SelectItem>
-                          <SelectItem value="environmental">Environmental Engineering</SelectItem>
-                          <SelectItem value="biomedical">Biomedical Engineering</SelectItem>
-                          <SelectItem value="aerospace">Aerospace Engineering</SelectItem>
-                          <SelectItem value="other">Other/General Interest</SelectItem>
+                          <SelectItem value="math">Mathematics</SelectItem>
+                          <SelectItem value="science">Science</SelectItem>
+                          <SelectItem value="english">English/Language Arts</SelectItem>
+                          <SelectItem value="reading">Reading & Comprehension</SelectItem>
+                          <SelectItem value="writing">Writing & Grammar</SelectItem>
+                          <SelectItem value="social-studies">Social Studies</SelectItem>
+                          <SelectItem value="history">History</SelectItem>
+                          <SelectItem value="computer">Computer Science/Programming</SelectItem>
+                          <SelectItem value="engineering">Engineering Projects</SelectItem>
+                          <SelectItem value="robotics">Robotics & Technology</SelectItem>
+                          <SelectItem value="art">Art & Creative Projects</SelectItem>
+                          <SelectItem value="test-prep">Test Preparation</SelectItem>
+                          <SelectItem value="homework">General Homework Help</SelectItem>
+                          <SelectItem value="other">Other/Multiple Subjects</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
