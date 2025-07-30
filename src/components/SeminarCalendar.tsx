@@ -38,27 +38,44 @@ const SeminarCalendar = () => {
     }
   };
 
-  // Load hidden state from localStorage on component mount
+  // Load hidden state from database on component mount
   useEffect(() => {
-    const savedState = localStorage.getItem('seminar-coming-soon-hidden');
-    if (savedState === 'true') {
-      setIsComingSoonHidden(true);
-    }
+    const loadSiteSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('setting_value')
+          .eq('setting_key', 'seminar_section_visible')
+          .single();
+
+        if (error) throw error;
+        
+        const isVisible = (data?.setting_value as any)?.visible ?? false;
+        setIsComingSoonHidden(isVisible);
+      } catch (error) {
+        console.error('Error loading site settings:', error);
+        // Fallback to localStorage for backward compatibility
+        const savedState = localStorage.getItem('seminar-coming-soon-hidden');
+        setIsComingSoonHidden(savedState === 'true');
+      }
+    };
+
+    loadSiteSettings();
   }, []);
 
   // Listen for global events to toggle the overlay
   useEffect(() => {
-    const handleToggleComingSoon = () => {
-      const newState = !isComingSoonHidden;
-      setIsComingSoonHidden(newState);
-      localStorage.setItem('seminar-coming-soon-hidden', newState.toString());
+    const handleSiteSettingsChange = (event: CustomEvent) => {
+      if (event.detail.key === 'seminar_section_visible') {
+        setIsComingSoonHidden(event.detail.visible);
+      }
     };
 
-    window.addEventListener('toggleSeminarComingSoon', handleToggleComingSoon);
+    window.addEventListener('siteSettingsChanged', handleSiteSettingsChange as EventListener);
     return () => {
-      window.removeEventListener('toggleSeminarComingSoon', handleToggleComingSoon);
+      window.removeEventListener('siteSettingsChanged', handleSiteSettingsChange as EventListener);
     };
-  }, [isComingSoonHidden]);
+  }, []);
 
   const getCategoryColor = (category: string) => {
     const colors = {

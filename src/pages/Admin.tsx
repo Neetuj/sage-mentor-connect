@@ -37,21 +37,57 @@ const Admin = () => {
     setRefreshTrigger(prev => prev + 1);
   };
 
-  // Load coming soon state from localStorage
+  // Load coming soon state from database
   useEffect(() => {
-    const savedState = localStorage.getItem('seminar-coming-soon-hidden');
-    setIsComingSoonHidden(savedState === 'true');
+    const loadSiteSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('setting_value')
+          .eq('setting_key', 'seminar_section_visible')
+          .single();
+
+        if (error) throw error;
+        
+        const isVisible = (data?.setting_value as any)?.visible ?? false;
+        setIsComingSoonHidden(isVisible);
+      } catch (error) {
+        console.error('Error loading site settings:', error);
+        // Fallback to localStorage for backward compatibility
+        const savedState = localStorage.getItem('seminar-coming-soon-hidden');
+        setIsComingSoonHidden(savedState === 'true');
+      }
+    };
+
+    loadSiteSettings();
   }, []);
 
-  const toggleComingSoon = () => {
+  const toggleComingSoon = async () => {
     const newState = !isComingSoonHidden;
-    setIsComingSoonHidden(newState);
-    localStorage.setItem('seminar-coming-soon-hidden', newState.toString());
     
-    // Dispatch global event to update the SeminarCalendar component
-    window.dispatchEvent(new CustomEvent('toggleSeminarComingSoon'));
-    
-    toast.success(newState ? "Seminar section is now visible" : "Seminar section is now hidden");
+    try {
+      const { error } = await supabase
+        .from('site_settings')
+        .update({ 
+          setting_value: { visible: newState },
+          updated_at: new Date().toISOString()
+        })
+        .eq('setting_key', 'seminar_section_visible');
+
+      if (error) throw error;
+
+      setIsComingSoonHidden(newState);
+      
+      // Dispatch global event to update all components
+      window.dispatchEvent(new CustomEvent('siteSettingsChanged', { 
+        detail: { key: 'seminar_section_visible', visible: newState }
+      }));
+      
+      toast.success(newState ? "Seminar section is now visible to all users" : "Seminar section is now hidden for all users");
+    } catch (error) {
+      console.error('Error updating site settings:', error);
+      toast.error("Failed to update site settings");
+    }
   };
 
   const fetchSubmissions = async () => {
