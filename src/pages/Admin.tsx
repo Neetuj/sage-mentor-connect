@@ -10,6 +10,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import TutorForm from "@/components/TutorForm";
 import SeminarForm from "@/components/SeminarForm";
+import TutorManagement from "@/components/TutorManagement";
+import SeminarManagement from "@/components/SeminarManagement";
 
 interface Submission {
   id: string;
@@ -281,11 +283,17 @@ const Admin = () => {
           </TabsContent>
           
           <TabsContent value="tutors">
-            <TutorForm onTutorAdded={refreshData} />
+            <div className="space-y-6">
+              <TutorForm onTutorAdded={refreshData} />
+              <TutorManagement onTutorDeleted={refreshData} />
+            </div>
           </TabsContent>
           
           <TabsContent value="seminars">
-            <SeminarForm onSeminarAdded={refreshData} />
+            <div className="space-y-6">
+              <SeminarForm onSeminarAdded={refreshData} />
+              <SeminarManagement onSeminarDeleted={refreshData} />
+            </div>
           </TabsContent>
         </Tabs>
       </div>

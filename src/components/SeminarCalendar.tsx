@@ -5,6 +5,7 @@ import { Calendar, Clock, MapPin, Users, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import SeminarRegistration from "./SeminarRegistration";
 
 const SeminarCalendar = () => {
   const { toast } = useToast();
@@ -174,13 +175,17 @@ const SeminarCalendar = () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <Button 
-                        className="flex-1" 
-                        variant="default"
-                        onClick={() => handleRegister(seminar.title, seminar.registered, seminar.capacity)}
+                      <SeminarRegistration 
+                        seminarTitle={seminar.title} 
+                        seminarId={seminar.id}
                       >
-                        Register Now
-                      </Button>
+                        <Button 
+                          className="flex-1" 
+                          variant="default"
+                        >
+                          Register Now
+                        </Button>
+                      </SeminarRegistration>
                       <Button 
                         variant="outline" 
                         size="sm"
