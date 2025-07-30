@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { applicationFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_MESSAGES } from "@/lib/security";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
 const GetInvolved = () => {
   const [formType, setFormType] = useState("student");
@@ -130,8 +131,23 @@ const GetInvolved = () => {
     setIsSubmitting(true);
     
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Submit to Supabase
+      const { error } = await supabase
+        .from('submissions')
+        .insert({
+          form_type: formType,
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          school: formData.school || null,
+          grade_level: formData.gradeLevel || null,
+          interests: formData.interests || null,
+          additional_info: formData.additionalInfo,
+          parent_email: formData.parentEmail || null
+        });
+
+      if (error) {
+        throw error;
+      }
       
       toast({
         title: "Application Submitted!",
@@ -151,9 +167,10 @@ const GetInvolved = () => {
         selectedTutor: ""
       });
     } catch (error) {
+      console.error('Submission error:', error);
       toast({
         title: "Error",
-        description: SECURITY_ERROR_MESSAGES.SUBMISSION_FAILED,
+        description: "Failed to submit application. Please try again.",
         variant: "destructive"
       });
     } finally {
