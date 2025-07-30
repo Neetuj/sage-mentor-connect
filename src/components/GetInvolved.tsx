@@ -364,12 +364,12 @@ const GetInvolved = () => {
                       </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="any">Any Available Tutor</SelectItem>
-                          <SelectItem value="tutor1">Sarah Chen</SelectItem>
-                          <SelectItem value="tutor2">Marcus Johnson</SelectItem>
-                          <SelectItem value="tutor3">Emma Rodriguez</SelectItem>
-                          <SelectItem value="tutor4">David Kim</SelectItem>
-                          <SelectItem value="tutor5">Alex Thompson</SelectItem>
-                          <SelectItem value="tutor6">Hannah Wilson</SelectItem>
+                          <SelectItem value="tutor1">TUTOR NAME</SelectItem>
+                          <SelectItem value="tutor2">TUTOR NAME</SelectItem>
+                          <SelectItem value="tutor3">TUTOR NAME</SelectItem>
+                          <SelectItem value="tutor4">TUTOR NAME</SelectItem>
+                          <SelectItem value="tutor5">TUTOR NAME</SelectItem>
+                          <SelectItem value="tutor6">TUTOR NAME</SelectItem>
                         </SelectContent>
                     </Select>
                   </div>
