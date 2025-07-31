@@ -26,7 +26,27 @@ const GetInvolved = () => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [tutors, setTutors] = useState<any[]>([]);
   const { toast } = useToast();
+
+  // Fetch tutors for the dropdown
+  useEffect(() => {
+    const fetchTutors = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('tutors')
+          .select('name')
+          .order('name');
+
+        if (error) throw error;
+        setTutors(data || []);
+      } catch (error) {
+        console.error('Error fetching tutors:', error);
+      }
+    };
+
+    fetchTutors();
+  }, []);
 
   // Listen for tutor selection from TutorDirectory
   useEffect(() => {
@@ -371,12 +391,11 @@ const GetInvolved = () => {
                       </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="any">Any Available Tutor</SelectItem>
-                          <SelectItem value="tutor1">TUTOR NAME</SelectItem>
-                          <SelectItem value="tutor2">TUTOR NAME</SelectItem>
-                          <SelectItem value="tutor3">TUTOR NAME</SelectItem>
-                          <SelectItem value="tutor4">TUTOR NAME</SelectItem>
-                          <SelectItem value="tutor5">TUTOR NAME</SelectItem>
-                          <SelectItem value="tutor6">TUTOR NAME</SelectItem>
+                          {tutors.map((tutor) => (
+                            <SelectItem key={tutor.name} value={tutor.name}>
+                              {tutor.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                     </Select>
                   </div>
