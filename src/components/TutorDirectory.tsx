@@ -203,7 +203,7 @@ const TutorDirectory = () => {
                 </div>
 
                 {/* Bio */}
-                <p className="text-xs text-muted-foreground mb-3 leading-relaxed line-clamp-3">
+                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
                   {tutor.bio}
                 </p>
 
