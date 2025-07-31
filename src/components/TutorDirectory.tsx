@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Star, MessageCircle, Users, Search, Award, Clock } from "lucide-react";
+import { Star, MessageCircle, Users, Search, Award } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { sanitizeString, searchSchema } from "@/lib/security";
@@ -194,10 +194,6 @@ const TutorDirectory = () => {
                   <div className="flex items-center gap-1 text-xs">
                     <Users className="h-3 w-3 text-secondary" />
                     <span>{tutor.students}</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs">
-                    <Clock className="h-3 w-3 text-primary" />
-                    <span>{tutor.experience}</span>
                   </div>
                 </div>
 

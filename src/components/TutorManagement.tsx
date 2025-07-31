@@ -12,7 +12,6 @@ interface Tutor {
   name: string;
   school: string;
   specialty: string;
-  experience: string;
   bio: string;
   skills: string[];
   rating: number;

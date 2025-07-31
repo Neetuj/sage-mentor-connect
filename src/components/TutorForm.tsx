@@ -23,7 +23,6 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
     specialty: "",
     rating: 5.0,
     students: 0,
-    experience: "",
     bio: "",
     availability: true,
     profile_image_url: "",
@@ -71,7 +70,6 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
         specialty: "",
         rating: 5.0,
         students: 0,
-        experience: "",
         bio: "",
         availability: true,
         profile_image_url: "",
@@ -132,16 +130,6 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-            <div>
-              <Label htmlFor="experience">Experience</Label>
-              <Input
-                id="experience"
-                value={formData.experience}
-                onChange={(e) => setFormData({...formData, experience: e.target.value})}
-                placeholder="e.g., 3+ years"
-                required
-              />
             </div>
           </div>
 

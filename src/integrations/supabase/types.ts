@@ -130,7 +130,6 @@ export type Database = {
           availability: boolean
           bio: string
           created_at: string
-          experience: string
           id: string
           name: string
           profile_image_url: string | null
@@ -145,7 +144,6 @@ export type Database = {
           availability?: boolean
           bio: string
           created_at?: string
-          experience: string
           id?: string
           name: string
           profile_image_url?: string | null
@@ -160,7 +158,6 @@ export type Database = {
           availability?: boolean
           bio?: string
           created_at?: string
-          experience?: string
           id?: string
           name?: string
           profile_image_url?: string | null
