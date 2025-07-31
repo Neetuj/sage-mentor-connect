@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Star, MessageCircle, Users, Search, Award } from "lucide-react";
+import { Star, MessageCircle, Users, Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { sanitizeString, searchSchema } from "@/lib/security";
@@ -100,12 +100,6 @@ const TutorDirectory = () => {
     }
   };
 
-  const handleViewProfile = (tutorName: string) => {
-    toast({
-      title: "Profile Details",
-      description: `Opening detailed profile for ${tutorName}...`,
-    });
-  };
   const filteredTutors = tutors.filter(tutor => {
     const matchesSearch = tutor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          tutor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -233,14 +227,6 @@ const TutorDirectory = () => {
                   >
                     <MessageCircle className="h-3 w-3 mr-1" />
                     {tutor.availability ? "Connect" : "Full"}
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="text-xs"
-                    onClick={() => handleViewProfile(tutor.name)}
-                  >
-                    <Award className="h-3 w-3" />
                   </Button>
                 </div>
               </CardContent>
