@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { applicationFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_MESSAGES } from "@/lib/security";
 
 interface SeminarRegistrationProps {
   seminarTitle: string;
@@ -31,17 +32,49 @@ const SeminarRegistration = ({ seminarTitle, seminarId, children }: SeminarRegis
     setLoading(true);
 
     try {
+      // Rate limiting check
+      if (!checkRateLimit(`seminar_reg_${formData.email}`, 3, 300000)) { // 3 requests per 5 minutes
+        toast.error(SECURITY_ERROR_MESSAGES.RATE_LIMIT_EXCEEDED);
+        return;
+      }
+
+      // Validate and sanitize input
+      const validationResult = applicationFormSchema.safeParse({
+        name: formData.name,
+        email: formData.email,
+        school: formData.school,
+        gradeLevel: formData.grade_level,
+        interests: formData.interests,
+        additionalInfo: formData.additional_info,
+        parentEmail: formData.parent_email
+      });
+
+      if (!validationResult.success) {
+        toast.error(SECURITY_ERROR_MESSAGES.INVALID_INPUT);
+        return;
+      }
+
+      const sanitizedData = {
+        name: sanitizeString(formData.name),
+        email: sanitizeString(formData.email),
+        school: formData.school ? sanitizeString(formData.school) : null,
+        grade_level: formData.grade_level ? sanitizeString(formData.grade_level) : null,
+        interests: formData.interests ? sanitizeString(formData.interests) : null,
+        additional_info: formData.additional_info ? sanitizeString(formData.additional_info) : null,
+        parent_email: formData.parent_email ? sanitizeString(formData.parent_email) : null
+      };
+
       const { error } = await supabase
         .from('submissions')
         .insert({
           form_type: 'seminar',
-          name: formData.name,
-          email: formData.email,
-          school: formData.school || null,
-          grade_level: formData.grade_level || null,
-          interests: formData.interests || null,
-          additional_info: `Seminar Registration: ${seminarTitle}\n\n${formData.additional_info}`,
-          parent_email: formData.parent_email || null
+          name: sanitizedData.name,
+          email: sanitizedData.email,
+          school: sanitizedData.school,
+          grade_level: sanitizedData.grade_level,
+          interests: sanitizedData.interests,
+          additional_info: `Seminar Registration: ${seminarTitle}\n\n${sanitizedData.additional_info || ''}`,
+          parent_email: sanitizedData.parent_email
         });
 
       if (error) throw error;
@@ -68,7 +101,7 @@ const SeminarRegistration = ({ seminarTitle, seminarId, children }: SeminarRegis
       });
     } catch (error) {
       console.error('Error submitting registration:', error);
-      toast.error("Failed to register. Please try again.");
+      toast.error(SECURITY_ERROR_MESSAGES.SUBMISSION_FAILED);
     } finally {
       setLoading(false);
     }

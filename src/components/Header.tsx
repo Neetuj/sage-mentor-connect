@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, profile, isAdmin, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -11,6 +16,16 @@ const Header = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
     setIsMenuOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast.error('Error signing out');
+    } else {
+      toast.success('Signed out successfully');
+      navigate('/');
+    }
   };
 
   return (
@@ -56,6 +71,38 @@ const Header = () => {
             <Button variant="default" onClick={() => scrollToSection('get-involved')}>
               Get Involved
             </Button>
+            
+            {user ? (
+              <div className="flex items-center space-x-2">
+                {isAdmin && (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate('/admin')}
+                  >
+                    Admin
+                  </Button>
+                )}
+                <div className="flex items-center space-x-2 text-sm">
+                  <User className="h-4 w-4" />
+                  <span>{profile?.full_name || user.email}</span>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={handleSignOut}
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                variant="outline"
+                onClick={() => navigate('/auth')}
+              >
+                Sign In
+              </Button>
+            )}
           </nav>
 
           {/* Mobile menu button */}
@@ -102,6 +149,40 @@ const Header = () => {
               >
                 Get Involved
               </Button>
+              
+              {user ? (
+                <>
+                  {isAdmin && (
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={() => navigate('/admin')}
+                    >
+                      Admin
+                    </Button>
+                  )}
+                  <div className="flex items-center space-x-2 px-3 py-2">
+                    <User className="h-4 w-4" />
+                    <span className="text-sm">{profile?.full_name || user.email}</span>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start"
+                    onClick={handleSignOut}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Button 
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => navigate('/auth')}
+                >
+                  Sign In
+                </Button>
+              )}
             </nav>
           </div>
         )}
