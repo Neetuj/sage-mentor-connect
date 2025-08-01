@@ -68,10 +68,11 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
   ];
 
   const timezones = [
-    "UTC", "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
-    "America/Phoenix", "America/Anchorage", "Pacific/Honolulu", "Europe/London", 
-    "Europe/Paris", "Europe/Berlin", "Asia/Tokyo", "Asia/Shanghai", "Asia/Dubai",
-    "Australia/Sydney", "Australia/Melbourne"
+    "EST - New York", "EST - Florida", "EST - Georgia", "EST - North Carolina", "EST - Virginia",
+    "CST - Texas", "CST - Illinois", "CST - Missouri", "CST - Louisiana", "CST - Minnesota",
+    "MST - Colorado", "MST - Arizona", "MST - New Mexico", "MST - Utah", "MST - Montana",
+    "PST - California", "PST - Washington", "PST - Oregon", "PST - Nevada",
+    "AKST - Alaska", "HST - Hawaii"
   ];
 
   const startEdit = (tutor: Tutor) => {
@@ -85,7 +86,7 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
       students: tutor.students,
       availability: tutor.availability,
       profile_image_url: tutor.profile_image_url || "",
-      timezone: tutor.timezone || "UTC",
+      timezone: tutor.timezone || "EST - New York",
     });
     setEditSkills([...tutor.skills]);
   };
@@ -190,7 +191,7 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
                     <TableCell className="font-medium">{tutor.name}</TableCell>
                     <TableCell>{tutor.school}</TableCell>
                     <TableCell>{tutor.specialty}</TableCell>
-                    <TableCell>{tutor.timezone || "UTC"}</TableCell>
+                    <TableCell>{tutor.timezone || "EST - New York"}</TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
                         {tutor.skills.slice(0, 2).map((skill, index) => (

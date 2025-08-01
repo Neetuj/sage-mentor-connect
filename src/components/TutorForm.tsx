@@ -26,7 +26,7 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
     bio: "",
     availability: true,
     profile_image_url: "",
-    timezone: "UTC",
+    timezone: "EST - New York",
   });
 
   const specialties = [
@@ -35,10 +35,11 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
   ];
 
   const timezones = [
-    "UTC", "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
-    "America/Phoenix", "America/Anchorage", "Pacific/Honolulu", "Europe/London", 
-    "Europe/Paris", "Europe/Berlin", "Asia/Tokyo", "Asia/Shanghai", "Asia/Dubai",
-    "Australia/Sydney", "Australia/Melbourne"
+    "EST - New York", "EST - Florida", "EST - Georgia", "EST - North Carolina", "EST - Virginia",
+    "CST - Texas", "CST - Illinois", "CST - Missouri", "CST - Louisiana", "CST - Minnesota",
+    "MST - Colorado", "MST - Arizona", "MST - New Mexico", "MST - Utah", "MST - Montana",
+    "PST - California", "PST - Washington", "PST - Oregon", "PST - Nevada",
+    "AKST - Alaska", "HST - Hawaii"
   ];
 
   const addSkill = () => {
@@ -81,7 +82,7 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
         bio: "",
         availability: true,
         profile_image_url: "",
-        timezone: "UTC",
+        timezone: "EST - New York",
       });
       setSkills([]);
       onTutorAdded();
