@@ -3,7 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Trash2, Star, Users } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Trash2, Star, Users, Edit, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -18,6 +24,7 @@ interface Tutor {
   students: number;
   availability: boolean;
   profile_image_url?: string;
+  timezone?: string;
 }
 
 interface TutorManagementProps {
@@ -27,6 +34,11 @@ interface TutorManagementProps {
 const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingTutor, setEditingTutor] = useState<Tutor | null>(null);
+  const [editForm, setEditForm] = useState<any>({});
+  const [editSkills, setEditSkills] = useState<string[]>([]);
+  const [newSkill, setNewSkill] = useState("");
+  const [editLoading, setEditLoading] = useState(false);
 
   const fetchTutors = async () => {
     setLoading(true);
@@ -49,6 +61,72 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
   useEffect(() => {
     fetchTutors();
   }, []);
+
+  const specialties = [
+    "Mathematics", "Science", "English", "History", "Computer Science", 
+    "Foreign Languages", "Art", "Music", "Test Prep", "College Counseling"
+  ];
+
+  const timezones = [
+    "UTC", "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
+    "America/Phoenix", "America/Anchorage", "Pacific/Honolulu", "Europe/London", 
+    "Europe/Paris", "Europe/Berlin", "Asia/Tokyo", "Asia/Shanghai", "Asia/Dubai",
+    "Australia/Sydney", "Australia/Melbourne"
+  ];
+
+  const startEdit = (tutor: Tutor) => {
+    setEditingTutor(tutor);
+    setEditForm({
+      name: tutor.name,
+      school: tutor.school,
+      specialty: tutor.specialty,
+      bio: tutor.bio,
+      rating: tutor.rating,
+      students: tutor.students,
+      availability: tutor.availability,
+      profile_image_url: tutor.profile_image_url || "",
+      timezone: tutor.timezone || "UTC",
+    });
+    setEditSkills([...tutor.skills]);
+  };
+
+  const addEditSkill = () => {
+    if (newSkill.trim() && !editSkills.includes(newSkill.trim())) {
+      setEditSkills([...editSkills, newSkill.trim()]);
+      setNewSkill("");
+    }
+  };
+
+  const removeEditSkill = (skillToRemove: string) => {
+    setEditSkills(editSkills.filter(skill => skill !== skillToRemove));
+  };
+
+  const saveEdit = async () => {
+    if (!editingTutor) return;
+    
+    setEditLoading(true);
+    try {
+      const { error } = await supabase
+        .from('tutors')
+        .update({
+          ...editForm,
+          skills: editSkills
+        })
+        .eq('id', editingTutor.id);
+
+      if (error) throw error;
+
+      toast.success("Tutor updated successfully");
+      setEditingTutor(null);
+      fetchTutors();
+      onTutorDeleted(); // Refresh parent data
+    } catch (error) {
+      console.error('Error updating tutor:', error);
+      toast.error("Failed to update tutor");
+    } finally {
+      setEditLoading(false);
+    }
+  };
 
   const deleteTutor = async (id: string, name: string) => {
     if (!confirm(`Are you sure you want to delete tutor "${name}"?`)) {
@@ -98,6 +176,7 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
                   <TableHead>Name</TableHead>
                   <TableHead>School</TableHead>
                   <TableHead>Specialty</TableHead>
+                  <TableHead>Timezone</TableHead>
                   <TableHead>Skills</TableHead>
                   <TableHead>Rating</TableHead>
                   <TableHead>Students</TableHead>
@@ -111,6 +190,7 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
                     <TableCell className="font-medium">{tutor.name}</TableCell>
                     <TableCell>{tutor.school}</TableCell>
                     <TableCell>{tutor.specialty}</TableCell>
+                    <TableCell>{tutor.timezone || "UTC"}</TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
                         {tutor.skills.slice(0, 2).map((skill, index) => (
@@ -143,15 +223,175 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => deleteTutor(tutor.id, tutor.name)}
-                        className="flex items-center gap-2"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        Delete
-                      </Button>
+                      <div className="flex gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => startEdit(tutor)}
+                              className="flex items-center gap-2"
+                            >
+                              <Edit className="h-4 w-4" />
+                              Edit
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle>Edit Tutor: {tutor.name}</DialogTitle>
+                            </DialogHeader>
+                            {editingTutor && (
+                              <div className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="edit-name">Name</Label>
+                                    <Input
+                                      id="edit-name"
+                                      value={editForm.name}
+                                      onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="edit-school">School</Label>
+                                    <Input
+                                      id="edit-school"
+                                      value={editForm.school}
+                                      onChange={(e) => setEditForm({...editForm, school: e.target.value})}
+                                    />
+                                  </div>
+                                </div>
+                                
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="edit-specialty">Specialty</Label>
+                                    <Select value={editForm.specialty} onValueChange={(value) => setEditForm({...editForm, specialty: value})}>
+                                      <SelectTrigger>
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {specialties.map((specialty) => (
+                                          <SelectItem key={specialty} value={specialty}>
+                                            {specialty}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="edit-timezone">Timezone</Label>
+                                    <Select value={editForm.timezone} onValueChange={(value) => setEditForm({...editForm, timezone: value})}>
+                                      <SelectTrigger>
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {timezones.map((timezone) => (
+                                          <SelectItem key={timezone} value={timezone}>
+                                            {timezone}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-4">
+                                  <div>
+                                    <Label htmlFor="edit-rating">Rating</Label>
+                                    <Input
+                                      id="edit-rating"
+                                      type="number"
+                                      min="1"
+                                      max="5"
+                                      step="0.1"
+                                      value={editForm.rating}
+                                      onChange={(e) => setEditForm({...editForm, rating: parseFloat(e.target.value)})}
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="edit-students">Students</Label>
+                                    <Input
+                                      id="edit-students"
+                                      type="number"
+                                      min="0"
+                                      value={editForm.students}
+                                      onChange={(e) => setEditForm({...editForm, students: parseInt(e.target.value)})}
+                                    />
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <Label htmlFor="edit-availability">Available</Label>
+                                    <Switch
+                                      id="edit-availability"
+                                      checked={editForm.availability}
+                                      onCheckedChange={(checked) => setEditForm({...editForm, availability: checked})}
+                                    />
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <Label htmlFor="edit-image">Profile Image URL</Label>
+                                  <Input
+                                    id="edit-image"
+                                    value={editForm.profile_image_url}
+                                    onChange={(e) => setEditForm({...editForm, profile_image_url: e.target.value})}
+                                    placeholder="https://..."
+                                  />
+                                </div>
+
+                                <div>
+                                  <Label htmlFor="edit-bio">Bio</Label>
+                                  <Textarea
+                                    id="edit-bio"
+                                    value={editForm.bio}
+                                    onChange={(e) => setEditForm({...editForm, bio: e.target.value})}
+                                  />
+                                </div>
+
+                                <div>
+                                  <Label>Skills</Label>
+                                  <div className="flex gap-2 mb-2">
+                                    <Input
+                                      value={newSkill}
+                                      onChange={(e) => setNewSkill(e.target.value)}
+                                      placeholder="Add a skill"
+                                      onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addEditSkill())}
+                                    />
+                                    <Button type="button" onClick={addEditSkill}>Add</Button>
+                                  </div>
+                                  <div className="flex flex-wrap gap-2">
+                                    {editSkills.map((skill) => (
+                                      <Badge key={skill} variant="secondary" className="flex items-center gap-1">
+                                        {skill}
+                                        <X 
+                                          className="h-3 w-3 cursor-pointer" 
+                                          onClick={() => removeEditSkill(skill)}
+                                        />
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <div className="flex justify-end gap-2">
+                                  <Button variant="outline" onClick={() => setEditingTutor(null)}>
+                                    Cancel
+                                  </Button>
+                                  <Button onClick={saveEdit} disabled={editLoading}>
+                                    {editLoading ? "Saving..." : "Save Changes"}
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </DialogContent>
+                        </Dialog>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => deleteTutor(tutor.id, tutor.name)}
+                          className="flex items-center gap-2"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Delete
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

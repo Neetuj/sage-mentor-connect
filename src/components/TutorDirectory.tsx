@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Star, MessageCircle, Users, Search } from "lucide-react";
+import { Star, MessageCircle, Users, Search, Clock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { sanitizeString, searchSchema } from "@/lib/security";
@@ -191,9 +191,13 @@ const TutorDirectory = () => {
                   </div>
                 </div>
 
-                {/* Specialty badge */}
-                <div className="mb-3">
+                {/* Specialty and timezone */}
+                <div className="mb-3 flex items-center justify-between">
                   <Badge variant="secondary" className="text-xs">{tutor.specialty}</Badge>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    <span>{tutor.timezone || "UTC"}</span>
+                  </div>
                 </div>
 
                 {/* Bio */}

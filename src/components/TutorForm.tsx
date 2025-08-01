@@ -26,11 +26,19 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
     bio: "",
     availability: true,
     profile_image_url: "",
+    timezone: "UTC",
   });
 
   const specialties = [
     "Mathematics", "Science", "English", "History", "Computer Science", 
     "Foreign Languages", "Art", "Music", "Test Prep", "College Counseling"
+  ];
+
+  const timezones = [
+    "UTC", "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
+    "America/Phoenix", "America/Anchorage", "Pacific/Honolulu", "Europe/London", 
+    "Europe/Paris", "Europe/Berlin", "Asia/Tokyo", "Asia/Shanghai", "Asia/Dubai",
+    "Australia/Sydney", "Australia/Melbourne"
   ];
 
   const addSkill = () => {
@@ -73,6 +81,7 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
         bio: "",
         availability: true,
         profile_image_url: "",
+        timezone: "UTC",
       });
       setSkills([]);
       onTutorAdded();
@@ -126,6 +135,21 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
                   {specialties.map((specialty) => (
                     <SelectItem key={specialty} value={specialty}>
                       {specialty}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="timezone">Timezone</Label>
+              <Select value={formData.timezone} onValueChange={(value) => setFormData({...formData, timezone: value})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select timezone" />
+                </SelectTrigger>
+                <SelectContent>
+                  {timezones.map((timezone) => (
+                    <SelectItem key={timezone} value={timezone}>
+                      {timezone}
                     </SelectItem>
                   ))}
                 </SelectContent>
