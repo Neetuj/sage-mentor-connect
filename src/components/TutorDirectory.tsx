@@ -204,16 +204,11 @@ const TutorDirectory = () => {
                 {/* Skills tags */}
                 <div className="mb-4">
                   <div className="flex flex-wrap gap-1">
-                    {tutor.skills.slice(0, 3).map((skill, index) => (
+                    {tutor.skills.map((skill, index) => (
                       <Badge key={index} variant="outline" className="text-xs px-2 py-0">
                         {skill}
                       </Badge>
                     ))}
-                    {tutor.skills.length > 3 && (
-                      <Badge variant="outline" className="text-xs px-2 py-0">
-                        +{tutor.skills.length - 3}
-                      </Badge>
-                    )}
                   </div>
                 </div>
 
