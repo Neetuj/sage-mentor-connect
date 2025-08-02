@@ -104,13 +104,23 @@ const Footer = () => {
             <p className="text-sm text-primary-foreground/80">
               © 2024 SAGE - Student Alliance for Growth in Engineering. All rights reserved.
             </p>
-            <div className="flex items-center gap-1 text-sm text-primary-foreground/80">
-              <span>Made with</span>
-              <Heart 
-                className="h-4 w-4 text-accent fill-current cursor-pointer hover:opacity-80 transition-opacity" 
-                onClick={() => navigate('/admin')}
-              />
-              <span>by student volunteers</span>
+            <div className="flex items-center gap-4 text-sm text-primary-foreground/80">
+              <a 
+                href="https://docs.google.com/document/d/1ot5m5bYhCruBP6ldak0XIlKynQit6yTCXqyqqnWwreM/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary-foreground transition-colors underline"
+              >
+                Privacy Policy
+              </a>
+              <div className="flex items-center gap-1">
+                <span>Made with</span>
+                <Heart 
+                  className="h-4 w-4 text-accent fill-current cursor-pointer hover:opacity-80 transition-opacity" 
+                  onClick={() => navigate('/admin')}
+                />
+                <span>by student volunteers</span>
+              </div>
             </div>
           </div>
         </div>

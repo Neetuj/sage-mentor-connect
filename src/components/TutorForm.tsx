@@ -26,7 +26,7 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
     bio: "",
     availability: true,
     profile_image_url: "",
-    timezone: "EST - New York",
+        timezone: "",
   });
 
   const specialties = [
@@ -82,7 +82,7 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
         bio: "",
         availability: true,
         profile_image_url: "",
-        timezone: "EST - New York",
+        timezone: "",
       });
       setSkills([]);
       onTutorAdded();
@@ -142,19 +142,14 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
               </Select>
             </div>
             <div>
-              <Label htmlFor="timezone">Timezone</Label>
-              <Select value={formData.timezone} onValueChange={(value) => setFormData({...formData, timezone: value})}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select timezone" />
-                </SelectTrigger>
-                <SelectContent>
-                  {timezones.map((timezone) => (
-                    <SelectItem key={timezone} value={timezone}>
-                      {timezone}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="timezone">Location/Timezone</Label>
+              <Input
+                id="timezone"
+                value={formData.timezone}
+                onChange={(e) => setFormData({...formData, timezone: e.target.value})}
+                placeholder="e.g., EST - New York"
+                required
+              />
             </div>
           </div>
 

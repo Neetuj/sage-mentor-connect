@@ -86,7 +86,7 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
       students: tutor.students,
       availability: tutor.availability,
       profile_image_url: tutor.profile_image_url || "",
-      timezone: tutor.timezone || "EST - New York",
+      timezone: tutor.timezone || "",
     });
     setEditSkills([...tutor.skills]);
   };
@@ -191,7 +191,7 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
                     <TableCell className="font-medium">{tutor.name}</TableCell>
                     <TableCell>{tutor.school}</TableCell>
                     <TableCell>{tutor.specialty}</TableCell>
-                    <TableCell>{tutor.timezone || "EST - New York"}</TableCell>
+                    <TableCell>{tutor.timezone || "N/A"}</TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
                         {tutor.skills.slice(0, 2).map((skill, index) => (
@@ -278,21 +278,15 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
                                       </SelectContent>
                                     </Select>
                                   </div>
-                                  <div>
-                                    <Label htmlFor="edit-timezone">Timezone</Label>
-                                    <Select value={editForm.timezone} onValueChange={(value) => setEditForm({...editForm, timezone: value})}>
-                                      <SelectTrigger>
-                                        <SelectValue />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        {timezones.map((timezone) => (
-                                          <SelectItem key={timezone} value={timezone}>
-                                            {timezone}
-                                          </SelectItem>
-                                        ))}
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
+                          <div>
+                            <Label htmlFor="edit-timezone">Location/Timezone</Label>
+                            <Input
+                              id="edit-timezone"
+                              value={editForm.timezone}
+                              onChange={(e) => setEditForm({...editForm, timezone: e.target.value})}
+                              placeholder="e.g., EST - New York"
+                            />
+                          </div>
                                 </div>
 
                                 <div className="grid grid-cols-3 gap-4">
