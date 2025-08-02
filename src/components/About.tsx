@@ -17,7 +17,7 @@ const About = () => {
     },
     {
       name: "Rohan Jain",
-      role: "Vice President",
+      role: "Cofounder & Vice President",
       school: "Coppell High School, TX", 
       expertise: "Aerospace Engineering",
       bio: "From Dallas, Texas, Rohan is interested in flight mechanics, rocketry propulsion, and aerodynamics. He loves spending time mastering new card tricks, with a good book and his giant playlist, teaching taekwondo to toddlers, and making really good guacamole. "
