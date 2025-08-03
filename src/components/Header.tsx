@@ -33,9 +33,7 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-hero-gradient rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">S</span>
-            </div>
+            <img src="/lovable-uploads/55bfe8cb-0cef-4057-ae60-ce370c18903c.png" alt="SAGE Logo" className="h-10 w-10" />
             <div>
               <h1 className="text-xl font-bold text-primary">SAGE</h1>
               <p className="text-xs text-muted-foreground">Student Alliance for Growth in Engineering</p>
