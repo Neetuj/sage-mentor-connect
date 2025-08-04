@@ -11,3 +11,21 @@
   
   # HSTS (uncomment for production HTTPS)
   # Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# JavaScript and TypeScript files
+*.js
+  Content-Type: text/javascript; charset=utf-8
+*.mjs
+  Content-Type: text/javascript; charset=utf-8
+*.ts
+  Content-Type: text/typescript; charset=utf-8
+*.tsx
+  Content-Type: text/typescript; charset=utf-8
+
+# CSS files
+*.css
+  Content-Type: text/css; charset=utf-8
+
+# JSON files
+*.json
+  Content-Type: application/json; charset=utf-8
