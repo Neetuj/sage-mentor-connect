@@ -280,10 +280,19 @@ const TutorDirectory = () => {
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                  />
+                    disabled={currentPage === 1}
+                    className="gap-1 pl-2.5"
+                  >
+                    <span className="sr-only">Previous</span>
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                  </Button>
                 </PaginationItem>
                 
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
@@ -306,22 +315,32 @@ const TutorDirectory = () => {
                   
                   return (
                     <PaginationItem key={page}>
-                      <PaginationLink
+                      <Button
+                        variant={currentPage === page ? "default" : "ghost"}
+                        size="sm"
                         onClick={() => handlePageChange(page)}
-                        isActive={currentPage === page}
-                        className="cursor-pointer"
+                        className="w-9 h-9 p-0"
                       >
                         {page}
-                      </PaginationLink>
+                      </Button>
                     </PaginationItem>
                   );
                 })}
                 
                 <PaginationItem>
-                  <PaginationNext 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                  />
+                    disabled={currentPage === totalPages}
+                    className="gap-1 pr-2.5"
+                  >
+                    Next
+                    <span className="sr-only">Next</span>
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Button>
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
