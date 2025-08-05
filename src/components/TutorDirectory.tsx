@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Star, MessageCircle, Users, Search, Clock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -16,6 +17,8 @@ const TutorDirectory = () => {
   const [searchError, setSearchError] = useState("");
   const [tutors, setTutors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -108,6 +111,24 @@ const TutorDirectory = () => {
     return matchesSearch && matchesSpecialty;
   });
 
+  // Pagination calculations
+  const totalTutors = filteredTutors.length;
+  const totalPages = Math.ceil(totalTutors / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentTutors = filteredTutors.slice(startIndex, endIndex);
+
+  // Reset to page 1 when search/filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterSpecialty]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of tutors section
+    document.getElementById('tutors')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <section id="tutors" className="py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -123,7 +144,7 @@ const TutorDirectory = () => {
         </div>
 
         {/* Search and Filter */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8 max-w-2xl mx-auto">
+        <div className="flex flex-col sm:flex-row gap-4 mb-8 max-w-4xl mx-auto">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -148,7 +169,26 @@ const TutorDirectory = () => {
               ))}
             </SelectContent>
           </Select>
+          <Select value={itemsPerPage.toString()} onValueChange={(value) => setItemsPerPage(Number(value))}>
+            <SelectTrigger className="w-full sm:w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="6">6 per page</SelectItem>
+              <SelectItem value="12">12 per page</SelectItem>
+              <SelectItem value="18">18 per page</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
+
+        {/* Results Summary */}
+        {!loading && filteredTutors.length > 0 && (
+          <div className="text-center mb-6">
+            <p className="text-sm text-muted-foreground">
+              Showing {startIndex + 1}-{Math.min(endIndex, totalTutors)} of {totalTutors} tutors
+            </p>
+          </div>
+        )}
 
         {/* Tutors Grid */}
         {loading ? (
@@ -158,7 +198,7 @@ const TutorDirectory = () => {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredTutors.map((tutor) => (
+            {currentTutors.map((tutor) => (
             <Card key={tutor.id} className="shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden">
               {/* Header with availability indicator */}
               <CardHeader className="pb-3">
@@ -231,6 +271,60 @@ const TutorDirectory = () => {
               </CardContent>
             </Card>
             ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {!loading && filteredTutors.length > 0 && totalPages > 1 && (
+          <div className="mt-12">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  // Show first page, last page, current page, and pages around current page
+                  const showPage = page === 1 || 
+                                   page === totalPages || 
+                                   (page >= currentPage - 1 && page <= currentPage + 1);
+                  
+                  if (!showPage) {
+                    // Show ellipsis for gaps
+                    if (page === currentPage - 2 || page === currentPage + 2) {
+                      return (
+                        <PaginationItem key={page}>
+                          <span className="px-3 py-2">...</span>
+                        </PaginationItem>
+                      );
+                    }
+                    return null;
+                  }
+                  
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => handlePageChange(page)}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
+                
+                <PaginationItem>
+                  <PaginationNext 
+                    onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         )}
 
