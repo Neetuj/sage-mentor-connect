@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/sage-mentor-connect/",    // <-- Add this line
+  base: "/",
   server: {
     host: "::",
     port: 8080,
