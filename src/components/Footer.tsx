@@ -19,7 +19,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
-              <img src="/lovable-uploads/55bfe8cb-0cef-4057-ae60-ce370c18903c.png" alt="SAGE Logo" className="h-10 w-10" />
+              <img src="/lovable-uploads/55bfe8cb-0cef-4057-ae60-ce370c18903c.png" alt="SAGE Logo" className="h-10 w-10 opacity-70 hover:opacity-90 transition-opacity duration-300" />
               <div>
                 <h3 className="text-xl font-bold">SAGE</h3>
                 <p className="text-xs text-primary-foreground/80">Student Alliance for Growth in Engineering</p>
