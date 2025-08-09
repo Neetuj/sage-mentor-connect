@@ -1,0 +1,31 @@
+/*
+  # Content Security Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self'; object-src 'none'; frame-src 'self'
+  
+  # Security Headers
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  
+  # HSTS (uncomment for production HTTPS)
+  # Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# JavaScript and TypeScript files
+*.js
+  Content-Type: text/javascript; charset=utf-8
+*.mjs
+  Content-Type: text/javascript; charset=utf-8
+*.ts
+  Content-Type: text/typescript; charset=utf-8
+*.tsx
+  Content-Type: text/typescript; charset=utf-8
+
+# CSS files
+*.css
+  Content-Type: text/css; charset=utf-8
+
+# JSON files
+*.json
+  Content-Type: application/json; charset=utf-8
