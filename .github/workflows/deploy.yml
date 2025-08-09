@@ -6,8 +6,7 @@ on:
       - main
 
 permissions:
-  pages: write
-  id-token: write
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -35,4 +34,4 @@ jobs:
         with:
           branch: gh-pages
           folder: dist
-          token: ${{ secrets.GITHUB_TOKEN }}_
+          token: ${{ secrets.GITHUB_TOKEN }}
