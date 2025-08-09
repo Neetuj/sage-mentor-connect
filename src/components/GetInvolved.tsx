@@ -74,7 +74,7 @@ const GetInvolved = () => {
       icon: GraduationCap, 
       title: "Become a Tutor",
       description: "High school students with engineering passion can guide younger students and share their knowledge.",
-      requirements: "Grades 9-12 • Engineering interest • 2-3 hours per week",
+      requirements: "Grades 9-12 • Engineering interest • 1-2 hours per week",
       action: "Apply as Tutor"
     },
     {
