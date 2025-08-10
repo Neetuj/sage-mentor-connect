@@ -30,6 +30,26 @@
 
   <body>
     <div id="root"></div>
+    
+    <!-- GitHub Pages SPA routing support -->
+    <script type="text/javascript">
+      // Handle redirected routes from 404.html for GitHub Pages
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded);
+        }
+      }(window.location));
+      
+      // Handle query parameter redirect from 404.html
+      if (window.location.search && window.location.search.indexOf('p=') !== -1) {
+        var path = window.location.search.split('p=')[1];
+        window.history.replaceState(null, null, path);
+      }
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
