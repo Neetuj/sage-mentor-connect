@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,7 +8,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-const SeminarForm = ({ onSeminarAdded }: { onSeminarAdded: () => void }) => {
+interface Seminar {
+  id?: string;
+  title: string;
+  speaker: string;
+  date: string;
+  time: string;
+  location: string;
+  category: string;
+  audience: string;
+  description: string;
+  capacity: number;
+  registered: number;
+}
+
+interface SeminarFormProps {
+  onSeminarAdded: () => void;
+  editingSeminar?: Seminar | null;
+  onCancelEdit?: () => void;
+}
+
+const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFormProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   
@@ -25,6 +45,37 @@ const SeminarForm = ({ onSeminarAdded }: { onSeminarAdded: () => void }) => {
     capacity: 50,
   });
 
+  // Populate form when editing
+  useEffect(() => {
+    if (editingSeminar) {
+      setFormData({
+        title: editingSeminar.title,
+        speaker: editingSeminar.speaker,
+        description: editingSeminar.description,
+        category: editingSeminar.category,
+        date: editingSeminar.date,
+        time: editingSeminar.time,
+        location: editingSeminar.location,
+        audience: editingSeminar.audience,
+        registered: editingSeminar.registered,
+        capacity: editingSeminar.capacity,
+      });
+    } else {
+      setFormData({
+        title: "",
+        speaker: "",
+        description: "",
+        category: "",
+        date: "",
+        time: "",
+        location: "",
+        audience: "",
+        registered: 0,
+        capacity: 50,
+      });
+    }
+  }, [editingSeminar]);
+
   const categories = [
     "Engineering", "Computer Science", "Mathematics", "Science", 
     "Career Development", "Research", "Innovation", "Technology"
@@ -40,35 +91,54 @@ const SeminarForm = ({ onSeminarAdded }: { onSeminarAdded: () => void }) => {
     setLoading(true);
     
     try {
-      const { error } = await supabase
-        .from('seminars')
-        .insert([formData]);
+      if (editingSeminar) {
+        // Update existing seminar
+        const { error } = await supabase
+          .from('seminars')
+          .update(formData)
+          .eq('id', editingSeminar.id);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      toast({
-        title: "Success",
-        description: "Seminar added successfully!",
-      });
+        toast({
+          title: "Success",
+          description: "Seminar updated successfully!",
+        });
 
-      // Reset form
-      setFormData({
-        title: "",
-        speaker: "",
-        description: "",
-        category: "",
-        date: "",
-        time: "",
-        location: "",
-        audience: "",
-        registered: 0,
-        capacity: 50,
-      });
+        onCancelEdit?.();
+      } else {
+        // Create new seminar
+        const { error } = await supabase
+          .from('seminars')
+          .insert([formData]);
+
+        if (error) throw error;
+
+        toast({
+          title: "Success",
+          description: "Seminar added successfully!",
+        });
+
+        // Reset form
+        setFormData({
+          title: "",
+          speaker: "",
+          description: "",
+          category: "",
+          date: "",
+          time: "",
+          location: "",
+          audience: "",
+          registered: 0,
+          capacity: 50,
+        });
+      }
+      
       onSeminarAdded();
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to add seminar. Please try again.",
+        description: editingSeminar ? "Failed to update seminar. Please try again." : "Failed to add seminar. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -79,7 +149,7 @@ const SeminarForm = ({ onSeminarAdded }: { onSeminarAdded: () => void }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add New Seminar</CardTitle>
+        <CardTitle>{editingSeminar ? "Edit Seminar" : "Add New Seminar"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -202,9 +272,16 @@ const SeminarForm = ({ onSeminarAdded }: { onSeminarAdded: () => void }) => {
             />
           </div>
 
-          <Button type="submit" disabled={loading}>
-            {loading ? "Adding..." : "Add Seminar"}
-          </Button>
+          <div className="flex gap-2">
+            <Button type="submit" disabled={loading}>
+              {loading ? (editingSeminar ? "Updating..." : "Adding...") : (editingSeminar ? "Update Seminar" : "Add Seminar")}
+            </Button>
+            {editingSeminar && onCancelEdit && (
+              <Button type="button" variant="outline" onClick={onCancelEdit}>
+                Cancel
+              </Button>
+            )}
+          </div>
         </form>
       </CardContent>
     </Card>

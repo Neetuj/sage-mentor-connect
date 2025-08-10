@@ -16,6 +16,7 @@ import SubmissionManagement from "@/components/SubmissionManagement";
 const Admin = () => {
   const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [editingSeminar, setEditingSeminar] = useState(null);
   const navigate = useNavigate();
 
   const refreshData = () => {
@@ -136,8 +137,15 @@ const Admin = () => {
           
           <TabsContent value="seminars">
             <div className="space-y-6">
-              <SeminarForm onSeminarAdded={refreshData} />
-              <SeminarManagement onSeminarDeleted={refreshData} />
+              <SeminarForm 
+                onSeminarAdded={refreshData} 
+                editingSeminar={editingSeminar}
+                onCancelEdit={() => setEditingSeminar(null)}
+              />
+              <SeminarManagement 
+                onSeminarDeleted={refreshData} 
+                onEditSeminar={setEditingSeminar}
+              />
             </div>
           </TabsContent>
         </Tabs>

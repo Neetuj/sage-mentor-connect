@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Trash2, Calendar, Clock, MapPin, Users } from "lucide-react";
+import { Trash2, Calendar, Clock, MapPin, Users, Edit } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -23,9 +23,10 @@ interface Seminar {
 
 interface SeminarManagementProps {
   onSeminarDeleted: () => void;
+  onEditSeminar: (seminar: Seminar) => void;
 }
 
-const SeminarManagement = ({ onSeminarDeleted }: SeminarManagementProps) => {
+const SeminarManagement = ({ onSeminarDeleted, onEditSeminar }: SeminarManagementProps) => {
   const [seminars, setSeminars] = useState<Seminar[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -172,15 +173,26 @@ const SeminarManagement = ({ onSeminarDeleted }: SeminarManagementProps) => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => deleteSeminar(seminar.id, seminar.title)}
-                          className="flex items-center gap-2"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Delete
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onEditSeminar(seminar)}
+                            className="flex items-center gap-2"
+                          >
+                            <Edit className="h-4 w-4" />
+                            Edit
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => deleteSeminar(seminar.id, seminar.title)}
+                            className="flex items-center gap-2"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Delete
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
