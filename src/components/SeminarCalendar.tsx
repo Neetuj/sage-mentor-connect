@@ -189,34 +189,63 @@ const SeminarCalendar = () => {
               const regStatus = getRegistrationStatus(seminar.registered, seminar.capacity);
               
               return (
-                <Card key={seminar.id} data-seminar={seminar.title} className="shadow-card hover:shadow-card-hover transition-all duration-300">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <Badge className={getCategoryColor(seminar.category)}>
-                        {seminar.category}
-                      </Badge>
-                      <Badge variant={regStatus.color as any}>
-                        {regStatus.status}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-xl text-primary mb-2">
-                      {seminar.title}
-                    </CardTitle>
-                    <div className="text-sm text-muted-foreground">
-                      <p className="font-medium">{seminar.speaker}</p>
-                    </div>
-                  </CardHeader>
+                 <Card key={seminar.id} data-seminar={seminar.title} className="shadow-card hover:shadow-card-hover transition-all duration-300">
+                   <CardHeader className="pb-4">
+                     <div className="flex items-start justify-between mb-2">
+                       <Badge className={getCategoryColor(seminar.category)}>
+                         {seminar.category}
+                       </Badge>
+                       <Badge variant={regStatus.color as any}>
+                         {regStatus.status}
+                       </Badge>
+                     </div>
+                     
+                     {/* Topic and Host Images */}
+                     <div className="flex gap-4 mb-4">
+                       {seminar.topic_image_url && (
+                         <div className="flex-1">
+                           <img 
+                             src={seminar.topic_image_url} 
+                             alt={`${seminar.title} topic`}
+                             className="w-full h-32 object-cover rounded-md"
+                             onError={(e) => {
+                               e.currentTarget.style.display = 'none';
+                             }}
+                           />
+                         </div>
+                       )}
+                       {seminar.host_image_url && (
+                         <div className="w-20">
+                           <img 
+                             src={seminar.host_image_url} 
+                             alt={`${seminar.speaker} profile`}
+                             className="w-20 h-20 object-cover rounded-full"
+                             onError={(e) => {
+                               e.currentTarget.style.display = 'none';
+                             }}
+                           />
+                         </div>
+                       )}
+                     </div>
+                     
+                     <CardTitle className="text-xl text-primary mb-2">
+                       {seminar.title}
+                     </CardTitle>
+                     <div className="text-sm text-muted-foreground">
+                       <p className="font-medium">{seminar.speaker}</p>
+                     </div>
+                   </CardHeader>
 
                   <CardContent>
                     <p className="text-muted-foreground mb-4 leading-relaxed">
                       {seminar.description}
                     </p>
 
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="h-4 w-4 text-primary" />
-                        <span>{new Date(seminar.date).toLocaleDateString()}</span>
-                      </div>
+                     <div className="space-y-3 mb-6">
+                       <div className="flex items-center gap-2 text-sm">
+                         <Calendar className="h-4 w-4 text-primary" />
+                         <span>{seminar.date ? new Date(seminar.date).toLocaleDateString() : "Date TBD"}</span>
+                       </div>
                       <div className="flex items-center gap-2 text-sm">
                         <Clock className="h-4 w-4 text-primary" />
                         <span>{seminar.time}</span>

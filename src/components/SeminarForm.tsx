@@ -12,7 +12,7 @@ interface Seminar {
   id?: string;
   title: string;
   speaker: string;
-  date: string;
+  date: string | null;
   time: string;
   location: string;
   category: string;
@@ -20,6 +20,8 @@ interface Seminar {
   description: string;
   capacity: number;
   registered: number;
+  topic_image_url?: string;
+  host_image_url?: string;
 }
 
 interface SeminarFormProps {
@@ -43,6 +45,9 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
     audience: "",
     registered: 0,
     capacity: 50,
+    topic_image_url: "",
+    host_image_url: "",
+    is_date_tbd: false,
   });
 
   // Populate form when editing
@@ -53,12 +58,15 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
         speaker: editingSeminar.speaker,
         description: editingSeminar.description,
         category: editingSeminar.category,
-        date: editingSeminar.date,
+        date: editingSeminar.date || "",
         time: editingSeminar.time,
         location: editingSeminar.location,
         audience: editingSeminar.audience,
         registered: editingSeminar.registered,
         capacity: editingSeminar.capacity,
+        topic_image_url: editingSeminar.topic_image_url || "",
+        host_image_url: editingSeminar.host_image_url || "",
+        is_date_tbd: !editingSeminar.date,
       });
     } else {
       setFormData({
@@ -72,6 +80,9 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
         audience: "",
         registered: 0,
         capacity: 50,
+        topic_image_url: "",
+        host_image_url: "",
+        is_date_tbd: false,
       });
     }
   }, [editingSeminar]);
@@ -91,11 +102,17 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
     setLoading(true);
     
     try {
+      const submitData = {
+        ...formData,
+        date: formData.is_date_tbd ? null : formData.date,
+      };
+      delete submitData.is_date_tbd;
+
       if (editingSeminar) {
         // Update existing seminar
         const { error } = await supabase
           .from('seminars')
-          .update(formData)
+          .update(submitData)
           .eq('id', editingSeminar.id);
 
         if (error) throw error;
@@ -110,7 +127,7 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
         // Create new seminar
         const { error } = await supabase
           .from('seminars')
-          .insert([formData]);
+          .insert([submitData]);
 
         if (error) throw error;
 
@@ -131,6 +148,9 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
           audience: "",
           registered: 0,
           capacity: 50,
+          topic_image_url: "",
+          host_image_url: "",
+          is_date_tbd: false,
         });
       }
       
@@ -209,13 +229,25 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="date">Date</Label>
+              <div className="flex items-center space-x-2 mb-2">
+                <Label htmlFor="date">Date</Label>
+                <input
+                  type="checkbox"
+                  id="is_date_tbd"
+                  checked={formData.is_date_tbd}
+                  onChange={(e) => setFormData({...formData, is_date_tbd: e.target.checked, date: e.target.checked ? "" : formData.date})}
+                  className="rounded"
+                />
+                <Label htmlFor="is_date_tbd" className="text-sm">TBD</Label>
+              </div>
               <Input
                 id="date"
                 type="date"
                 value={formData.date}
                 onChange={(e) => setFormData({...formData, date: e.target.value})}
-                required
+                required={!formData.is_date_tbd}
+                disabled={formData.is_date_tbd}
+                placeholder={formData.is_date_tbd ? "Date TBD" : ""}
               />
             </div>
             <div>
@@ -258,6 +290,27 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
                 min="1"
                 value={formData.capacity}
                 onChange={(e) => setFormData({...formData, capacity: parseInt(e.target.value)})}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="topic_image_url">Topic Image URL (optional)</Label>
+              <Input
+                id="topic_image_url"
+                value={formData.topic_image_url}
+                onChange={(e) => setFormData({...formData, topic_image_url: e.target.value})}
+                placeholder="https://example.com/topic-image.jpg"
+              />
+            </div>
+            <div>
+              <Label htmlFor="host_image_url">Host Image URL (optional)</Label>
+              <Input
+                id="host_image_url"
+                value={formData.host_image_url}
+                onChange={(e) => setFormData({...formData, host_image_url: e.target.value})}
+                placeholder="https://example.com/host-image.jpg"
               />
             </div>
           </div>

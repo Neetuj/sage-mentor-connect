@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,41 +16,82 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
   const [loading, setLoading] = useState(false);
   const [skills, setSkills] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState("");
+  const [selectedTutor, setSelectedTutor] = useState<string>("");
+  const [tutors, setTutors] = useState<any[]>([]);
+  const [selectedTutorSkills, setSelectedTutorSkills] = useState<string[]>([]);
   
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     school: "",
-    specialty: "",
-    rating: 5.0,
-    students: 0,
-    bio: "",
-    availability: true,
-    profile_image_url: "",
-        timezone: "",
+    grade: "",
+    subject: "",
+    availability: "",
+    additional_info: "",
   });
 
-  const specialties = [
+  // Fetch tutors for the dropdown
+  useEffect(() => {
+    fetchTutors();
+  }, []);
+
+  // Listen for tutor selection from directory
+  useEffect(() => {
+    const handleTutorSelection = (event: CustomEvent) => {
+      const { tutorName, formType } = event.detail;
+      if (formType === 'student') {
+        setSelectedTutor(tutorName);
+        const tutor = tutors.find(t => t.name === tutorName);
+        if (tutor) {
+          setSelectedTutorSkills(tutor.skills || []);
+        }
+      }
+    };
+
+    window.addEventListener('selectTutor', handleTutorSelection as EventListener);
+    return () => {
+      window.removeEventListener('selectTutor', handleTutorSelection as EventListener);
+    };
+  }, [tutors]);
+
+  const fetchTutors = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('tutors')
+        .select('*')
+        .eq('availability', true)
+        .order('name');
+
+      if (error) throw error;
+      setTutors(data || []);
+    } catch (error) {
+      console.error('Error fetching tutors:', error);
+    }
+  };
+
+  const grades = [
+    "6th Grade", "7th Grade", "8th Grade", "9th Grade", "10th Grade", 
+    "11th Grade", "12th Grade", "College", "Other"
+  ];
+
+  const defaultSubjects = [
     "Mathematics", "Science", "English", "History", "Computer Science", 
     "Foreign Languages", "Art", "Music", "Test Prep", "College Counseling"
   ];
 
-  const timezones = [
-    "EST - New York", "EST - Florida", "EST - Georgia", "EST - North Carolina", "EST - Virginia",
-    "CST - Texas", "CST - Illinois", "CST - Missouri", "CST - Louisiana", "CST - Minnesota",
-    "MST - Colorado", "MST - Arizona", "MST - New Mexico", "MST - Utah", "MST - Montana",
-    "PST - California", "PST - Washington", "PST - Oregon", "PST - Nevada",
-    "AKST - Alaska", "HST - Hawaii"
+  const availabilityOptions = [
+    "Weekdays after 3pm", "Weekday evenings", "Weekend mornings", 
+    "Weekend afternoons", "Flexible", "Other"
   ];
 
-  const addSkill = () => {
-    if (newSkill.trim() && !skills.includes(newSkill.trim())) {
-      setSkills([...skills, newSkill.trim()]);
-      setNewSkill("");
+  const handleTutorSelection = (tutorName: string) => {
+    setSelectedTutor(tutorName);
+    const tutor = tutors.find(t => t.name === tutorName);
+    if (tutor) {
+      setSelectedTutorSkills(tutor.skills || []);
+    } else {
+      setSelectedTutorSkills([]);
     }
-  };
-
-  const removeSkill = (skillToRemove: string) => {
-    setSkills(skills.filter(skill => skill !== skillToRemove));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,38 +99,40 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
     setLoading(true);
     
     try {
+      const submissionData = {
+        ...formData,
+        form_type: 'tutoring_request',
+        additional_info: `${formData.additional_info}${selectedTutor ? `\nRequested Tutor: ${selectedTutor}` : ''}`
+      };
+
       const { error } = await supabase
-        .from('tutors')
-        .insert([{
-          ...formData,
-          skills
-        }]);
+        .from('submissions')
+        .insert([submissionData]);
 
       if (error) throw error;
 
       toast({
         title: "Success",
-        description: "Tutor added successfully!",
+        description: "Tutoring request submitted successfully! We'll be in touch soon.",
       });
 
       // Reset form
       setFormData({
         name: "",
+        email: "",
         school: "",
-        specialty: "",
-        rating: 5.0,
-        students: 0,
-        bio: "",
-        availability: true,
-        profile_image_url: "",
-        timezone: "",
+        grade: "",
+        subject: "",
+        availability: "",
+        additional_info: "",
       });
-      setSkills([]);
+      setSelectedTutor("");
+      setSelectedTutorSkills([]);
       onTutorAdded();
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to add tutor. Please try again.",
+        description: "Failed to submit request. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -98,15 +141,15 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
   };
 
   return (
-    <Card>
+    <Card id="tutoring-form">
       <CardHeader>
-        <CardTitle>Add New Tutor</CardTitle>
+        <CardTitle>Request Tutoring</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
                 value={formData.name}
@@ -114,6 +157,19 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
                 required
               />
             </div>
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="school">School</Label>
               <Input
@@ -123,115 +179,118 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
                 required
               />
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="specialty">Specialty</Label>
-              <Select value={formData.specialty} onValueChange={(value) => setFormData({...formData, specialty: value})}>
+              <Label htmlFor="grade">Grade Level</Label>
+              <Select value={formData.grade} onValueChange={(value) => setFormData({...formData, grade: value})}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select specialty" />
+                  <SelectValue placeholder="Select your grade" />
                 </SelectTrigger>
                 <SelectContent>
-                  {specialties.map((specialty) => (
-                    <SelectItem key={specialty} value={specialty}>
-                      {specialty}
+                  {grades.map((grade) => (
+                    <SelectItem key={grade} value={grade}>
+                      {grade}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label htmlFor="timezone">Location/Timezone</Label>
-              <Input
-                id="timezone"
-                value={formData.timezone}
-                onChange={(e) => setFormData({...formData, timezone: e.target.value})}
-                placeholder="e.g., EST - New York"
-                required
-              />
-            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          {selectedTutor && (
             <div>
-              <Label htmlFor="rating">Rating</Label>
-              <Input
-                id="rating"
-                type="number"
-                min="1"
-                max="5"
-                step="0.1"
-                value={formData.rating}
-                onChange={(e) => setFormData({...formData, rating: parseFloat(e.target.value)})}
-              />
+              <Label>Selected Tutor</Label>
+              <div className="p-3 bg-muted rounded-lg">
+                <p className="font-medium">{selectedTutor}</p>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => {
+                    setSelectedTutor("");
+                    setSelectedTutorSkills([]);
+                  }}
+                  className="mt-2"
+                >
+                  Change Tutor
+                </Button>
+              </div>
             </div>
+          )}
+
+          {!selectedTutor && (
             <div>
-              <Label htmlFor="students">Students Taught</Label>
-              <Input
-                id="students"
-                type="number"
-                min="0"
-                value={formData.students}
-                onChange={(e) => setFormData({...formData, students: parseInt(e.target.value)})}
-              />
+              <Label htmlFor="tutor">Preferred Tutor (optional)</Label>
+              <Select value={selectedTutor} onValueChange={handleTutorSelection}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a tutor (optional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">No preference</SelectItem>
+                  {tutors.map((tutor) => (
+                    <SelectItem key={tutor.id} value={tutor.name}>
+                      {tutor.name} - {tutor.specialty}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="availability">Available</Label>
-              <Switch
-                id="availability"
-                checked={formData.availability}
-                onCheckedChange={(checked) => setFormData({...formData, availability: checked})}
-              />
-            </div>
+          )}
+
+          <div>
+            <Label htmlFor="subject">Which subject do you want tutoring in?</Label>
+            <Select value={formData.subject} onValueChange={(value) => setFormData({...formData, subject: value})}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select subject" />
+              </SelectTrigger>
+              <SelectContent>
+                {selectedTutorSkills.length > 0 ? (
+                  <>
+                    {selectedTutorSkills.map((skill) => (
+                      <SelectItem key={skill} value={skill}>
+                        {skill}
+                      </SelectItem>
+                    ))}
+                    <SelectItem value="Other">Other</SelectItem>
+                  </>
+                ) : (
+                  defaultSubjects.map((subject) => (
+                    <SelectItem key={subject} value={subject}>
+                      {subject}
+                    </SelectItem>
+                  ))
+                )}
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
-            <Label htmlFor="profile_image_url">Profile Image URL (optional)</Label>
-            <Input
-              id="profile_image_url"
-              value={formData.profile_image_url}
-              onChange={(e) => setFormData({...formData, profile_image_url: e.target.value})}
-              placeholder="https://..."
-            />
+            <Label htmlFor="availability">When are you available for tutoring?</Label>
+            <Select value={formData.availability} onValueChange={(value) => setFormData({...formData, availability: value})}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select availability" />
+              </SelectTrigger>
+              <SelectContent>
+                {availabilityOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
-            <Label htmlFor="bio">Bio</Label>
+            <Label htmlFor="additional_info">Additional Information (optional)</Label>
             <Textarea
-              id="bio"
-              value={formData.bio}
-              onChange={(e) => setFormData({...formData, bio: e.target.value})}
-              required
+              id="additional_info"
+              value={formData.additional_info}
+              onChange={(e) => setFormData({...formData, additional_info: e.target.value})}
+              placeholder="Tell us more about what you'd like help with..."
             />
           </div>
 
-          <div>
-            <Label>Skills</Label>
-            <div className="flex gap-2 mb-2">
-              <Input
-                value={newSkill}
-                onChange={(e) => setNewSkill(e.target.value)}
-                placeholder="Add a skill"
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addSkill())}
-              />
-              <Button type="button" onClick={addSkill}>Add</Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {skills.map((skill) => (
-                <Badge key={skill} variant="secondary" className="flex items-center gap-1">
-                  {skill}
-                  <X 
-                    className="h-3 w-3 cursor-pointer" 
-                    onClick={() => removeSkill(skill)}
-                  />
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          <Button type="submit" disabled={loading}>
-            {loading ? "Adding..." : "Add Tutor"}
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? "Submitting..." : "Submit Tutoring Request"}
           </Button>
         </form>
       </CardContent>

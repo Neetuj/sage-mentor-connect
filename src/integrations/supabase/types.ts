@@ -49,12 +49,14 @@ export type Database = {
           created_at: string
           date: string
           description: string
+          host_image_url: string | null
           id: string
           location: string
           registered: number
           speaker: string
           time: string
           title: string
+          topic_image_url: string | null
           updated_at: string
         }
         Insert: {
@@ -64,12 +66,14 @@ export type Database = {
           created_at?: string
           date: string
           description: string
+          host_image_url?: string | null
           id?: string
           location: string
           registered?: number
           speaker: string
           time: string
           title: string
+          topic_image_url?: string | null
           updated_at?: string
         }
         Update: {
@@ -79,12 +83,14 @@ export type Database = {
           created_at?: string
           date?: string
           description?: string
+          host_image_url?: string | null
           id?: string
           location?: string
           registered?: number
           speaker?: string
           time?: string
           title?: string
+          topic_image_url?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -165,6 +171,7 @@ export type Database = {
           skills: string[]
           specialty: string
           students: number
+          timezone: string | null
           updated_at: string
         }
         Insert: {
@@ -179,6 +186,7 @@ export type Database = {
           skills?: string[]
           specialty: string
           students?: number
+          timezone?: string | null
           updated_at?: string
         }
         Update: {
@@ -193,6 +201,7 @@ export type Database = {
           skills?: string[]
           specialty?: string
           students?: number
+          timezone?: string | null
           updated_at?: string
         }
         Relationships: []

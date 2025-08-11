@@ -11,7 +11,7 @@ interface Seminar {
   id: string;
   title: string;
   speaker: string;
-  date: string;
+  date: string | null;
   time: string;
   location: string;
   category: string;
@@ -19,6 +19,8 @@ interface Seminar {
   description: string;
   capacity: number;
   registered: number;
+  topic_image_url?: string;
+  host_image_url?: string;
 }
 
 interface SeminarManagementProps {
@@ -138,18 +140,18 @@ const SeminarManagement = ({ onSeminarDeleted, onEditSeminar }: SeminarManagemen
                         </div>
                       </TableCell>
                       <TableCell>{seminar.speaker}</TableCell>
-                      <TableCell>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-1 text-sm">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(seminar.date).toLocaleDateString()}
-                          </div>
-                          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                            <Clock className="h-3 w-3" />
-                            {seminar.time}
-                          </div>
-                        </div>
-                      </TableCell>
+                       <TableCell>
+                         <div className="space-y-1">
+                           <div className="flex items-center gap-1 text-sm">
+                             <Calendar className="h-3 w-3" />
+                             {seminar.date ? new Date(seminar.date).toLocaleDateString() : "TBD"}
+                           </div>
+                           <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                             <Clock className="h-3 w-3" />
+                             {seminar.time}
+                           </div>
+                         </div>
+                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1 text-sm">
                           <MapPin className="h-3 w-3" />
