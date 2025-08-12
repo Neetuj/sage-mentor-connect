@@ -14,6 +14,7 @@ import SeminarManagement from "@/components/SeminarManagement";
 import SubmissionManagement from "@/components/SubmissionManagement";
 
 const Admin = () => {
+  console.log('Admin component rendering');
   const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [editingSeminar, setEditingSeminar] = useState(null);

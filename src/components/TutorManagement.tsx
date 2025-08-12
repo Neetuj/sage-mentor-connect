@@ -32,6 +32,7 @@ interface TutorManagementProps {
 }
 
 const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
+  console.log('TutorManagement component rendering');
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingTutor, setEditingTutor] = useState<Tutor | null>(null);
