@@ -47,7 +47,7 @@ export type Database = {
           capacity: number
           category: string
           created_at: string
-          date: string
+          date: string | null
           description: string
           host_image_url: string | null
           id: string
@@ -64,7 +64,7 @@ export type Database = {
           capacity?: number
           category: string
           created_at?: string
-          date: string
+          date?: string | null
           description: string
           host_image_url?: string | null
           id?: string
@@ -81,7 +81,7 @@ export type Database = {
           capacity?: number
           category?: string
           created_at?: string
-          date?: string
+          date?: string | null
           description?: string
           host_image_url?: string | null
           id?: string
