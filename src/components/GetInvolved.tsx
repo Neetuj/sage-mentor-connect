@@ -392,7 +392,7 @@ const GetInvolved = () => {
                         <SelectContent>
                           <SelectItem value="any">Any Available Tutor</SelectItem>
                           {tutors.map((tutor) => (
-                            <SelectItem key={tutor.name} value={tutor.name}>
+                            <SelectItem key={tutor.name} value={tutor.name || "unknown"}>
                               {tutor.name}
                             </SelectItem>
                           ))}
