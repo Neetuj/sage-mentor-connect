@@ -84,19 +84,20 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
   ];
 
   const startEdit = (tutor: Tutor) => {
+    console.log('Starting edit for tutor:', tutor);
     setEditingTutor(tutor);
     setEditForm({
-      name: tutor.name,
-      school: tutor.school,
+      name: tutor.name || "",
+      school: tutor.school || "",
       specialty: tutor.specialty || "Mathematics", // Ensure non-empty default
-      bio: tutor.bio,
-      rating: tutor.rating,
-      students: tutor.students,
-      availability: tutor.availability,
+      bio: tutor.bio || "",
+      rating: tutor.rating || 5.0,
+      students: tutor.students || 0,
+      availability: tutor.availability !== false,
       profile_image_url: tutor.profile_image_url || "",
       timezone: tutor.timezone || "",
     });
-    setEditSkills([...tutor.skills]);
+    setEditSkills([...(tutor.skills || [])]);
   };
 
   const addEditSkill = () => {

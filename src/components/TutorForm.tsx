@@ -231,7 +231,9 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="no-preference">No preference</SelectItem>
-                  {tutors.map((tutor) => (
+                  {tutors
+                    .filter(tutor => tutor.name && tutor.name.trim() !== '')
+                    .map((tutor) => (
                     <SelectItem key={tutor.id} value={tutor.name}>
                       {tutor.name} - {tutor.specialty}
                     </SelectItem>
