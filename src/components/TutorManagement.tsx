@@ -52,7 +52,12 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
         .order('name');
 
       if (error) throw error;
-      setTutors(data || []);
+      // Filter out any tutors with empty names or specialties to prevent SelectItem errors
+      const validTutors = (data || []).filter(tutor => 
+        tutor.name && tutor.name.trim() !== '' && 
+        tutor.specialty && tutor.specialty.trim() !== ''
+      );
+      setTutors(validTutors);
     } catch (error) {
       console.error('Error fetching tutors:', error);
       toast.error("Failed to load tutors");
