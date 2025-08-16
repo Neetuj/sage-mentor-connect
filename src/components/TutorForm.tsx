@@ -86,6 +86,11 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
 
   const handleTutorSelection = (tutorName: string) => {
     setSelectedTutor(tutorName);
+    if (tutorName === "no-preference") {
+      setSelectedTutor("");
+      setSelectedTutorSkills([]);
+      return;
+    }
     const tutor = tutors.find(t => t.name === tutorName);
     if (tutor) {
       setSelectedTutorSkills(tutor.skills || []);
@@ -225,7 +230,7 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
                   <SelectValue placeholder="Select a tutor (optional)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">No preference</SelectItem>
+                  <SelectItem value="no-preference">No preference</SelectItem>
                   {tutors.map((tutor) => (
                     <SelectItem key={tutor.id} value={tutor.name}>
                       {tutor.name} - {tutor.specialty}
