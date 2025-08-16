@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -40,6 +41,7 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
   const [editSkills, setEditSkills] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState("");
   const [editLoading, setEditLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
 
   const fetchTutors = async () => {
     setLoading(true);
@@ -131,10 +133,7 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
   };
 
   const deleteTutor = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete tutor "${name}"?`)) {
-      return;
-    }
-
+    setDeleteLoading(id);
     try {
       const { error } = await supabase
         .from('tutors')
@@ -149,6 +148,8 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
     } catch (error) {
       console.error('Error deleting tutor:', error);
       toast.error("Failed to delete tutor");
+    } finally {
+      setDeleteLoading(null);
     }
   };
 
@@ -378,15 +379,36 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
                             )}
                           </DialogContent>
                         </Dialog>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => deleteTutor(tutor.id, tutor.name)}
-                          className="flex items-center gap-2"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Delete
-                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="flex items-center gap-2"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              Delete
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Tutor</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete tutor "{tutor.name}"? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => deleteTutor(tutor.id, tutor.name)}
+                                disabled={deleteLoading === tutor.id}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              >
+                                {deleteLoading === tutor.id ? "Deleting..." : "Delete"}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                     </TableCell>
                   </TableRow>
