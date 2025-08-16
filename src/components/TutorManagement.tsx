@@ -83,7 +83,7 @@ const TutorManagement = ({ onTutorDeleted }: TutorManagementProps) => {
     setEditForm({
       name: tutor.name,
       school: tutor.school,
-      specialty: tutor.specialty,
+      specialty: tutor.specialty || "Mathematics", // Ensure non-empty default
       bio: tutor.bio,
       rating: tutor.rating,
       students: tutor.students,
