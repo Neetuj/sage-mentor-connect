@@ -24,7 +24,7 @@ const About = () => {
     },
     {
       name: "Hannah Shin",
-      role: "Marketing & Social Media Outreach Director",
+      role: "CoFounder, Marketing & Outreach Director",
       school: "West Ranch High School, CA",
       expertise: "Biomedical Engineering",
       bio: "Hannah is located in Los Angeles, California and is passionate about biomedical engineering like tissue engineering, medical robotics and artificial intelligence in medicine. In her free time she enjoys reading, snowboarding and curating her 100 Spotify playlists. "
