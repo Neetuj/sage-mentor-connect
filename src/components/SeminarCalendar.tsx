@@ -132,18 +132,6 @@ const SeminarCalendar = () => {
     }
   };
 
-  const handleViewCalendar = () => {
-    // Scroll to seminars section to show all seminars
-    const seminarsSection = document.getElementById('seminars');
-    if (seminarsSection) {
-      seminarsSection.scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    toast({
-      title: "Full Calendar",
-      description: "Showing all upcoming seminars below",
-    });
-  };
   
   const getRegistrationStatus = (registered: number, capacity: number) => {
     const percentage = (registered / capacity) * 100;
@@ -274,16 +262,6 @@ const SeminarCalendar = () => {
           </div>
         )}
 
-        <div className={`text-center mt-12 ${isComingSoonHidden ? '' : 'blur-sm'}`}>
-          <Button 
-            variant="outline" 
-            size="lg"
-            onClick={handleViewCalendar}
-          >
-            <Calendar className="h-5 w-5 mr-2" />
-            View Full Calendar
-          </Button>
-        </div>
       </div>
 
       {/* Coming Soon Overlay - only show if not hidden */}
