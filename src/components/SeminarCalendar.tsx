@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, MapPin, Users, ExternalLink } from "lucide-react";
+import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -132,19 +132,6 @@ const SeminarCalendar = () => {
     }
   };
 
-  const handleLearnMore = (seminarTitle: string) => {
-    // Scroll to the seminar details or show more info
-    const seminarElement = document.querySelector(`[data-seminar="${seminarTitle}"]`);
-    if (seminarElement) {
-      seminarElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    
-    toast({
-      title: "More Information",
-      description: `Showing details for "${seminarTitle}"`,
-    });
-  };
-
   const handleViewCalendar = () => {
     // Scroll to seminars section to show all seminars
     const seminarsSection = document.getElementById('seminars');
@@ -157,6 +144,7 @@ const SeminarCalendar = () => {
       description: "Showing all upcoming seminars below",
     });
   };
+  
   const getRegistrationStatus = (registered: number, capacity: number) => {
     const percentage = (registered / capacity) * 100;
     if (percentage >= 90) return { status: "Almost Full", color: "destructive" };
@@ -260,27 +248,17 @@ const SeminarCalendar = () => {
                       </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <SeminarRegistration 
-                        seminarTitle={seminar.title} 
-                        seminarId={seminar.id}
-                      >
-                        <Button 
-                          className="flex-1" 
-                          variant="default"
-                        >
-                          Register Now
-                        </Button>
-                      </SeminarRegistration>
+                    <SeminarRegistration 
+                      seminarTitle={seminar.title} 
+                      seminarId={seminar.id}
+                    >
                       <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => handleLearnMore(seminar.title)}
+                        className="w-full" 
+                        variant="default"
                       >
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Learn More
+                        Register Now
                       </Button>
-                    </div>
+                    </SeminarRegistration>
                   </CardContent>
                 </Card>
               );
