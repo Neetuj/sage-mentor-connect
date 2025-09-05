@@ -82,22 +82,24 @@ const Testimonials = () => {
             {testimonials.map((testimonial) => (
               <Card
                 key={testimonial.id}
-                className="w-80 flex-shrink-0 shadow-card hover:shadow-card-hover transition-all duration-300"
+                className="w-80 h-64 flex-shrink-0 shadow-card hover:shadow-card-hover transition-all duration-300"
               >
-                <CardContent className="p-6">
+                <CardContent className="p-6 h-full flex flex-col">
                   <div className="flex items-center mb-3">
                     {renderStars(testimonial.rating)}
                   </div>
                   
-                  <blockquote className="text-sm text-foreground leading-relaxed mb-4">
-                    "{testimonial.content}"
+                  <blockquote className="text-sm text-foreground leading-relaxed mb-4 flex-1 overflow-hidden">
+                    <div className="line-clamp-4 whitespace-normal">
+                      "{testimonial.content}"
+                    </div>
                   </blockquote>
                   
-                  <div className="border-t pt-4">
-                    <div className="font-medium text-primary">
+                  <div className="border-t pt-4 mt-auto">
+                    <div className="font-medium text-primary truncate">
                       {testimonial.name}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-muted-foreground truncate">
                       {testimonial.role}
                       {testimonial.organization && ` • ${testimonial.organization}`}
                     </div>
