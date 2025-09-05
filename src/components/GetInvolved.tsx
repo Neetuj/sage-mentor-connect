@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { applicationFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_MESSAGES } from "@/lib/security";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import Testimonials from "@/components/Testimonials";
 
 const GetInvolved = () => {
   const [formType, setFormType] = useState("student");
@@ -467,6 +468,9 @@ const GetInvolved = () => {
           </Card>
         </div>
       </div>
+      
+      {/* Testimonials Section */}
+      <Testimonials />
     </section>
   );
 };

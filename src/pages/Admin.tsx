@@ -12,12 +12,15 @@ import SeminarForm from "@/components/SeminarForm";
 import TutorManagement from "@/components/TutorManagement";
 import SeminarManagement from "@/components/SeminarManagement";
 import SubmissionManagement from "@/components/SubmissionManagement";
+import TestimonialForm from "@/components/TestimonialForm";
+import TestimonialManagement from "@/components/TestimonialManagement";
 
 const Admin = () => {
   console.log('Admin component rendering');
   const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [editingSeminar, setEditingSeminar] = useState(null);
+  const [editingTestimonial, setEditingTestimonial] = useState(null);
   const navigate = useNavigate();
 
   const refreshData = () => {
@@ -119,10 +122,11 @@ const Admin = () => {
         </Card>
 
         <Tabs defaultValue="submissions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="submissions">Form Submissions</TabsTrigger>
             <TabsTrigger value="tutors">Manage Tutors</TabsTrigger>
             <TabsTrigger value="seminars">Manage Seminars</TabsTrigger>
+            <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
           </TabsList>
           
           <TabsContent value="submissions">
@@ -146,6 +150,20 @@ const Admin = () => {
               <SeminarManagement 
                 onSeminarDeleted={refreshData} 
                 onEditSeminar={setEditingSeminar}
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="testimonials">
+            <div className="space-y-6">
+              <TestimonialForm 
+                onTestimonialAdded={refreshData} 
+                editingTestimonial={editingTestimonial}
+                onCancelEdit={() => setEditingTestimonial(null)}
+              />
+              <TestimonialManagement 
+                onTestimonialDeleted={refreshData} 
+                onEditTestimonial={setEditingTestimonial}
               />
             </div>
           </TabsContent>
