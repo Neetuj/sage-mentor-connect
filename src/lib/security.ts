@@ -66,6 +66,19 @@ export const searchSchema = z.object({
     .regex(/^[a-zA-Z0-9\s\-_.,!?]*$/, 'Search contains invalid characters')
 });
 
+export const volunteerFormSchema = z.object({
+  name: z.string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(50, 'Name must be less than 50 characters')
+    .regex(/^[a-zA-Z\s'-]+$/, 'Name contains invalid characters'),
+  email: z.string()
+    .email('Invalid email format')
+    .max(100, 'Email must be less than 100 characters'),
+  additionalInfo: z.string()
+    .min(10, 'Please tell us how you would like to help')
+    .max(1000, 'Additional information must be less than 1000 characters')
+});
+
 export const contactFormSchema = z.object({
   name: z.string()
     .min(2, 'Name must be at least 2 characters')

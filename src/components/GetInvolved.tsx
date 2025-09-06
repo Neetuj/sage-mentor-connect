@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UserPlus, GraduationCap, Heart, Mail, Phone, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { applicationFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_MESSAGES } from "@/lib/security";
+import { applicationFormSchema, volunteerFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_MESSAGES } from "@/lib/security";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import Testimonials from "@/components/Testimonials";
@@ -98,17 +98,26 @@ const GetInvolved = () => {
 
   const validateForm = () => {
     try {
-      const dataToValidate = {
-        name: `${formData.firstName} ${formData.lastName}`,
-        email: formData.email,
-        school: formData.school,
-        gradeLevel: formData.gradeLevel,
-        interests: formData.interests,
-        additionalInfo: formData.additionalInfo,
-        ...(formType === 'student' && { parentEmail: formData.parentEmail })
-      };
+      if (formType === 'volunteer') {
+        const dataToValidate = {
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          additionalInfo: formData.additionalInfo
+        };
+        volunteerFormSchema.parse(dataToValidate);
+      } else {
+        const dataToValidate = {
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          school: formData.school,
+          gradeLevel: formData.gradeLevel,
+          interests: formData.interests,
+          additionalInfo: formData.additionalInfo,
+          ...(formType === 'student' && { parentEmail: formData.parentEmail })
+        };
+        applicationFormSchema.parse(dataToValidate);
+      }
       
-      applicationFormSchema.parse(dataToValidate);
       setErrors({});
       return true;
     } catch (error) {
