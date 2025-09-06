@@ -104,6 +104,7 @@ const GetInvolved = () => {
           email: formData.email,
           additionalInfo: formData.additionalInfo
         };
+        console.log('Validating volunteer data:', dataToValidate);
         volunteerFormSchema.parse(dataToValidate);
       } else {
         const dataToValidate = {
@@ -115,15 +116,18 @@ const GetInvolved = () => {
           additionalInfo: formData.additionalInfo,
           ...(formType === 'student' && { parentEmail: formData.parentEmail })
         };
+        console.log('Validating student/tutor data:', dataToValidate);
         applicationFormSchema.parse(dataToValidate);
       }
       
       setErrors({});
       return true;
     } catch (error) {
+      console.error('Validation error:', error);
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
         error.issues.forEach((issue) => {
+          console.log('Validation issue:', issue);
           if (issue.path[0]) {
             newErrors[issue.path[0].toString()] = issue.message;
           }
