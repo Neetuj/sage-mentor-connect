@@ -7,7 +7,7 @@ import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import TutorForm from "@/components/TutorForm";
+import TutorAdminForm from "@/components/TutorAdminForm";
 import SeminarForm from "@/components/SeminarForm";
 import TutorManagement from "@/components/TutorManagement";
 import SeminarManagement from "@/components/SeminarManagement";
@@ -135,7 +135,7 @@ const Admin = () => {
           
           <TabsContent value="tutors">
             <div className="space-y-6">
-              <TutorForm onTutorAdded={refreshData} />
+              <TutorAdminForm onTutorAdded={refreshData} />
               <TutorManagement onTutorDeleted={refreshData} />
             </div>
           </TabsContent>
