@@ -82,28 +82,69 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
-			keyframes: {
-				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
-				},
-				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
-				}
-			},
-			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+        keyframes: {
+          "accordion-down": {
+            from: { height: "0" },
+            to: { height: "var(--radix-accordion-content-height)" },
+          },
+          "accordion-up": {
+            from: { height: "var(--radix-accordion-content-height)" },
+            to: { height: "0" },
+          },
+          // Easter egg animations
+          "bounce-scale": {
+            "0%, 100%": { transform: "scale(1)" },
+            "50%": { transform: "scale(1.05)" },
+          },
+          "wiggle": {
+            "0%, 100%": { transform: "rotate(-3deg)" },
+            "50%": { transform: "rotate(3deg)" },
+          },
+          "party-spin": {
+            "0%": { transform: "rotate(0deg) scale(1)" },
+            "25%": { transform: "rotate(90deg) scale(1.1)" },
+            "50%": { transform: "rotate(180deg) scale(1)" },
+            "75%": { transform: "rotate(270deg) scale(1.1)" },
+            "100%": { transform: "rotate(360deg) scale(1)" },
+          },
+          "flamenco-spin": {
+            "0%": { transform: "rotate(0deg)" },
+            "25%": { transform: "rotate(-10deg) scale(1.1)" },
+            "50%": { transform: "rotate(10deg) scale(1.2)" },
+            "75%": { transform: "rotate(-5deg) scale(1.1)" },
+            "100%": { transform: "rotate(0deg) scale(1)" },
+          },
+          "card-shuffle": {
+            "0%": { transform: "translateX(0) rotate(0deg)" },
+            "25%": { transform: "translateX(-10px) rotate(-5deg)" },
+            "50%": { transform: "translateX(10px) rotate(5deg)" },
+            "75%": { transform: "translateX(-5px) rotate(-2deg)" },
+            "100%": { transform: "translateX(0) rotate(0deg)" },
+          },
+          "snowboard": {
+            "0%": { transform: "rotate(0deg) translateY(0)" },
+            "25%": { transform: "rotate(-15deg) translateY(-10px)" },
+            "50%": { transform: "rotate(15deg) translateY(-5px)" },
+            "75%": { transform: "rotate(-5deg) translateY(-15px)" },
+            "100%": { transform: "rotate(0deg) translateY(0)" },
+          },
+          "float-up": {
+            "0%": { transform: "translateY(0) opacity(1)" },
+            "100%": { transform: "translateY(-50px) opacity(0)" },
+          },
+        },
+        animation: {
+          "accordion-down": "accordion-down 0.2s ease-out",
+          "accordion-up": "accordion-up 0.2s ease-out",
+          // Easter egg animations
+          "bounce-scale": "bounce-scale 0.3s ease-in-out",
+          "wiggle": "wiggle 0.5s ease-in-out",
+          "party-spin": "party-spin 1s ease-in-out",
+          "flamenco-spin": "flamenco-spin 0.8s ease-in-out",
+          "card-shuffle": "card-shuffle 0.6s ease-in-out",
+          "snowboard": "snowboard 0.7s ease-in-out",
+          "float-up": "float-up 1.5s ease-out forwards",
+        },
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
