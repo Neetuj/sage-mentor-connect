@@ -252,7 +252,9 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
               <SelectContent>
                 {selectedTutorSkills.length > 0 ? (
                   <>
-                    {selectedTutorSkills.map((skill) => (
+                    {selectedTutorSkills
+                      .filter(skill => skill && skill.trim() !== '')
+                      .map((skill) => (
                       <SelectItem key={skill} value={skill}>
                         {skill}
                       </SelectItem>
