@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -8,44 +7,6 @@ import isabelProfile from "@/assets/isabel-profile.jpg";
 import hannahProfile from "@/assets/hannah-profile.jpg";
 
 const About = () => {
-  const [founderAnimations, setFounderAnimations] = useState<{[key: string]: string}>({});
-  const [clickCounts, setClickCounts] = useState<{[key: string]: number}>({});
-  const [particles, setParticles] = useState<{[key: string]: boolean}>({});
-
-  const handleFounderClick = (founderName: string, requiredClicks: number, animation: string, message?: string) => {
-    const currentClicks = (clickCounts[founderName] || 0) + 1;
-    setClickCounts(prev => ({ ...prev, [founderName]: currentClicks }));
-
-    if (currentClicks >= requiredClicks) {
-      setFounderAnimations(prev => ({ ...prev, [founderName]: animation }));
-      
-      if (founderName === 'Hannah') {
-        setParticles(prev => ({ ...prev, [founderName]: true }));
-      }
-
-      // Reset animation after it completes
-      setTimeout(() => {
-        setFounderAnimations(prev => ({ ...prev, [founderName]: '' }));
-        setParticles(prev => ({ ...prev, [founderName]: false }));
-      }, founderName === 'Hannah' ? 700 : founderName === 'Isabel' ? 800 : 600);
-
-      // Reset click count after successful trigger
-      setTimeout(() => {
-        setClickCounts(prev => ({ ...prev, [founderName]: 0 }));
-      }, 1000);
-    }
-
-    // Reset click count if no activity for 3 seconds
-    setTimeout(() => {
-      setClickCounts(prev => {
-        const current = prev[founderName] || 0;
-        if (current === currentClicks) {
-          return { ...prev, [founderName]: 0 };
-        }
-        return prev;
-      });
-    }, 3000);
-  };
   const founders = [
     {
       name: "Isabel Conejo",
@@ -152,23 +113,8 @@ const About = () => {
           {founders.map((founder, index) => (
             <Card key={index} className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary">
               <CardContent className="p-6">
-                <div className="text-center mb-6 relative">
-                  <Avatar 
-                    className={`w-24 h-24 mx-auto mb-4 shadow-lg cursor-pointer transition-transform hover:scale-105 ${
-                      founderAnimations[founder.name] === 'flamenco' ? 'animate-flamenco-spin' :
-                      founderAnimations[founder.name] === 'shuffle' ? 'animate-card-shuffle' :
-                      founderAnimations[founder.name] === 'snowboard' ? 'animate-snowboard' : ''
-                    }`}
-                    onClick={() => {
-                      if (founder.name === 'Isabel Conejo') {
-                        handleFounderClick('Isabel', 3, 'flamenco');
-                      } else if (founder.name === 'Rohan Jain') {
-                        handleFounderClick('Rohan', 2, 'shuffle');
-                      } else if (founder.name === 'Hannah Shin') {
-                        handleFounderClick('Hannah', 1, 'snowboard');
-                      }
-                    }}
-                  >
+                <div className="text-center mb-6">
+                  <Avatar className="w-24 h-24 mx-auto mb-4 shadow-lg">
                     <AvatarImage 
                       src={founder.name === "Rohan Jain" ? rohanProfile : 
                            founder.name === "Isabel Conejo" ? isabelProfile :
@@ -179,52 +125,6 @@ const About = () => {
                       {founder.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
-                  
-                  {/* Special effects */}
-                  {founderAnimations['Isabel'] === 'flamenco' && (
-                    <div className="absolute -top-2 -right-2 text-2xl animate-float-up">
-                      ¡Hola! 💃
-                    </div>
-                  )}
-                  
-                  {founderAnimations['Rohan'] === 'shuffle' && (
-                    <div className="absolute inset-0 pointer-events-none">
-                      {['🃏', '🎴', '♠️', '♥️'].map((card, i) => (
-                        <div
-                          key={i}
-                          className="absolute text-xl animate-float-up"
-                          style={{
-                            left: `${20 + i * 15}%`,
-                            top: `${10 + i * 5}%`,
-                            animationDelay: `${i * 0.1}s`,
-                          }}
-                        >
-                          {card}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {particles['Hannah'] && (
-                    <div className="absolute inset-0 pointer-events-none">
-                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-lg animate-float-up font-bold text-blue-400">
-                        Cowabunga! 🏂
-                      </div>
-                      {['❄️', '⛷️', '🏔️', '❄️', '⛷️'].map((snow, i) => (
-                        <div
-                          key={i}
-                          className="absolute text-lg animate-float-up"
-                          style={{
-                            left: `${Math.random() * 80 + 10}%`,
-                            top: `${Math.random() * 50}%`,
-                            animationDelay: `${i * 0.2}s`,
-                          }}
-                        >
-                          {snow}
-                        </div>
-                      ))}
-                    </div>
-                  )}
                   
                   <h3 className="text-xl font-semibold text-primary mb-2">{founder.name}</h3>
                   <p className="text-secondary font-medium mb-1">{founder.role}</p>
