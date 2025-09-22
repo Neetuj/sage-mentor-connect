@@ -80,7 +80,10 @@ const TutorDirectory = () => {
   };
 
 
-  const specialties = [...new Set(tutors.map(tutor => tutor.specialty))];
+  const specialties = [...new Set(tutors
+    .map(tutor => tutor.specialty)
+    .filter(specialty => specialty && specialty.trim() !== '')
+  )];
 
   const handleConnectTutor = (tutorName: string, available: boolean) => {
     if (available) {
@@ -248,7 +251,9 @@ const TutorDirectory = () => {
                 {/* Skills tags */}
                 <div className="mb-4">
                   <div className="flex flex-wrap gap-1">
-                    {tutor.skills.map((skill, index) => (
+                    {tutor.skills
+                      .filter(skill => skill && skill.trim() !== '')
+                      .map((skill, index) => (
                       <Badge key={index} variant="outline" className="text-xs px-2 py-0">
                         {skill}
                       </Badge>
