@@ -91,10 +91,50 @@ export default {
             from: { height: "var(--radix-accordion-content-height)" },
             to: { height: "0" },
           },
+          "card-shuffle": {
+            "0%": { transform: "translateX(0) translateY(0) rotate(0deg)", opacity: "0" },
+            "20%": { transform: "translateX(-10px) translateY(-10px) rotate(-5deg)", opacity: "1" },
+            "40%": { transform: "translateX(10px) translateY(10px) rotate(5deg)", opacity: "1" },
+            "60%": { transform: "translateX(-5px) translateY(5px) rotate(-3deg)", opacity: "1" },
+            "80%": { transform: "translateX(5px) translateY(-5px) rotate(3deg)", opacity: "1" },
+            "100%": { transform: "translateX(0) translateY(0) rotate(0deg)", opacity: "1" }
+          },
+          "card-spread": {
+            "0%": { transform: "translateX(0) rotate(0deg)" },
+            "100%": { transform: "var(--spread-x) rotate(var(--spread-rotate))" }
+          },
+          "card-flip": {
+            "0%": { transform: "rotateY(0deg)" },
+            "50%": { transform: "rotateY(180deg)" },
+            "100%": { transform: "rotateY(360deg)" }
+          },
+          "card-collect": {
+            "0%": { transform: "var(--spread-x) rotate(var(--spread-rotate))", opacity: "1" },
+            "100%": { transform: "translateX(0) rotate(0deg)", opacity: "1" }
+          },
+          "card-appear": {
+            "0%": { transform: "scale(0.8)", opacity: "0" },
+            "100%": { transform: "scale(1)", opacity: "1" }
+          },
+          "card-disappear": {
+            "0%": { transform: "scale(1)", opacity: "1" },
+            "100%": { transform: "scale(0.8)", opacity: "0" }
+          },
+          "backdrop-appear": {
+            "0%": { opacity: "0" },
+            "100%": { opacity: "1" }
+          }
         },
         animation: {
           "accordion-down": "accordion-down 0.2s ease-out",
           "accordion-up": "accordion-up 0.2s ease-out",
+          "card-shuffle": "card-shuffle 1s ease-in-out",
+          "card-spread": "card-spread 0.8s ease-out forwards",
+          "card-flip": "card-flip 1s ease-in-out",
+          "card-collect": "card-collect 0.8s ease-in forwards",
+          "card-appear": "card-appear 0.3s ease-out",
+          "card-disappear": "card-disappear 0.4s ease-in forwards",
+          "backdrop-appear": "backdrop-appear 0.3s ease-out"
         },
 		}
 	},

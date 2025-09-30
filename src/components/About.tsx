@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -5,8 +6,10 @@ import { Lightbulb, Heart, Target } from "lucide-react";
 import rohanProfile from "@/assets/rohan-profile.jpg";
 import isabelProfile from "@/assets/isabel-profile.jpg";
 import hannahProfile from "@/assets/hannah-profile.jpg";
+import CardTrickAnimation from "./CardTrickAnimation";
 
 const About = () => {
+  const [showCardTrick, setShowCardTrick] = useState(false);
   const founders = [
     {
       name: "Isabel Conejo",
@@ -24,7 +27,7 @@ const About = () => {
     },
     {
       name: "Hannah Shin",
-      role: "CoFounder, Marketing & Outreach Director",
+      role: "Cofounder, Marketing & Outreach Director",
       school: "West Ranch High School, CA",
       expertise: "Biomedical Engineering",
       bio: "Hannah is located in Los Angeles, California and is passionate about biomedical engineering like tissue engineering, medical robotics and artificial intelligence in medicine. In her free time she enjoys reading, snowboarding and curating her 100 Spotify playlists. "
@@ -111,7 +114,17 @@ const About = () => {
 
         <div className="grid md:grid-cols-3 gap-8">
           {founders.map((founder, index) => (
-            <Card key={index} className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary">
+            <Card 
+              key={index} 
+              className={`shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary ${
+                founder.name === "Rohan Jain" ? "cursor-pointer hover:scale-105 hover:shadow-lg" : ""
+              }`}
+              onClick={() => {
+                if (founder.name === "Rohan Jain") {
+                  setShowCardTrick(true);
+                }
+              }}
+            >
               <CardContent className="p-6">
                 <div className="text-center mb-6">
                   <Avatar className="w-24 h-24 mx-auto mb-4 shadow-lg">
@@ -143,6 +156,10 @@ const About = () => {
           ))}
         </div>
       </div>
+      
+      {showCardTrick && (
+        <CardTrickAnimation onComplete={() => setShowCardTrick(false)} />
+      )}
     </section>
   );
 };
