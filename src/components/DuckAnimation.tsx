@@ -20,13 +20,21 @@ const MinimalistDuck = ({ size = 40, delay = "0s" }: { size?: number; delay?: st
 const DuckAnimation = ({ onComplete }: DuckAnimationProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm pointer-events-none">
-      <div className="flex items-end gap-2 animate-duck-walk">
+      <div className="relative">
         {/* Mother Duck */}
-        <MinimalistDuck size={50} delay="0s" />
-        {/* Baby Ducks */}
-        <MinimalistDuck size={30} delay="0.2s" />
-        <MinimalistDuck size={30} delay="0.4s" />
-        <MinimalistDuck size={30} delay="0.6s" />
+        <div className="absolute animate-duck-walk" style={{ animationDelay: '0s' }}>
+          <MinimalistDuck size={50} delay="0s" />
+        </div>
+        {/* Baby Ducks - following behind */}
+        <div className="absolute animate-duck-walk" style={{ animationDelay: '0.3s' }}>
+          <MinimalistDuck size={30} delay="0.2s" />
+        </div>
+        <div className="absolute animate-duck-walk" style={{ animationDelay: '0.6s' }}>
+          <MinimalistDuck size={30} delay="0.4s" />
+        </div>
+        <div className="absolute animate-duck-walk" style={{ animationDelay: '0.9s' }}>
+          <MinimalistDuck size={30} delay="0.6s" />
+        </div>
       </div>
     </div>
   );
