@@ -118,10 +118,10 @@ export default {
               transform: "translateX(-100vw)",
               opacity: "0"
             },
-            "10%": {
+            "15%": {
               opacity: "1"
             },
-            "90%": {
+            "85%": {
               opacity: "1"
             },
             "100%": {
@@ -131,10 +131,10 @@ export default {
           },
           "duck-waddle": {
             "0%, 100%": {
-              transform: "translateY(0px) rotate(-5deg)"
+              transform: "translateY(0px) rotate(-3deg)"
             },
             "50%": {
-              transform: "translateY(-3px) rotate(5deg)"
+              transform: "translateY(-4px) rotate(3deg)"
             }
           },
         },
@@ -144,8 +144,8 @@ export default {
           "fade-in": "fade-in 0.3s ease-out",
           "scale-in": "scale-in 0.4s ease-out",
           "card-trick": "card-trick 1.8s ease-in-out",
-          "duck-walk": "duck-walk 2s ease-in-out",
-          "duck-waddle": "duck-waddle 0.3s ease-in-out infinite",
+          "duck-walk": "duck-walk 3.5s ease-in-out",
+          "duck-waddle": "duck-waddle 0.5s ease-in-out infinite",
         },
 		}
 	},
