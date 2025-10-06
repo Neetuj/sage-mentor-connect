@@ -301,9 +301,24 @@ const TutorDirectory = () => {
                 </PaginationItem>
                 
                 {(() => {
+                  // If 7 or fewer pages, show all numbers
+                  if (totalPages <= 7) {
+                    return Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <PaginationItem key={page}>
+                        <Button
+                          variant={currentPage === page ? "default" : "ghost"}
+                          size="sm"
+                          onClick={() => handlePageChange(page)}
+                          className="w-9 h-9 p-0"
+                        >
+                          {page}
+                        </Button>
+                      </PaginationItem>
+                    ));
+                  }
+                  
+                  // For more than 7 pages, use smart ellipsis
                   const pages = [];
-                  const showEllipsisStart = currentPage > 3;
-                  const showEllipsisEnd = currentPage < totalPages - 2;
                   
                   // Always show first page
                   pages.push(
@@ -319,8 +334,8 @@ const TutorDirectory = () => {
                     </PaginationItem>
                   );
                   
-                  // Show ellipsis if needed
-                  if (showEllipsisStart) {
+                  // Show ellipsis after first page if current page is far from start
+                  if (currentPage > 3) {
                     pages.push(
                       <PaginationItem key="ellipsis-start">
                         <span className="px-2 text-muted-foreground">...</span>
@@ -347,8 +362,8 @@ const TutorDirectory = () => {
                     );
                   }
                   
-                  // Show ellipsis if needed
-                  if (showEllipsisEnd) {
+                  // Show ellipsis before last page if current page is far from end
+                  if (currentPage < totalPages - 2) {
                     pages.push(
                       <PaginationItem key="ellipsis-end">
                         <span className="px-2 text-muted-foreground">...</span>
@@ -356,21 +371,19 @@ const TutorDirectory = () => {
                     );
                   }
                   
-                  // Always show last page if more than 1 page
-                  if (totalPages > 1) {
-                    pages.push(
-                      <PaginationItem key={totalPages}>
-                        <Button
-                          variant={currentPage === totalPages ? "default" : "ghost"}
-                          size="sm"
-                          onClick={() => handlePageChange(totalPages)}
-                          className="w-9 h-9 p-0"
-                        >
-                          {totalPages}
-                        </Button>
-                      </PaginationItem>
-                    );
-                  }
+                  // Always show last page
+                  pages.push(
+                    <PaginationItem key={totalPages}>
+                      <Button
+                        variant={currentPage === totalPages ? "default" : "ghost"}
+                        size="sm"
+                        onClick={() => handlePageChange(totalPages)}
+                        className="w-9 h-9 p-0"
+                      >
+                        {totalPages}
+                      </Button>
+                    </PaginationItem>
+                  );
                   
                   return pages;
                 })()}
