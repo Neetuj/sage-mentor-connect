@@ -99,12 +99,27 @@ export default {
             from: { transform: "scale(0.9)", opacity: "0" },
             to: { transform: "scale(1)", opacity: "1" },
           },
+          "card-trick": {
+            "0%": {
+              transform: "scale(0.3) rotateY(0deg)",
+              opacity: "0"
+            },
+            "50%": {
+              transform: "scale(1.2) rotateY(720deg)",
+              opacity: "1"
+            },
+            "100%": {
+              transform: "scale(0.3) rotateY(1440deg)",
+              opacity: "0"
+            }
+          },
         },
         animation: {
           "accordion-down": "accordion-down 0.2s ease-out",
           "accordion-up": "accordion-up 0.2s ease-out",
           "fade-in": "fade-in 0.3s ease-out",
           "scale-in": "scale-in 0.4s ease-out",
+          "card-trick": "card-trick 1.8s ease-in-out",
         },
 		}
 	},
