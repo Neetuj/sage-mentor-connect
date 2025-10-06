@@ -118,10 +118,10 @@ export default {
               transform: "translateX(-100vw)",
               opacity: "0"
             },
-            "15%": {
+            "5%": {
               opacity: "1"
             },
-            "85%": {
+            "95%": {
               opacity: "1"
             },
             "100%": {
@@ -144,8 +144,8 @@ export default {
           "fade-in": "fade-in 0.3s ease-out",
           "scale-in": "scale-in 0.4s ease-out",
           "card-trick": "card-trick 1.8s ease-in-out",
-          "duck-walk": "duck-walk 3.5s ease-in-out",
-          "duck-waddle": "duck-waddle 0.5s ease-in-out infinite",
+          "duck-walk": "duck-walk 8s linear",
+          "duck-waddle": "duck-waddle 0.6s ease-in-out infinite",
         },
 		}
 	},

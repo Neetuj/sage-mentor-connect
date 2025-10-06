@@ -14,7 +14,7 @@ const Header = () => {
 
   useEffect(() => {
     if (showDucks) {
-      const timer = setTimeout(() => setShowDucks(false), 3500);
+      const timer = setTimeout(() => setShowDucks(false), 8000);
       return () => clearTimeout(timer);
     }
   }, [showDucks]);
