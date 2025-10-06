@@ -115,7 +115,7 @@ export default {
           },
           "duck-walk": {
             "0%": {
-              transform: "translateX(-100vw)",
+              transform: "translateX(100vw)",
               opacity: "0"
             },
             "5%": {
@@ -125,7 +125,7 @@ export default {
               opacity: "1"
             },
             "100%": {
-              transform: "translateX(100vw)",
+              transform: "translateX(-100vw)",
               opacity: "0"
             }
           },
