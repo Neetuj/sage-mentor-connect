@@ -6,13 +6,13 @@ const MinimalistDuck = ({ size = 40, delay = "0s" }: { size?: number; delay?: st
   <div className="animate-duck-waddle" style={{ animationDelay: delay }}>
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       {/* Body */}
-      <ellipse cx="20" cy="25" rx="10" ry="8" className="fill-primary" />
+      <ellipse cx="20" cy="25" rx="10" ry="8" fill="white" stroke="#22c55e" strokeWidth="2" />
       {/* Head */}
-      <circle cx="20" cy="16" r="6" className="fill-primary" />
+      <circle cx="20" cy="16" r="6" fill="white" stroke="#22c55e" strokeWidth="2" />
       {/* Beak */}
-      <circle cx="26" cy="16" r="2" className="fill-accent" />
+      <circle cx="26" cy="16" r="2" fill="white" stroke="#22c55e" strokeWidth="1.5" />
       {/* Eye */}
-      <circle cx="22" cy="15" r="1" className="fill-background" />
+      <circle cx="22" cy="15" r="1" fill="#22c55e" />
     </svg>
   </div>
 );
