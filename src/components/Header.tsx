@@ -1,14 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X, LogOut, User } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import DuckAnimation from "./DuckAnimation";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showDucks, setShowDucks] = useState(false);
   const { user, profile, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (showDucks) {
+      const timer = setTimeout(() => setShowDucks(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showDucks]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -36,9 +45,16 @@ const Header = () => {
             <img src="/lovable-uploads/55bfe8cb-0cef-4057-ae60-ce370c18903c.png" alt="SAGE Logo" className="h-10 w-10" />
             <div>
               <h1 className="text-xl font-bold text-primary">SAGE</h1>
-              <p className="text-xs text-muted-foreground">Student Alliance for Growth in Engineering</p>
+              <p 
+                className="text-xs text-muted-foreground cursor-pointer hover:text-primary transition-colors"
+                onClick={() => setShowDucks(true)}
+              >
+                Student Alliance for Growth in Engineering
+              </p>
             </div>
           </div>
+
+          {showDucks && <DuckAnimation onComplete={() => setShowDucks(false)} />}
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">

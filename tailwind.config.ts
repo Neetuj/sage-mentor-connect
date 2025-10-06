@@ -113,6 +113,30 @@ export default {
               opacity: "0"
             }
           },
+          "duck-walk": {
+            "0%": {
+              transform: "translateX(-100vw)",
+              opacity: "0"
+            },
+            "10%": {
+              opacity: "1"
+            },
+            "90%": {
+              opacity: "1"
+            },
+            "100%": {
+              transform: "translateX(100vw)",
+              opacity: "0"
+            }
+          },
+          "duck-waddle": {
+            "0%, 100%": {
+              transform: "translateY(0px) rotate(-5deg)"
+            },
+            "50%": {
+              transform: "translateY(-3px) rotate(5deg)"
+            }
+          },
         },
         animation: {
           "accordion-down": "accordion-down 0.2s ease-out",
@@ -120,6 +144,8 @@ export default {
           "fade-in": "fade-in 0.3s ease-out",
           "scale-in": "scale-in 0.4s ease-out",
           "card-trick": "card-trick 1.8s ease-in-out",
+          "duck-walk": "duck-walk 2s ease-in-out",
+          "duck-waddle": "duck-waddle 0.3s ease-in-out infinite",
         },
 		}
 	},
