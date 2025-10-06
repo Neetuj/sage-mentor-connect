@@ -300,37 +300,80 @@ const TutorDirectory = () => {
                   </Button>
                 </PaginationItem>
                 
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                  // Show first page, last page, current page, and pages around current page
-                  const showPage = page === 1 || 
-                                   page === totalPages || 
-                                   (page >= currentPage - 1 && page <= currentPage + 1);
+                {(() => {
+                  const pages = [];
+                  const showEllipsisStart = currentPage > 3;
+                  const showEllipsisEnd = currentPage < totalPages - 2;
                   
-                  if (!showPage) {
-                    // Show ellipsis for gaps
-                    if (page === currentPage - 2 || page === currentPage + 2) {
-                      return (
-                        <PaginationItem key={page}>
-                          <span className="px-3 py-2">...</span>
-                        </PaginationItem>
-                      );
-                    }
-                    return null;
-                  }
-                  
-                  return (
-                    <PaginationItem key={page}>
+                  // Always show first page
+                  pages.push(
+                    <PaginationItem key={1}>
                       <Button
-                        variant={currentPage === page ? "default" : "ghost"}
+                        variant={currentPage === 1 ? "default" : "ghost"}
                         size="sm"
-                        onClick={() => handlePageChange(page)}
+                        onClick={() => handlePageChange(1)}
                         className="w-9 h-9 p-0"
                       >
-                        {page}
+                        1
                       </Button>
                     </PaginationItem>
                   );
-                })}
+                  
+                  // Show ellipsis if needed
+                  if (showEllipsisStart) {
+                    pages.push(
+                      <PaginationItem key="ellipsis-start">
+                        <span className="px-2 text-muted-foreground">...</span>
+                      </PaginationItem>
+                    );
+                  }
+                  
+                  // Show pages around current page
+                  const startPage = Math.max(2, currentPage - 1);
+                  const endPage = Math.min(totalPages - 1, currentPage + 1);
+                  
+                  for (let page = startPage; page <= endPage; page++) {
+                    pages.push(
+                      <PaginationItem key={page}>
+                        <Button
+                          variant={currentPage === page ? "default" : "ghost"}
+                          size="sm"
+                          onClick={() => handlePageChange(page)}
+                          className="w-9 h-9 p-0"
+                        >
+                          {page}
+                        </Button>
+                      </PaginationItem>
+                    );
+                  }
+                  
+                  // Show ellipsis if needed
+                  if (showEllipsisEnd) {
+                    pages.push(
+                      <PaginationItem key="ellipsis-end">
+                        <span className="px-2 text-muted-foreground">...</span>
+                      </PaginationItem>
+                    );
+                  }
+                  
+                  // Always show last page if more than 1 page
+                  if (totalPages > 1) {
+                    pages.push(
+                      <PaginationItem key={totalPages}>
+                        <Button
+                          variant={currentPage === totalPages ? "default" : "ghost"}
+                          size="sm"
+                          onClick={() => handlePageChange(totalPages)}
+                          className="w-9 h-9 p-0"
+                        >
+                          {totalPages}
+                        </Button>
+                      </PaginationItem>
+                    );
+                  }
+                  
+                  return pages;
+                })()}
                 
                 <PaginationItem>
                   <Button
