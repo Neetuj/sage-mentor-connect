@@ -7,14 +7,9 @@ import rohanProfile from "@/assets/rohan-profile.jpg";
 import isabelProfile from "@/assets/isabel-profile.jpg";
 import hannahProfile from "@/assets/hannah-profile.jpg";
 import CardTrickAnimation from "./CardTrickAnimation";
-import MicrophoneAnimation from "./MicrophoneAnimation";
-import BobaTeaAnimation from "./BobaTeaAnimation";
 
 const About = () => {
   const [showCardTrick, setShowCardTrick] = useState(false);
-  const [showMicrophone, setShowMicrophone] = useState(false);
-  const [showBobaTea, setShowBobaTea] = useState(false);
-  const [clickedCardIndex, setClickedCardIndex] = useState(0);
   const founders = [
     {
       name: "Isabel Conejo",
@@ -122,15 +117,10 @@ const About = () => {
             <Card 
               key={index} 
               id={`founder-card-${index}`}
-              className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary cursor-pointer hover:scale-105 hover:shadow-lg relative"
+              className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary cursor-pointer hover:scale-105 hover:shadow-lg"
               onClick={() => {
-                setClickedCardIndex(index);
                 if (founder.name === "Rohan Jain") {
                   setShowCardTrick(true);
-                } else if (founder.name === "Isabel Conejo") {
-                  setShowMicrophone(true);
-                } else if (founder.name === "Hannah Shin") {
-                  setShowBobaTea(true);
                 }
               }}
             >
@@ -154,7 +144,7 @@ const About = () => {
                   <Badge variant="outline" className="mb-4">{founder.expertise}</Badge>
                 </div>
                 
-                <div id={`founder-rect-${index}`} className="bg-muted/30 rounded-lg p-4 relative">
+                <div className="bg-muted/30 rounded-lg p-4 relative">
                   <div className="absolute top-[-8px] left-1/2 transform -translate-x-1/2 w-4 h-4 bg-muted/30 rotate-45"></div>
                   <p className="text-muted-foreground text-sm leading-relaxed">
                     {founder.bio}
@@ -167,13 +157,7 @@ const About = () => {
       </div>
       
       {showCardTrick && (
-        <CardTrickAnimation onComplete={() => setShowCardTrick(false)} cardIndex={clickedCardIndex} />
-      )}
-      {showMicrophone && (
-        <MicrophoneAnimation onComplete={() => setShowMicrophone(false)} cardIndex={clickedCardIndex} />
-      )}
-      {showBobaTea && (
-        <BobaTeaAnimation onComplete={() => setShowBobaTea(false)} cardIndex={clickedCardIndex} />
+        <CardTrickAnimation onComplete={() => setShowCardTrick(false)} />
       )}
     </section>
   );

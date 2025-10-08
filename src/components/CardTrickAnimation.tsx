@@ -1,34 +1,22 @@
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect } from "react";
+
 interface CardTrickAnimationProps {
   onComplete: () => void;
-  cardIndex: number;
 }
 
-const CardTrickAnimation = ({ onComplete, cardIndex }: CardTrickAnimationProps) => {
-  const [host, setHost] = useState<HTMLElement | null>(null);
-
+const CardTrickAnimation = ({ onComplete }: CardTrickAnimationProps) => {
   useEffect(() => {
-    const el = document.getElementById(`founder-rect-${cardIndex}`) as HTMLElement | null;
-    setHost(el);
-
     const timer = setTimeout(() => onComplete(), 1800);
     return () => clearTimeout(timer);
-  }, [onComplete, cardIndex]);
+  }, [onComplete]);
 
-  if (!host) return null;
-
-  return createPortal(
-    <div 
-      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-card-trick z-10"
-      onClick={onComplete}
-    >
-      <div className="w-24 h-32 bg-card border-2 border-primary rounded-lg shadow-card-hover flex flex-col items-center justify-center">
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
+      <div className="w-24 h-32 bg-card border-2 border-primary rounded-lg shadow-card-hover flex flex-col items-center justify-center animate-card-trick">
         <div className="text-4xl font-bold text-primary">A</div>
         <div className="text-5xl text-primary">♠</div>
       </div>
-    </div>,
-    host
+    </div>
   );
 };
 
