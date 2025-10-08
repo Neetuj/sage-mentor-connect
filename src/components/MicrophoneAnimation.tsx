@@ -19,31 +19,44 @@ const MicrophoneAnimation = ({ onComplete }: MicrophoneAnimationProps) => {
     >
       <div className="animate-[spin_2s_ease-in-out]">
         <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          {/* Microphone body */}
-          <rect x="85" y="40" width="30" height="60" rx="15" stroke="#22c55e" strokeWidth="3" fill="white"/>
+          {/* Microphone capsule (top round part) */}
+          <ellipse cx="100" cy="55" rx="22" ry="28" stroke="#22c55e" strokeWidth="3" fill="white"/>
           
-          {/* Microphone grille lines */}
-          <line x1="90" y1="50" x2="110" y2="50" stroke="#22c55e" strokeWidth="2"/>
-          <line x1="90" y1="60" x2="110" y2="60" stroke="#22c55e" strokeWidth="2"/>
-          <line x1="90" y1="70" x2="110" y2="70" stroke="#22c55e" strokeWidth="2"/>
-          <line x1="90" y1="80" x2="110" y2="80" stroke="#22c55e" strokeWidth="2"/>
-          <line x1="90" y1="90" x2="110" y2="90" stroke="#22c55e" strokeWidth="2"/>
+          {/* Mesh pattern on capsule */}
+          <line x1="85" y1="40" x2="115" y2="40" stroke="#22c55e" strokeWidth="1.5" opacity="0.6"/>
+          <line x1="83" y1="48" x2="117" y2="48" stroke="#22c55e" strokeWidth="1.5" opacity="0.6"/>
+          <line x1="82" y1="55" x2="118" y2="55" stroke="#22c55e" strokeWidth="1.5" opacity="0.6"/>
+          <line x1="83" y1="62" x2="117" y2="62" stroke="#22c55e" strokeWidth="1.5" opacity="0.6"/>
+          <line x1="85" y1="70" x2="115" y2="70" stroke="#22c55e" strokeWidth="1.5" opacity="0.6"/>
           
-          {/* Microphone connector */}
-          <rect x="95" y="100" width="10" height="15" stroke="#22c55e" strokeWidth="3" fill="white"/>
+          {/* Body cylinder */}
+          <rect x="88" y="80" width="24" height="35" stroke="#22c55e" strokeWidth="3" fill="white"/>
+          <ellipse cx="100" cy="80" rx="12" ry="4" stroke="#22c55e" strokeWidth="3" fill="white"/>
           
-          {/* Microphone stand */}
-          <path d="M 100 115 Q 90 130, 90 145 L 90 160" stroke="#22c55e" strokeWidth="3" fill="none"/>
-          <path d="M 100 115 Q 110 130, 110 145 L 110 160" stroke="#22c55e" strokeWidth="3" fill="none"/>
+          {/* Volume/control ring */}
+          <rect x="86" y="95" width="28" height="8" rx="2" stroke="#22c55e" strokeWidth="3" fill="white"/>
           
-          {/* Base */}
-          <ellipse cx="100" cy="160" rx="25" ry="8" stroke="#22c55e" strokeWidth="3" fill="white"/>
+          {/* Connection base */}
+          <ellipse cx="100" cy="115" rx="14" ry="5" stroke="#22c55e" strokeWidth="3" fill="white"/>
+          <rect x="86" y="115" width="28" height="8" stroke="#22c55e" strokeWidth="3" fill="white"/>
+          <ellipse cx="100" cy="123" rx="14" ry="5" stroke="#22c55e" strokeWidth="3" fill="white"/>
           
-          {/* Sound waves */}
-          <path d="M 120 50 Q 135 60, 135 75" stroke="#22c55e" strokeWidth="2" fill="none" opacity="0.6"/>
-          <path d="M 125 55 Q 145 65, 145 75" stroke="#22c55e" strokeWidth="2" fill="none" opacity="0.4"/>
-          <path d="M 80 50 Q 65 60, 65 75" stroke="#22c55e" strokeWidth="2" fill="none" opacity="0.6"/>
-          <path d="M 75 55 Q 55 65, 55 75" stroke="#22c55e" strokeWidth="2" fill="none" opacity="0.4"/>
+          {/* Stand arm */}
+          <path d="M 100 123 L 100 135" stroke="#22c55e" strokeWidth="4" strokeLinecap="round"/>
+          <path d="M 100 135 L 75 155" stroke="#22c55e" strokeWidth="4" strokeLinecap="round"/>
+          
+          {/* Stand base */}
+          <ellipse cx="75" cy="155" rx="30" ry="10" stroke="#22c55e" strokeWidth="3" fill="white"/>
+          
+          {/* Sound waves - right side */}
+          <path d="M 125 45 Q 138 48, 142 55" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.7"/>
+          <path d="M 128 52 Q 145 55, 150 62" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.5"/>
+          <path d="M 130 60 Q 150 62, 156 70" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.3"/>
+          
+          {/* Sound waves - left side */}
+          <path d="M 75 45 Q 62 48, 58 55" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.7"/>
+          <path d="M 72 52 Q 55 55, 50 62" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.5"/>
+          <path d="M 70 60 Q 50 62, 44 70" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.3"/>
         </svg>
       </div>
     </div>
