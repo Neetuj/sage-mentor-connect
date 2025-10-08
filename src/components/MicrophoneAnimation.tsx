@@ -8,7 +8,7 @@ const MicrophoneAnimation = ({ onComplete }: MicrophoneAnimationProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onComplete();
-    }, 2000);
+    }, 1800);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
@@ -17,20 +17,17 @@ const MicrophoneAnimation = ({ onComplete }: MicrophoneAnimationProps) => {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 animate-fade-in"
       onClick={onComplete}
     >
-      <div className="animate-[spin_2s_ease-in-out]">
-        <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          {/* Microphone head */}
-          <circle cx="100" cy="70" r="25" stroke="#22c55e" strokeWidth="3" fill="white"/>
+      <div className="animate-card-trick">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* First music note */}
+          <ellipse cx="35" cy="85" rx="12" ry="8" fill="#22c55e"/>
+          <rect x="45" y="35" width="4" height="50" fill="#22c55e"/>
+          <circle cx="47" cy="35" r="8" fill="#22c55e"/>
           
-          {/* Handle */}
-          <rect x="90" y="95" width="20" height="50" rx="3" stroke="#22c55e" strokeWidth="3" fill="white"/>
-          
-          {/* Base */}
-          <rect x="85" y="145" width="30" height="8" rx="2" stroke="#22c55e" strokeWidth="3" fill="white"/>
-          
-          {/* Sound waves */}
-          <path d="M 130 60 Q 145 65, 145 75" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-          <path d="M 70 60 Q 55 65, 55 75" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+          {/* Second music note */}
+          <ellipse cx="65" cy="90" rx="12" ry="8" fill="#22c55e"/>
+          <rect x="75" y="25" width="4" height="65" fill="#22c55e"/>
+          <circle cx="77" cy="25" r="10" fill="#22c55e"/>
         </svg>
       </div>
     </div>
