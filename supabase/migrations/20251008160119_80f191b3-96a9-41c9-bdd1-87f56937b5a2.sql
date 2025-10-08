@@ -1,0 +1,1 @@
+UPDATE tutors SET timezone = 'CST - Texas' WHERE timezone = 'CST - Dallas'
