@@ -14,6 +14,7 @@ const About = () => {
   const [showCardTrick, setShowCardTrick] = useState(false);
   const [showMicrophone, setShowMicrophone] = useState(false);
   const [showBobaTea, setShowBobaTea] = useState(false);
+  const [clickedCardIndex, setClickedCardIndex] = useState(0);
   const founders = [
     {
       name: "Isabel Conejo",
@@ -120,8 +121,10 @@ const About = () => {
           {founders.map((founder, index) => (
             <Card 
               key={index} 
+              id={`founder-card-${index}`}
               className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary cursor-pointer hover:scale-105 hover:shadow-lg"
               onClick={() => {
+                setClickedCardIndex(index);
                 if (founder.name === "Rohan Jain") {
                   setShowCardTrick(true);
                 } else if (founder.name === "Isabel Conejo") {
@@ -164,13 +167,13 @@ const About = () => {
       </div>
       
       {showCardTrick && (
-        <CardTrickAnimation onComplete={() => setShowCardTrick(false)} />
+        <CardTrickAnimation onComplete={() => setShowCardTrick(false)} cardIndex={clickedCardIndex} />
       )}
       {showMicrophone && (
-        <MicrophoneAnimation onComplete={() => setShowMicrophone(false)} />
+        <MicrophoneAnimation onComplete={() => setShowMicrophone(false)} cardIndex={clickedCardIndex} />
       )}
       {showBobaTea && (
-        <BobaTeaAnimation onComplete={() => setShowBobaTea(false)} />
+        <BobaTeaAnimation onComplete={() => setShowBobaTea(false)} cardIndex={clickedCardIndex} />
       )}
     </section>
   );

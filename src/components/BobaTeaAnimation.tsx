@@ -1,23 +1,38 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface BobaTeaAnimationProps {
   onComplete: () => void;
+  cardIndex: number;
 }
 
-const BobaTeaAnimation = ({ onComplete }: BobaTeaAnimationProps) => {
+const BobaTeaAnimation = ({ onComplete, cardIndex }: BobaTeaAnimationProps) => {
+  const [position, setPosition] = useState({ top: '50%', left: '50%' });
+
   useEffect(() => {
+    const cardElement = document.getElementById(`founder-card-${cardIndex}`);
+    if (cardElement) {
+      const rect = cardElement.getBoundingClientRect();
+      setPosition({
+        top: `${rect.top + rect.height / 2}px`,
+        left: `${rect.left + rect.width / 2}px`,
+      });
+    }
+    
     const timer = setTimeout(() => {
       onComplete();
     }, 1800);
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, [onComplete, cardIndex]);
 
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 animate-fade-in"
       onClick={onComplete}
     >
-      <div className="animate-card-trick">
+      <div 
+        className="animate-card-trick absolute -translate-x-1/2 -translate-y-1/2"
+        style={{ top: position.top, left: position.left }}
+      >
         <svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Cup */}
           <path d="M 30 30 L 35 120 Q 35 130, 45 130 L 75 130 Q 85 130, 85 120 L 90 30 Z" 

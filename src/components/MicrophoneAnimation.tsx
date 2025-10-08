@@ -1,23 +1,38 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface MicrophoneAnimationProps {
   onComplete: () => void;
+  cardIndex: number;
 }
 
-const MicrophoneAnimation = ({ onComplete }: MicrophoneAnimationProps) => {
+const MicrophoneAnimation = ({ onComplete, cardIndex }: MicrophoneAnimationProps) => {
+  const [position, setPosition] = useState({ top: '50%', left: '50%' });
+
   useEffect(() => {
+    const cardElement = document.getElementById(`founder-card-${cardIndex}`);
+    if (cardElement) {
+      const rect = cardElement.getBoundingClientRect();
+      setPosition({
+        top: `${rect.top + rect.height / 2}px`,
+        left: `${rect.left + rect.width / 2}px`,
+      });
+    }
+    
     const timer = setTimeout(() => {
       onComplete();
     }, 1800);
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, [onComplete, cardIndex]);
 
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 animate-fade-in"
       onClick={onComplete}
     >
-      <div className="animate-card-trick">
+      <div 
+        className="animate-card-trick absolute -translate-x-1/2 -translate-y-1/2"
+        style={{ top: position.top, left: position.left }}
+      >
         <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* White background */}
           <rect x="30" y="30" width="80" height="80" rx="8" fill="white" stroke="hsl(var(--primary))" strokeWidth="3"/>
