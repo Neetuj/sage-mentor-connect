@@ -30,25 +30,29 @@ const MicrophoneAnimation = ({ onComplete, cardIndex }: MicrophoneAnimationProps
       onClick={onComplete}
     >
       <div 
-        className="animate-card-trick absolute -translate-x-1/2 -translate-y-1/2"
-        style={{ top: position.top, left: position.left }}
+        className="animate-card-trick absolute"
+        style={{ 
+          top: position.top, 
+          left: position.left,
+          transform: 'translate(-50%, -50%)'
+        }}
       >
-        <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* White background */}
-          <rect x="30" y="30" width="80" height="80" rx="8" fill="white" stroke="hsl(var(--primary))" strokeWidth="3"/>
+          <rect x="20" y="20" width="80" height="80" rx="8" fill="white" stroke="hsl(var(--primary))" strokeWidth="3"/>
           
-          {/* Simple music notes */}
+          {/* Music notes */}
           <g>
-            {/* First note - positioned to connect perfectly */}
-            <rect x="65" y="50" width="3" height="35" fill="hsl(var(--primary))" rx="1.5"/>
-            <ellipse cx="56" cy="85" rx="10" ry="7" fill="hsl(var(--primary))" transform="rotate(-25 56 85)"/>
+            {/* First note */}
+            <rect x="50" y="45" width="3" height="30" fill="hsl(var(--primary))"/>
+            <ellipse cx="51.5" cy="75" rx="8" ry="6" fill="hsl(var(--primary))" transform="rotate(-20 51.5 75)"/>
             
             {/* Second note */}
-            <rect x="90" y="45" width="3" height="43" fill="hsl(var(--primary))" rx="1.5"/>
-            <ellipse cx="81" cy="88" rx="10" ry="7" fill="hsl(var(--primary))" transform="rotate(-25 81 88)"/>
+            <rect x="70" y="40" width="3" height="35" fill="hsl(var(--primary))"/>
+            <ellipse cx="71.5" cy="75" rx="8" ry="6" fill="hsl(var(--primary))" transform="rotate(-20 71.5 75)"/>
             
             {/* Connecting beam */}
-            <path d="M 65 50 L 90 45 L 90 52 L 65 57 Z" fill="hsl(var(--primary))"/>
+            <path d="M 50 45 L 70 40 L 70 43 L 50 48 Z" fill="hsl(var(--primary))"/>
           </g>
         </svg>
       </div>

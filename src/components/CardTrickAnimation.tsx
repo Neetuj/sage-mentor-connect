@@ -25,8 +25,12 @@ const CardTrickAnimation = ({ onComplete, cardIndex }: CardTrickAnimationProps) 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
       <div 
-        className="w-24 h-32 bg-card border-2 border-primary rounded-lg shadow-card-hover flex flex-col items-center justify-center animate-card-trick absolute -translate-x-1/2 -translate-y-1/2"
-        style={{ top: position.top, left: position.left }}
+        className="w-24 h-32 bg-card border-2 border-primary rounded-lg shadow-card-hover flex flex-col items-center justify-center animate-card-trick absolute"
+        style={{ 
+          top: position.top, 
+          left: position.left,
+          transform: 'translate(-50%, -50%)'
+        }}
       >
         <div className="text-4xl font-bold text-primary">A</div>
         <div className="text-5xl text-primary">♠</div>

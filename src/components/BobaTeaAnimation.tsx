@@ -30,10 +30,14 @@ const BobaTeaAnimation = ({ onComplete, cardIndex }: BobaTeaAnimationProps) => {
       onClick={onComplete}
     >
       <div 
-        className="animate-card-trick absolute -translate-x-1/2 -translate-y-1/2"
-        style={{ top: position.top, left: position.left }}
+        className="animate-card-trick absolute"
+        style={{ 
+          top: position.top, 
+          left: position.left,
+          transform: 'translate(-50%, -50%)'
+        }}
       >
-        <svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="120" height="120" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Cup */}
           <path d="M 30 30 L 35 120 Q 35 130, 45 130 L 75 130 Q 85 130, 85 120 L 90 30 Z" 
                 stroke="hsl(var(--primary))" strokeWidth="3" fill="white"/>
