@@ -22,11 +22,16 @@ const BobaTeaAnimation = ({ onComplete, cardIndex }: BobaTeaAnimationProps) => {
       }
     };
     
-    // Initial compute and again on next frame to account for layout/hover settling
-    updatePosition();
-    rafId = requestAnimationFrame(updatePosition);
+    const loop = () => {
+      updatePosition();
+      rafId = requestAnimationFrame(loop);
+    };
 
-    // Keep centered on scroll/resize while overlay is visible
+    // Start continuous centering while overlay is visible
+    updatePosition();
+    rafId = requestAnimationFrame(loop);
+
+    // Also recenter on resize/scroll
     window.addEventListener('resize', updatePosition);
     window.addEventListener('scroll', updatePosition, true);
 
