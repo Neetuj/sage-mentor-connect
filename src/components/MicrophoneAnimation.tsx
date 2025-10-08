@@ -24,16 +24,16 @@ const MicrophoneAnimation = ({ onComplete }: MicrophoneAnimationProps) => {
           
           {/* Simple music notes */}
           <g>
-            {/* First note */}
-            <ellipse cx="55" cy="85" rx="10" ry="7" fill="hsl(var(--primary))" transform="rotate(-25 55 85)"/>
-            <rect x="64" y="50" width="3" height="35" fill="hsl(var(--primary))" rx="1.5"/>
+            {/* First note - positioned to connect perfectly */}
+            <rect x="65" y="50" width="3" height="35" fill="hsl(var(--primary))" rx="1.5"/>
+            <ellipse cx="56" cy="85" rx="10" ry="7" fill="hsl(var(--primary))" transform="rotate(-25 56 85)"/>
             
             {/* Second note */}
-            <ellipse cx="80" cy="88" rx="10" ry="7" fill="hsl(var(--primary))" transform="rotate(-25 80 88)"/>
-            <rect x="89" y="45" width="3" height="43" fill="hsl(var(--primary))" rx="1.5"/>
+            <rect x="90" y="45" width="3" height="43" fill="hsl(var(--primary))" rx="1.5"/>
+            <ellipse cx="81" cy="88" rx="10" ry="7" fill="hsl(var(--primary))" transform="rotate(-25 81 88)"/>
             
             {/* Connecting beam */}
-            <path d="M 67 50 L 92 45 L 92 52 L 67 57 Z" fill="hsl(var(--primary))"/>
+            <path d="M 65 50 L 90 45 L 90 52 L 65 57 Z" fill="hsl(var(--primary))"/>
           </g>
         </svg>
       </div>
