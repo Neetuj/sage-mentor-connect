@@ -7,9 +7,13 @@ import rohanProfile from "@/assets/rohan-profile.jpg";
 import isabelProfile from "@/assets/isabel-profile.jpg";
 import hannahProfile from "@/assets/hannah-profile.jpg";
 import CardTrickAnimation from "./CardTrickAnimation";
+import MicrophoneAnimation from "./MicrophoneAnimation";
+import BobaTeaAnimation from "./BobaTeaAnimation";
 
 const About = () => {
   const [showCardTrick, setShowCardTrick] = useState(false);
+  const [showMicrophone, setShowMicrophone] = useState(false);
+  const [showBobaTea, setShowBobaTea] = useState(false);
   const founders = [
     {
       name: "Isabel Conejo",
@@ -116,12 +120,14 @@ const About = () => {
           {founders.map((founder, index) => (
             <Card 
               key={index} 
-              className={`shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary ${
-                founder.name === "Rohan Jain" ? "cursor-pointer hover:scale-105 hover:shadow-lg" : ""
-              }`}
+              className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary cursor-pointer hover:scale-105 hover:shadow-lg"
               onClick={() => {
                 if (founder.name === "Rohan Jain") {
                   setShowCardTrick(true);
+                } else if (founder.name === "Isabel Conejo") {
+                  setShowMicrophone(true);
+                } else if (founder.name === "Hannah Shin") {
+                  setShowBobaTea(true);
                 }
               }}
             >
@@ -159,6 +165,12 @@ const About = () => {
       
       {showCardTrick && (
         <CardTrickAnimation onComplete={() => setShowCardTrick(false)} />
+      )}
+      {showMicrophone && (
+        <MicrophoneAnimation onComplete={() => setShowMicrophone(false)} />
+      )}
+      {showBobaTea && (
+        <BobaTeaAnimation onComplete={() => setShowBobaTea(false)} />
       )}
     </section>
   );
