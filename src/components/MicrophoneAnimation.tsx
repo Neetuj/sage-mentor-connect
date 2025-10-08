@@ -9,18 +9,19 @@ const MicrophoneAnimation = ({ onComplete, cardIndex }: MicrophoneAnimationProps
   const [position, setPosition] = useState({ top: '50%', left: '50%' });
 
   useEffect(() => {
-    const cardElement = document.getElementById(`founder-card-${cardIndex}`);
-    if (cardElement) {
-      const rect = cardElement.getBoundingClientRect();
-      setPosition({
-        top: `${rect.top + rect.height / 2}px`,
-        left: `${rect.left + rect.width / 2}px`,
-      });
-    }
+    const updatePosition = () => {
+      const cardElement = document.getElementById(`founder-card-${cardIndex}`);
+      if (cardElement) {
+        const rect = cardElement.getBoundingClientRect();
+        setPosition({
+          top: `${rect.top + rect.height / 2}px`,
+          left: `${rect.left + rect.width / 2}px`,
+        });
+      }
+    };
     
-    const timer = setTimeout(() => {
-      onComplete();
-    }, 1800);
+    updatePosition();
+    const timer = setTimeout(() => onComplete(), 1800);
     return () => clearTimeout(timer);
   }, [onComplete, cardIndex]);
 
