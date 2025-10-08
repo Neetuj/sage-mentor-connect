@@ -18,16 +18,20 @@ const MicrophoneAnimation = ({ onComplete }: MicrophoneAnimationProps) => {
       onClick={onComplete}
     >
       <div className="animate-card-trick">
-        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          {/* First music note */}
-          <ellipse cx="35" cy="85" rx="12" ry="8" fill="#22c55e"/>
-          <rect x="45" y="35" width="4" height="50" fill="#22c55e"/>
-          <circle cx="47" cy="35" r="8" fill="#22c55e"/>
-          
-          {/* Second music note */}
-          <ellipse cx="65" cy="90" rx="12" ry="8" fill="#22c55e"/>
-          <rect x="75" y="25" width="4" height="65" fill="#22c55e"/>
-          <circle cx="77" cy="25" r="10" fill="#22c55e"/>
+        <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Music notes */}
+          <g>
+            {/* First note */}
+            <ellipse cx="40" cy="95" rx="14" ry="10" fill="hsl(var(--primary))" transform="rotate(-20 40 95)"/>
+            <rect x="52" y="45" width="5" height="50" fill="hsl(var(--primary))" rx="2.5"/>
+            
+            {/* Second note */}
+            <ellipse cx="75" cy="100" rx="14" ry="10" fill="hsl(var(--primary))" transform="rotate(-20 75 100)"/>
+            <rect x="87" y="35" width="5" height="65" fill="hsl(var(--primary))" rx="2.5"/>
+            
+            {/* Connecting beam */}
+            <path d="M 57 45 L 92 35 L 92 45 L 57 55 Z" fill="hsl(var(--primary))"/>
+          </g>
         </svg>
       </div>
     </div>
