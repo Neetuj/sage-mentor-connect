@@ -14,6 +14,7 @@ import { z } from "zod";
 const TutorDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("all");
+  const [filterTimezone, setFilterTimezone] = useState("all");
   const [searchError, setSearchError] = useState("");
   const [tutors, setTutors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,6 +86,11 @@ const TutorDirectory = () => {
     .filter(specialty => specialty && specialty.trim() !== '')
   )];
 
+  const timezones = [...new Set(tutors
+    .map(tutor => tutor.timezone || 'UTC')
+    .filter(timezone => timezone && timezone.trim() !== '')
+  )].sort();
+
   const handleConnectTutor = (tutorName: string, available: boolean) => {
     if (available) {
       // Scroll to form and set tutor selection
@@ -111,7 +117,8 @@ const TutorDirectory = () => {
                          tutor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          tutor.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesSpecialty = filterSpecialty === "all" || tutor.specialty === filterSpecialty;
-    return matchesSearch && matchesSpecialty;
+    const matchesTimezone = filterTimezone === "all" || (tutor.timezone || 'UTC') === filterTimezone;
+    return matchesSearch && matchesSpecialty && matchesTimezone;
   });
 
   // Pagination calculations
@@ -124,7 +131,7 @@ const TutorDirectory = () => {
   // Reset to page 1 when search/filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, filterSpecialty]);
+  }, [searchTerm, filterSpecialty, filterTimezone]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -168,6 +175,19 @@ const TutorDirectory = () => {
               {specialties.map(specialty => (
                 <SelectItem key={specialty} value={specialty}>
                   {specialty}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={filterTimezone} onValueChange={setFilterTimezone}>
+            <SelectTrigger className="w-full sm:w-40">
+              <SelectValue placeholder="Filter by timezone" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Timezones</SelectItem>
+              {timezones.map(timezone => (
+                <SelectItem key={timezone} value={timezone}>
+                  {timezone}
                 </SelectItem>
               ))}
             </SelectContent>
