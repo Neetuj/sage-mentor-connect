@@ -1,63 +1,34 @@
 import { useEffect, useState } from "react";
-
+import { createPortal } from "react-dom";
 interface CardTrickAnimationProps {
   onComplete: () => void;
   cardIndex: number;
 }
 
 const CardTrickAnimation = ({ onComplete, cardIndex }: CardTrickAnimationProps) => {
-  const [position, setPosition] = useState({ top: '50%', left: '50%' });
+  const [host, setHost] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    let rafId: number | null = null;
-
-    const updatePosition = () => {
-      const cardElement = document.getElementById(`founder-card-${cardIndex}`);
-      if (cardElement) {
-        const rect = cardElement.getBoundingClientRect();
-        setPosition({
-          top: `${rect.top + rect.height / 2}px`,
-          left: `${rect.left + rect.width / 2}px`,
-        });
-      }
-    };
-
-    const loop = () => {
-      updatePosition();
-      rafId = requestAnimationFrame(loop);
-    };
-
-    // Start continuous centering while overlay is visible
-    updatePosition();
-    rafId = requestAnimationFrame(loop);
-
-    // Also recenter on resize/scroll
-    window.addEventListener('resize', updatePosition);
-    window.addEventListener('scroll', updatePosition, true);
+    const el = document.getElementById(`founder-rect-${cardIndex}`) as HTMLElement | null;
+    setHost(el);
 
     const timer = setTimeout(() => onComplete(), 1800);
-    return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition, true);
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, [onComplete, cardIndex]);
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
-      <div 
-        className="w-24 h-32 bg-card border-2 border-primary rounded-lg shadow-card-hover flex flex-col items-center justify-center animate-card-trick absolute"
-        style={{ 
-          top: position.top, 
-          left: position.left,
-          transform: 'translate(-50%, -50%)'
-        }}
-      >
+  if (!host) return null;
+
+  return createPortal(
+    <div 
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-card-trick z-10"
+      onClick={onComplete}
+    >
+      <div className="w-24 h-32 bg-card border-2 border-primary rounded-lg shadow-card-hover flex flex-col items-center justify-center">
         <div className="text-4xl font-bold text-primary">A</div>
         <div className="text-5xl text-primary">♠</div>
       </div>
-    </div>
+    </div>,
+    host
   );
 };
 

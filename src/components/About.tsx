@@ -122,7 +122,7 @@ const About = () => {
             <Card 
               key={index} 
               id={`founder-card-${index}`}
-              className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary cursor-pointer hover:scale-105 hover:shadow-lg"
+              className="shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient border-l-4 border-l-secondary cursor-pointer hover:scale-105 hover:shadow-lg relative"
               onClick={() => {
                 setClickedCardIndex(index);
                 if (founder.name === "Rohan Jain") {
@@ -154,7 +154,7 @@ const About = () => {
                   <Badge variant="outline" className="mb-4">{founder.expertise}</Badge>
                 </div>
                 
-                <div className="bg-muted/30 rounded-lg p-4 relative">
+                <div id={`founder-rect-${index}`} className="bg-muted/30 rounded-lg p-4 relative">
                   <div className="absolute top-[-8px] left-1/2 transform -translate-x-1/2 w-4 h-4 bg-muted/30 rotate-45"></div>
                   <p className="text-muted-foreground text-sm leading-relaxed">
                     {founder.bio}
