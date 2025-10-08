@@ -23,7 +23,7 @@ const About = () => {
       role: "Cofounder & Vice President",
       school: "Coppell High School, TX", 
       expertise: "Aerospace Engineering",
-      bio: "From Dallas, Texas, Rohan is interested in flight mechanics, rocketry propulsion, and aerodynamics. He loves spending time mastering new card tricks, with a good book and his giant playlist, teaching taekwondo to toddlers, and making really good guacamole. "
+      bio: "From Dallas, Texas, Rohan is interested in flight mechanics, aerospace systems design, and fluid dynamics. He loves spending time mastering new card tricks, with a good book and his giant playlist, teaching taekwondo to toddlers, and making really good guacamole. "
     },
     {
       name: "Hannah Shin",
