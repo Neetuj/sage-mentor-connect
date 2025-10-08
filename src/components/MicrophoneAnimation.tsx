@@ -9,6 +9,8 @@ const MicrophoneAnimation = ({ onComplete, cardIndex }: MicrophoneAnimationProps
   const [position, setPosition] = useState({ top: '50%', left: '50%' });
 
   useEffect(() => {
+    let rafId: number | null = null;
+
     const updatePosition = () => {
       const cardElement = document.getElementById(`founder-card-${cardIndex}`);
       if (cardElement) {
@@ -20,9 +22,21 @@ const MicrophoneAnimation = ({ onComplete, cardIndex }: MicrophoneAnimationProps
       }
     };
     
+    // Initial compute and again on next frame to account for layout/hover settling
     updatePosition();
+    rafId = requestAnimationFrame(updatePosition);
+
+    // Keep centered on scroll/resize while overlay is visible
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+
     const timer = setTimeout(() => onComplete(), 1800);
-    return () => clearTimeout(timer);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+      clearTimeout(timer);
+    };
   }, [onComplete, cardIndex]);
 
   return (
