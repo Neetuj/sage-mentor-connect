@@ -53,14 +53,13 @@ const Header = () => {
             <img 
               src="/lovable-uploads/55bfe8cb-0cef-4057-ae60-ce370c18903c.png" 
               alt="SAGE Logo" 
-              className="h-10 w-10 cursor-pointer hover:scale-110 transition-transform" 
-              onClick={() => setShowProfileImage(true)}
+              className="h-10 w-10" 
             />
             <div>
               <h1 className="text-xl font-bold text-primary">SAGE</h1>
               <p 
                 className="text-xs text-muted-foreground cursor-pointer hover:text-primary transition-colors"
-                onClick={() => setShowDucks(true)}
+                onClick={() => setShowProfileImage(true)}
               >
                 Student Alliance for Growth in Engineering
               </p>
