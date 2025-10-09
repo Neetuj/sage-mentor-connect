@@ -9,7 +9,6 @@ import DuckAnimation from "./DuckAnimation";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showDucks, setShowDucks] = useState(false);
-  const [showProfileImage, setShowProfileImage] = useState(false);
   const { user, profile, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -19,13 +18,6 @@ const Header = () => {
       return () => clearTimeout(timer);
     }
   }, [showDucks]);
-
-  useEffect(() => {
-    if (showProfileImage) {
-      const timer = setTimeout(() => setShowProfileImage(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [showProfileImage]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -59,7 +51,7 @@ const Header = () => {
               <h1 className="text-xl font-bold text-primary">SAGE</h1>
               <p 
                 className="text-xs text-muted-foreground cursor-pointer hover:text-primary transition-colors"
-                onClick={() => setShowProfileImage(true)}
+                onClick={() => setShowDucks(true)}
               >
                 Student Alliance for Growth in Engineering
               </p>
@@ -67,16 +59,6 @@ const Header = () => {
           </div>
 
           {showDucks && <DuckAnimation onComplete={() => setShowDucks(false)} />}
-          
-          {showProfileImage && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm animate-[fade-out_0.5s_ease-out_2.5s_forwards]">
-              <img 
-                src="https://media.licdn.com/dms/image/v2/D4E03AQGRb6d8-Sywaw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731896562557?e=1762992000&v=beta&t=rRID3PEuPKoEDPDdo-UZM47xvCTeSwIpenHRVe5Rpzg" 
-                alt="Profile" 
-                className="w-[300px] h-[300px] object-contain rounded-lg shadow-2xl animate-[scale-in_0.3s_ease-out,shrink-away_2s_ease-in_1s_forwards]"
-              />
-            </div>
-          )}
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
