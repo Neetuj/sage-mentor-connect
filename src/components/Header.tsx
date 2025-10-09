@@ -74,7 +74,7 @@ const Header = () => {
               <img 
                 src="https://media.licdn.com/dms/image/v2/D4E03AQGRb6d8-Sywaw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731896562557?e=1762992000&v=beta&t=rRID3PEuPKoEDPDdo-UZM47xvCTeSwIpenHRVe5Rpzg" 
                 alt="Profile" 
-                className="w-[400px] h-[400px] object-cover rounded-lg shadow-2xl animate-[scale-in_0.3s_ease-out,shrink-away_2s_ease-in_1s_forwards]"
+                className="w-[300px] h-[300px] object-contain rounded-lg shadow-2xl animate-[scale-in_0.3s_ease-out,shrink-away_2s_ease-in_1s_forwards]"
               />
             </div>
           )}
