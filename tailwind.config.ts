@@ -137,6 +137,20 @@ export default {
               transform: "translateY(-4px) rotate(3deg)"
             }
           },
+          "shrink-away": {
+            "0%": {
+              transform: "scale(1)",
+              opacity: "1"
+            },
+            "100%": {
+              transform: "scale(0)",
+              opacity: "0"
+            }
+          },
+          "fade-out": {
+            "0%": { opacity: "1" },
+            "100%": { opacity: "0" }
+          },
         },
         animation: {
           "accordion-down": "accordion-down 0.2s ease-out",
