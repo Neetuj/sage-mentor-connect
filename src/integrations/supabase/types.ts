@@ -49,10 +49,12 @@ export type Database = {
           created_at: string
           date: string | null
           description: string
+          google_form_url: string | null
           host_image_url: string | null
           id: string
           location: string
           registered: number
+          registration_type: string
           speaker: string
           time: string
           title: string
@@ -66,10 +68,12 @@ export type Database = {
           created_at?: string
           date?: string | null
           description: string
+          google_form_url?: string | null
           host_image_url?: string | null
           id?: string
           location: string
           registered?: number
+          registration_type?: string
           speaker: string
           time: string
           title: string
@@ -83,10 +87,12 @@ export type Database = {
           created_at?: string
           date?: string | null
           description?: string
+          google_form_url?: string | null
           host_image_url?: string | null
           id?: string
           location?: string
           registered?: number
+          registration_type?: string
           speaker?: string
           time?: string
           title?: string

@@ -11,12 +11,23 @@ import { applicationFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_M
 interface SeminarRegistrationProps {
   seminarTitle: string;
   seminarId: string;
+  registrationType: string;
+  googleFormUrl?: string;
   children: React.ReactNode;
 }
 
-const SeminarRegistration = ({ seminarTitle, seminarId, children }: SeminarRegistrationProps) => {
+const SeminarRegistration = ({ seminarTitle, seminarId, registrationType, googleFormUrl, children }: SeminarRegistrationProps) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // If registration type is Google Form, redirect to the form URL
+  const handleRegistrationClick = () => {
+    if (registrationType === "google_form" && googleFormUrl) {
+      window.open(googleFormUrl, "_blank");
+      return;
+    }
+    setOpen(true);
+  };
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -106,6 +117,15 @@ const SeminarRegistration = ({ seminarTitle, seminarId, children }: SeminarRegis
       setLoading(false);
     }
   };
+
+  // If using Google Form, don't use Dialog, just handle click
+  if (registrationType === "google_form") {
+    return (
+      <div onClick={handleRegistrationClick}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

@@ -22,6 +22,8 @@ interface Seminar {
   registered: number;
   topic_image_url?: string;
   host_image_url?: string;
+  registration_type: string;
+  google_form_url?: string;
 }
 
 interface SeminarFormProps {
@@ -48,6 +50,8 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
     topic_image_url: "",
     host_image_url: "",
     is_date_tbd: false,
+    registration_type: "website",
+    google_form_url: "",
   });
 
   // Populate form when editing
@@ -67,6 +71,8 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
         topic_image_url: editingSeminar.topic_image_url || "",
         host_image_url: editingSeminar.host_image_url || "",
         is_date_tbd: !editingSeminar.date,
+        registration_type: editingSeminar.registration_type || "website",
+        google_form_url: editingSeminar.google_form_url || "",
       });
     } else {
       setFormData({
@@ -83,6 +89,8 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
         topic_image_url: "",
         host_image_url: "",
         is_date_tbd: false,
+        registration_type: "website",
+        google_form_url: "",
       });
     }
   }, [editingSeminar]);
@@ -151,6 +159,8 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
           topic_image_url: "",
           host_image_url: "",
           is_date_tbd: false,
+          registration_type: "website",
+          google_form_url: "",
         });
       }
       
@@ -323,6 +333,46 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
               onChange={(e) => setFormData({...formData, description: e.target.value})}
               required
             />
+          </div>
+
+          <div className="space-y-4 border-t pt-4">
+            <h3 className="font-semibold text-lg">Registration Settings</h3>
+            
+            <div>
+              <Label htmlFor="registration_type">Registration Type</Label>
+              <Select 
+                value={formData.registration_type} 
+                onValueChange={(value) => setFormData({...formData, registration_type: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select registration type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="website">Website Form</SelectItem>
+                  <SelectItem value="google_form">Google Form Link</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-sm text-muted-foreground mt-1">
+                Choose how users will register for this seminar
+              </p>
+            </div>
+
+            {formData.registration_type === "google_form" && (
+              <div>
+                <Label htmlFor="google_form_url">Google Form URL *</Label>
+                <Input
+                  id="google_form_url"
+                  type="url"
+                  value={formData.google_form_url}
+                  onChange={(e) => setFormData({...formData, google_form_url: e.target.value})}
+                  placeholder="https://forms.gle/..."
+                  required={formData.registration_type === "google_form"}
+                />
+                <p className="text-sm text-muted-foreground mt-1">
+                  Paste the full Google Form link here. Users will be redirected to this form when they click "Register Now".
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="flex gap-2">

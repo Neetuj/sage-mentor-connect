@@ -239,6 +239,8 @@ const SeminarCalendar = () => {
                     <SeminarRegistration 
                       seminarTitle={seminar.title} 
                       seminarId={seminar.id}
+                      registrationType={seminar.registration_type || "website"}
+                      googleFormUrl={seminar.google_form_url}
                     >
                       <Button 
                         className="w-full" 

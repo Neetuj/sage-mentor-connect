@@ -21,6 +21,8 @@ interface Seminar {
   registered: number;
   topic_image_url?: string;
   host_image_url?: string;
+  registration_type: string;
+  google_form_url?: string;
 }
 
 interface SeminarManagementProps {
@@ -123,6 +125,7 @@ const SeminarManagement = ({ onSeminarDeleted, onEditSeminar }: SeminarManagemen
                   <TableHead>Date & Time</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>Category</TableHead>
+                  <TableHead>Registration Type</TableHead>
                   <TableHead>Registration</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -162,6 +165,23 @@ const SeminarManagement = ({ onSeminarDeleted, onEditSeminar }: SeminarManagemen
                         <Badge variant={getCategoryColor(seminar.category) as any}>
                           {seminar.category}
                         </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="space-y-1">
+                          <Badge variant={seminar.registration_type === 'google_form' ? 'secondary' : 'default'}>
+                            {seminar.registration_type === 'google_form' ? 'Google Form' : 'Website Form'}
+                          </Badge>
+                          {seminar.registration_type === 'google_form' && seminar.google_form_url && (
+                            <a 
+                              href={seminar.google_form_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-xs text-primary hover:underline block truncate max-w-[150px]"
+                            >
+                              View Form
+                            </a>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <div className="space-y-1">
