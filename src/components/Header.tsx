@@ -70,11 +70,11 @@ const Header = () => {
           {showDucks && <DuckAnimation onComplete={() => setShowDucks(false)} />}
           
           {showProfileImage && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background animate-fade-in">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm animate-[fade-in_0.3s_ease-out,fade-out_1.5s_ease-out_1.5s_forwards]">
               <img 
                 src="https://media.licdn.com/dms/image/v2/D4E03AQGRb6d8-Sywaw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731896562557?e=1762992000&v=beta&t=rRID3PEuPKoEDPDdo-UZM47xvCTeSwIpenHRVe5Rpzg" 
                 alt="Profile" 
-                className="max-w-[90vw] max-h-[90vh] rounded-lg shadow-2xl animate-[fade-in_0.5s_ease-out,fade-out_1s_ease-out_2s_forwards]"
+                className="w-auto h-auto max-w-[70vw] max-h-[70vh] object-contain rounded-lg shadow-2xl"
               />
             </div>
           )}
