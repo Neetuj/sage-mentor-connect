@@ -160,7 +160,7 @@ const SeminarCalendar = () => {
             <p className="text-muted-foreground mt-2">Loading seminars...</p>
           </div>
         ) : (
-          <div className={`grid lg:grid-cols-2 gap-6 justify-items-center ${isComingSoonHidden ? '' : 'blur-sm'}`}>
+          <div className={`grid ${seminars.length === 1 ? 'max-w-2xl mx-auto' : 'lg:grid-cols-2'} gap-6 ${isComingSoonHidden ? '' : 'blur-sm'}`}>
             {seminars.map((seminar) => {
               const regStatus = getRegistrationStatus(seminar.registered, seminar.capacity);
               
