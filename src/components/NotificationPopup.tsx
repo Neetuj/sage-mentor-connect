@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Notification {
@@ -83,25 +83,35 @@ const NotificationPopup = () => {
   if (!notification || !isVisible) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 max-w-sm sm:max-w-md w-[calc(100vw-2rem)] sm:w-auto animate-fade-in">
-      <div className="bg-card border border-border rounded-lg shadow-2xl p-5 flex items-start gap-3">
-        <div className="flex-1">
-          <p className="text-base text-foreground mb-4 leading-relaxed">{notification.message}</p>
-          <Button 
-            onClick={handleCtaClick}
-            className="w-full"
+    <div className="fixed bottom-4 right-4 z-50 max-w-sm sm:max-w-md w-[calc(100vw-2rem)] sm:w-auto animate-[fade-in_0.4s_ease-out,scale-in_0.4s_ease-out]">
+      <div className="relative bg-gradient-to-br from-primary/10 via-card to-card border-2 border-primary/30 rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.12),0_0_40px_rgba(var(--primary),0.15)] p-5 overflow-hidden">
+        {/* Animated gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent animate-[slide-in-right_2s_ease-in-out_infinite] pointer-events-none" />
+        
+        {/* Sparkle icon with pulse animation */}
+        <div className="absolute -top-1 -right-1 text-primary animate-pulse">
+          <Sparkles className="h-6 w-6" fill="currentColor" />
+        </div>
+        
+        <div className="relative flex items-start gap-3">
+          <div className="flex-1">
+            <p className="text-base font-medium text-foreground mb-4 leading-relaxed">{notification.message}</p>
+            <Button 
+              onClick={handleCtaClick}
+              className="w-full shadow-lg hover:shadow-xl transition-shadow"
+            >
+              {notification.cta_text}
+            </Button>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsVisible(false)}
+            className="h-8 w-8 shrink-0 hover:bg-accent/50"
           >
-            {notification.cta_text}
+            <X className="h-4 w-4" />
           </Button>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsVisible(false)}
-          className="h-8 w-8 shrink-0 hover:bg-accent"
-        >
-          <X className="h-4 w-4" />
-        </Button>
       </div>
     </div>
   );
