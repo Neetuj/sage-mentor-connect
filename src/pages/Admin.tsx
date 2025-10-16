@@ -14,6 +14,8 @@ import SeminarManagement from "@/components/SeminarManagement";
 import SubmissionManagement from "@/components/SubmissionManagement";
 import TestimonialForm from "@/components/TestimonialForm";
 import TestimonialManagement from "@/components/TestimonialManagement";
+import NotificationForm from "@/components/NotificationForm";
+import NotificationManagement from "@/components/NotificationManagement";
 
 const Admin = () => {
   console.log('Admin component rendering');
@@ -21,6 +23,7 @@ const Admin = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [editingSeminar, setEditingSeminar] = useState(null);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
+  const [editingNotification, setEditingNotification] = useState(null);
   const navigate = useNavigate();
 
   const refreshData = () => {
@@ -122,11 +125,12 @@ const Admin = () => {
         </Card>
 
         <Tabs defaultValue="submissions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="submissions">Form Submissions</TabsTrigger>
             <TabsTrigger value="tutors">Manage Tutors</TabsTrigger>
             <TabsTrigger value="seminars">Manage Seminars</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger>
           </TabsList>
           
           <TabsContent value="submissions">
@@ -164,6 +168,20 @@ const Admin = () => {
               <TestimonialManagement 
                 onTestimonialDeleted={refreshData} 
                 onEditTestimonial={setEditingTestimonial}
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="notifications">
+            <div className="space-y-6">
+              <NotificationForm 
+                onNotificationAdded={refreshData} 
+                editingNotification={editingNotification}
+                onCancelEdit={() => setEditingNotification(null)}
+              />
+              <NotificationManagement 
+                onNotificationDeleted={refreshData} 
+                onEditNotification={setEditingNotification}
               />
             </div>
           </TabsContent>
