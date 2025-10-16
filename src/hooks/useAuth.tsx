@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface Profile {
   id: string;
@@ -47,7 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               
               setProfile(profileData);
             } catch (error) {
-              console.error('Error fetching profile:', error);
+              logger.error('Error fetching profile:', error);
               setProfile(null);
             }
           }, 0);

@@ -11,6 +11,7 @@ import { applicationFormSchema, volunteerFormSchema, sanitizeString, checkRateLi
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import Testimonials from "@/components/Testimonials";
+import { logger } from "@/lib/logger";
 
 const GetInvolved = () => {
   const [formType, setFormType] = useState("student");
@@ -42,7 +43,7 @@ const GetInvolved = () => {
         if (error) throw error;
         setTutors(data || []);
       } catch (error) {
-        console.error('Error fetching tutors:', error);
+        logger.error('Error fetching tutors:', error);
       }
     };
 
@@ -104,7 +105,7 @@ const GetInvolved = () => {
           email: formData.email,
           additionalInfo: formData.additionalInfo
         };
-        console.log('Validating volunteer data:', dataToValidate);
+        logger.log('Validating volunteer data:', dataToValidate);
         volunteerFormSchema.parse(dataToValidate);
       } else {
         const dataToValidate = {
@@ -116,18 +117,18 @@ const GetInvolved = () => {
           additionalInfo: formData.additionalInfo,
           ...(formType === 'student' && { parentEmail: formData.parentEmail })
         };
-        console.log('Validating student/tutor data:', dataToValidate);
+        logger.log('Validating student/tutor data:', dataToValidate);
         applicationFormSchema.parse(dataToValidate);
       }
       
       setErrors({});
       return true;
     } catch (error) {
-      console.error('Validation error:', error);
+      logger.error('Validation error:', error);
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
         error.issues.forEach((issue) => {
-          console.log('Validation issue:', issue);
+          logger.log('Validation issue:', issue);
           if (issue.path[0]) {
             newErrors[issue.path[0].toString()] = issue.message;
           }

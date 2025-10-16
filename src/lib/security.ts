@@ -44,20 +44,37 @@ export const applicationFormSchema = z.object({
     .max(100, 'Email must be less than 100 characters'),
   school: z.string()
     .min(2, 'School name must be at least 2 characters')
-    .max(100, 'School name must be less than 100 characters'),
+    .max(100, 'School name must be less than 100 characters')
+    .optional()
+    .or(z.literal('')),
   gradeLevel: z.string()
     .min(1, 'Grade level is required')
-    .max(20, 'Grade level must be less than 20 characters'),
+    .max(20, 'Grade level must be less than 20 characters')
+    .optional()
+    .or(z.literal('')),
   interests: z.string()
     .min(1, 'Please select an area of interest')
-    .max(500, 'Interests must be less than 500 characters'),
+    .max(500, 'Interests must be less than 500 characters')
+    .optional()
+    .or(z.literal('')),
   additionalInfo: z.string()
     .max(1000, 'Additional information must be less than 1000 characters')
-    .optional(),
+    .optional()
+    .or(z.literal('')),
   parentEmail: z.string()
     .email('Invalid parent email format')
     .max(100, 'Parent email must be less than 100 characters')
     .optional()
+    .or(z.literal(''))
+}).refine(data => {
+  // Validate email format when parentEmail is provided and not empty
+  if (data.parentEmail && data.parentEmail !== '') {
+    return z.string().email().safeParse(data.parentEmail).success;
+  }
+  return true;
+}, { 
+  message: 'Invalid parent email format',
+  path: ['parentEmail']
 });
 
 export const searchSchema = z.object({

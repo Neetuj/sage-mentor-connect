@@ -7,6 +7,7 @@ import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 import TutorAdminForm from "@/components/TutorAdminForm";
 import SeminarForm from "@/components/SeminarForm";
 import TutorManagement from "@/components/TutorManagement";
@@ -18,7 +19,7 @@ import NotificationForm from "@/components/NotificationForm";
 import NotificationManagement from "@/components/NotificationManagement";
 
 const Admin = () => {
-  console.log('Admin component rendering');
+  logger.log('Admin component rendering');
   const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [editingSeminar, setEditingSeminar] = useState(null);
@@ -45,7 +46,7 @@ const Admin = () => {
         const isVisible = (data?.setting_value as any)?.visible ?? false;
         setIsComingSoonHidden(isVisible);
       } catch (error) {
-        console.error('Error loading site settings:', error);
+        logger.error('Error loading site settings:', error);
         // Fallback to localStorage for backward compatibility
         const savedState = localStorage.getItem('seminar-coming-soon-hidden');
         setIsComingSoonHidden(savedState === 'true');
@@ -73,7 +74,7 @@ const Admin = () => {
       
       toast.success(newState ? "Seminar section is now visible to all users" : "Seminar section is now hidden for all users");
     } catch (error) {
-      console.error('Error updating site settings:', error);
+      logger.error('Error updating site settings:', error);
       toast.error("Failed to update site settings");
     }
   };
