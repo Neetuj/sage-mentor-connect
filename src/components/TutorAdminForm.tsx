@@ -142,18 +142,12 @@ const TutorAdminForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
             </div>
             <div>
               <Label htmlFor="timezone">Timezone</Label>
-              <Select value={formData.timezone} onValueChange={(value) => setFormData({...formData, timezone: value})}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select timezone" />
-                </SelectTrigger>
-                <SelectContent>
-                  {timezones.map((timezone) => (
-                    <SelectItem key={timezone} value={timezone}>
-                      {timezone}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Input
+                id="timezone"
+                value={formData.timezone}
+                onChange={(e) => setFormData({...formData, timezone: e.target.value})}
+                placeholder="e.g., EST, PST, UTC"
+              />
             </div>
           </div>
 
