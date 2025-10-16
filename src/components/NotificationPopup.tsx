@@ -83,12 +83,11 @@ const NotificationPopup = () => {
   if (!notification || !isVisible) return null;
 
   return (
-    <div className="fixed top-20 right-4 z-50 max-w-md animate-slide-in-right">
-      <div className="bg-card border border-border rounded-lg shadow-lg p-4 flex items-start gap-3">
+    <div className="fixed bottom-4 right-4 z-50 max-w-sm sm:max-w-md w-[calc(100vw-2rem)] sm:w-auto animate-fade-in">
+      <div className="bg-card border border-border rounded-lg shadow-2xl p-5 flex items-start gap-3">
         <div className="flex-1">
-          <p className="text-sm text-foreground mb-3">{notification.message}</p>
+          <p className="text-base text-foreground mb-4 leading-relaxed">{notification.message}</p>
           <Button 
-            size="sm" 
             onClick={handleCtaClick}
             className="w-full"
           >
@@ -99,7 +98,7 @@ const NotificationPopup = () => {
           variant="ghost"
           size="icon"
           onClick={() => setIsVisible(false)}
-          className="h-6 w-6 shrink-0"
+          className="h-8 w-8 shrink-0 hover:bg-accent"
         >
           <X className="h-4 w-4" />
         </Button>
