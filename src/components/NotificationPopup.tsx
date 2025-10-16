@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { X, Sparkles } from "lucide-react";
+import { X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Notification {
@@ -87,11 +87,6 @@ const NotificationPopup = () => {
       <div className="relative bg-gradient-to-br from-primary/10 via-card to-card border-2 border-primary/30 rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.12),0_0_40px_rgba(var(--primary),0.15)] p-5 overflow-hidden">
         {/* Animated gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent animate-[slide-in-right_2s_ease-in-out_infinite] pointer-events-none" />
-        
-        {/* Sparkle icon with pulse animation */}
-        <div className="absolute -top-1 -right-1 text-primary animate-pulse">
-          <Sparkles className="h-6 w-6" fill="currentColor" />
-        </div>
         
         <div className="relative flex items-start gap-3">
           <div className="flex-1">
