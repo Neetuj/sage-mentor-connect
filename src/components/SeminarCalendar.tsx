@@ -220,7 +220,7 @@ const SeminarCalendar = () => {
                      <div className="space-y-3 mb-6">
                        <div className="flex items-center gap-2 text-sm">
                          <Calendar className="h-4 w-4 text-primary" />
-                         <span>{seminar.date ? new Date(seminar.date).toLocaleDateString() : "Date TBD"}</span>
+                         <span>{seminar.date ? new Date(seminar.date + 'T00:00:00').toLocaleDateString() : "Date TBD"}</span>
                        </div>
                       <div className="flex items-center gap-2 text-sm">
                         <Clock className="h-4 w-4 text-primary" />
