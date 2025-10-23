@@ -36,6 +36,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
         
+        // Show success message for email verification
+        if (event === 'SIGNED_IN' && session?.user?.email_confirmed_at) {
+          const { toast } = await import('sonner');
+          toast.success('Email verified successfully! Welcome to SAGE.');
+        }
+        
         if (session?.user) {
           // Fetch user profile
           setTimeout(async () => {
@@ -79,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/auth`;
     
     const { error } = await supabase.auth.signUp({
       email,
