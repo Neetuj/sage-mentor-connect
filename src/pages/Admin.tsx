@@ -13,8 +13,6 @@ import SeminarForm from "@/components/SeminarForm";
 import TutorManagement from "@/components/TutorManagement";
 import SeminarManagement from "@/components/SeminarManagement";
 import SubmissionManagement from "@/components/SubmissionManagement";
-import TestimonialForm from "@/components/TestimonialForm";
-import TestimonialManagement from "@/components/TestimonialManagement";
 import NotificationForm from "@/components/NotificationForm";
 import NotificationManagement from "@/components/NotificationManagement";
 import TeamMemberForm from "@/components/TeamMemberForm";
@@ -29,7 +27,6 @@ const Admin = () => {
   const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [editingSeminar, setEditingSeminar] = useState(null);
-  const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [editingNotification, setEditingNotification] = useState(null);
   const [editingTeamMember, setEditingTeamMember] = useState(null);
   const [editingStat, setEditingStat] = useState(null);
@@ -135,11 +132,10 @@ const Admin = () => {
         </Card>
 
         <Tabs defaultValue="submissions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7">
             <TabsTrigger value="submissions">Submissions</TabsTrigger>
             <TabsTrigger value="tutors">Tutors</TabsTrigger>
             <TabsTrigger value="seminars">Seminars</TabsTrigger>
-            <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
             <TabsTrigger value="stats">Statistics</TabsTrigger>
             <TabsTrigger value="quotes">Quotes</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
@@ -167,20 +163,6 @@ const Admin = () => {
               <SeminarManagement 
                 onSeminarDeleted={refreshData} 
                 onEditSeminar={setEditingSeminar}
-              />
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="testimonials">
-            <div className="space-y-6">
-              <TestimonialForm 
-                onTestimonialAdded={refreshData} 
-                editingTestimonial={editingTestimonial}
-                onCancelEdit={() => setEditingTestimonial(null)}
-              />
-              <TestimonialManagement 
-                onTestimonialDeleted={refreshData} 
-                onEditTestimonial={setEditingTestimonial}
               />
             </div>
           </TabsContent>
