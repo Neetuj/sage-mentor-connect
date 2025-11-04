@@ -1,14 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import type mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 interface TeamMember {
   id: string;
@@ -24,10 +22,7 @@ interface TeamMember {
 
 const TeamMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]);
-  const [mapboxToken, setMapboxToken] = useState("");
-  const [tokenSubmitted, setTokenSubmitted] = useState(false);
+  const map = useRef<L.Map | null>(null);
 
   const { data: teamMembers = [], isLoading } = useQuery({
     queryKey: ["team-members"],
@@ -43,131 +38,106 @@ const TeamMap = () => {
   });
 
   useEffect(() => {
-    if (!mapContainer.current || map.current || !tokenSubmitted || !mapboxToken) return;
+    if (!mapContainer.current || map.current) return;
 
-    // Lazy load mapbox-gl to avoid React duplicate instance issues
-    import("mapbox-gl").then((mapboxModule) => {
-      const mapboxgl = mapboxModule.default;
-      mapboxgl.accessToken = mapboxToken;
+    // Initialize map with OpenStreetMap
+    map.current = L.map(mapContainer.current).setView([39.8283, -98.5795], 4);
 
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current!,
-        style: "mapbox://styles/mapbox/light-v11",
-        center: [-95, 40], // Centered on US
-        zoom: 3,
-        pitch: 0,
-      });
+    // Add OpenStreetMap tile layer
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map.current);
 
-      map.current.addControl(
-        new mapboxgl.NavigationControl({
-          visualizePitch: false,
-        }),
-        "top-right"
-      );
-    });
-
+    // Cleanup
     return () => {
       map.current?.remove();
     };
-  }, [tokenSubmitted, mapboxToken]);
+  }, []);
 
   useEffect(() => {
-    if (!map.current || !teamMembers.length || !tokenSubmitted) return;
+    if (!map.current || !teamMembers.length) return;
 
-    // Wait for map to be fully loaded
-    const addMarkers = () => {
-      // Lazy load mapbox-gl for marker creation
-      import("mapbox-gl").then((mapboxModule) => {
-        const mapboxgl = mapboxModule.default;
-        
-        // Remove existing markers
-        markersRef.current.forEach((marker) => marker.remove());
-        markersRef.current = [];
+    teamMembers.forEach((member) => {
+      // Create custom icon with profile image
+      const iconHtml = member.profile_image_url
+        ? `<div style="width:50px;height:50px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);background-image:url(${member.profile_image_url});background-size:cover;background-position:center;cursor:pointer;transition:transform 0.2s;" class="team-marker"></div>`
+        : `<div style="width:50px;height:50px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);background:linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;cursor:pointer;transition:transform 0.2s;" class="team-marker">${member.name.charAt(0)}</div>`;
 
-        // Add markers for each team member
-        teamMembers.forEach((member) => {
-        const el = document.createElement("div");
-        el.className = "team-marker";
-        el.style.cssText = `
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          cursor: pointer;
-          background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-          border: 3px solid white;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-          background-image: url('${member.profile_image_url || ""}');
-          background-size: cover;
-          background-position: center;
-          transition: transform 0.2s;
-        `;
+      const customIcon = L.divIcon({
+        html: iconHtml,
+        className: "",
+        iconSize: [50, 50],
+        iconAnchor: [25, 25],
+      });
 
-        el.addEventListener("mouseenter", () => {
-          el.style.transform = "scale(1.2)";
-        });
+      // Create marker
+      const marker = L.marker([member.latitude, member.longitude], { icon: customIcon })
+        .addTo(map.current!);
 
-        el.addEventListener("mouseleave", () => {
-          el.style.transform = "scale(1)";
-        });
+      // Brief popup for hover
+      const briefPopup = L.popup({
+        closeButton: false,
+        autoClose: false,
+        closeOnClick: false,
+        offset: [0, -25],
+      }).setContent(`
+        <div style="text-align: center; padding: 4px;">
+          <strong style="color: hsl(var(--primary));">${member.name}</strong><br/>
+          <span style="font-size: 0.9em; color: hsl(var(--muted-foreground));">${member.role}</span>
+        </div>
+      `);
 
-        const marker = new mapboxgl.Marker(el)
-          .setLngLat([member.longitude, member.latitude])
-          .addTo(map.current!);
+      // Detailed popup for click
+      const detailedPopup = L.popup({
+        maxWidth: 300,
+        offset: [0, -25],
+      }).setContent(`
+        <div style="padding: 16px; text-align: center;">
+          ${member.profile_image_url ? `
+            <img 
+              src="${member.profile_image_url}" 
+              alt="${member.name}"
+              style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid hsl(var(--primary));"
+            />
+          ` : ''}
+          <h3 style="margin: 8px 0; font-size: 1.1em; font-weight: bold; color: hsl(var(--primary));">${member.name}</h3>
+          <p style="margin: 4px 0; color: hsl(var(--secondary)); font-weight: 600;">${member.role}</p>
+          ${member.school ? `<p style="margin: 4px 0; font-size: 0.9em; color: hsl(var(--muted-foreground));"><strong>School:</strong> ${member.school}</p>` : ''}
+          <p style="margin: 4px 0; font-size: 0.9em; color: hsl(var(--muted-foreground));"><strong>Location:</strong> ${member.location}</p>
+          ${member.email ? `<p style="margin: 4px 0; font-size: 0.9em;"><strong>Email:</strong> <a href="mailto:${member.email}" style="color: hsl(var(--primary)); text-decoration: underline;">${member.email}</a></p>` : ''}
+        </div>
+      `);
 
-        const popup = new mapboxgl.Popup({
-          offset: 25,
-          closeButton: false,
-          className: "team-popup",
-        }).setHTML(`
-          <div style="padding: 8px;">
-            <h3 style="font-weight: 600; margin: 0 0 4px 0; color: hsl(var(--primary));">${member.name}</h3>
-            <p style="margin: 0; font-size: 14px; color: hsl(var(--muted-foreground));">${member.role}</p>
-            <p style="margin: 4px 0 0 0; font-size: 12px; color: hsl(var(--muted-foreground));">${member.location}</p>
-          </div>
-        `);
+      // Get marker element for hover effects
+      marker.on('add', () => {
+        const markerElement = marker.getElement();
+        if (markerElement) {
+          const markerDiv = markerElement.querySelector('.team-marker') as HTMLElement;
+          if (markerDiv) {
+            markerDiv.addEventListener('mouseenter', () => {
+              markerDiv.style.transform = 'scale(1.2)';
+              briefPopup.setLatLng([member.latitude, member.longitude]).openOn(map.current!);
+            });
 
-        marker.setPopup(popup);
+            markerDiv.addEventListener('mouseleave', () => {
+              markerDiv.style.transform = 'scale(1)';
+              map.current!.closePopup(briefPopup);
+            });
+          }
+        }
+      });
 
-        el.addEventListener("click", () => {
-          // Open popup with full details on click
-          const detailPopup = new mapboxgl.Popup({
-            offset: 25,
-            maxWidth: "300px",
-            className: "team-detail-popup",
-          }).setHTML(`
-            <div style="padding: 16px;">
-              <div style="text-align: center; margin-bottom: 12px;">
-                ${member.profile_image_url ? `<img src="${member.profile_image_url}" alt="${member.name}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px;" />` : ''}
-                <h3 style="font-weight: 600; margin: 0 0 6px 0; font-size: 18px; color: hsl(var(--primary));">${member.name}</h3>
-                <p style="margin: 0 0 4px 0; font-size: 14px; font-weight: 500; color: hsl(var(--secondary));">${member.role}</p>
-                ${member.school ? `<p style="margin: 0 0 8px 0; font-size: 13px; color: hsl(var(--muted-foreground));">${member.school}</p>` : ''}
-                <span style="display: inline-block; padding: 4px 8px; background: hsl(var(--muted)); border-radius: 4px; font-size: 12px;">${member.location}</span>
-              </div>
-              ${member.email ? `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid hsl(var(--border)); text-align: center;"><a href="mailto:${member.email}" style="font-size: 13px; color: hsl(var(--primary)); text-decoration: underline;">${member.email}</a></div>` : ''}
-            </div>
-          `);
-          
-          marker.setPopup(detailPopup);
-          detailPopup.addTo(map.current!);
-          
-          map.current?.flyTo({
-            center: [member.longitude, member.latitude],
-            zoom: 6,
-            duration: 1000,
-          });
-        });
-
-          markersRef.current.push(marker);
+      // Click effects
+      marker.on('click', () => {
+        map.current!.closePopup(briefPopup);
+        detailedPopup.setLatLng([member.latitude, member.longitude]).openOn(map.current!);
+        map.current!.flyTo([member.latitude, member.longitude], 6, {
+          duration: 1.5,
         });
       });
-    };
-
-    if (map.current.loaded()) {
-      addMarkers();
-    } else {
-      map.current.on('load', addMarkers);
-    }
-  }, [teamMembers, tokenSubmitted]);
+    });
+  }, [teamMembers]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -187,55 +157,12 @@ const TeamMap = () => {
               </p>
             </div>
 
-            {/* Mapbox Token Input */}
-            {!tokenSubmitted && (
-              <Card className="mb-6 shadow-card">
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Enter Your Mapbox Token</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Get your free token at{" "}
-                        <a 
-                          href="https://account.mapbox.com/access-tokens/" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-primary underline"
-                        >
-                          mapbox.com/account/access-tokens
-                        </a>
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Input
-                        type="text"
-                        placeholder="pk.eyJ1Ijoi..."
-                        value={mapboxToken}
-                        onChange={(e) => setMapboxToken(e.target.value)}
-                        className="flex-1"
-                      />
-                      <Button 
-                        onClick={() => setTokenSubmitted(true)}
-                        disabled={!mapboxToken.startsWith("pk.")}
-                      >
-                        Load Map
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
             {/* Map Section */}
             <Card className="overflow-hidden shadow-card">
               <CardContent className="p-0">
                 {isLoading ? (
                   <div className="h-[700px] flex items-center justify-center bg-muted/30">
                     <p className="text-muted-foreground">Loading map...</p>
-                  </div>
-                ) : !tokenSubmitted ? (
-                  <div className="h-[700px] flex items-center justify-center bg-muted/30">
-                    <p className="text-muted-foreground">Enter your Mapbox token above to view the map</p>
                   </div>
                 ) : (
                   <div
