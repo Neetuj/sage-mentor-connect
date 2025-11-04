@@ -115,7 +115,7 @@ const TestimonialBento = () => {
         {stats.slice(0, 2).map((stat, index) => {
           const Icon = iconMap[stat.icon_name] || Users;
           const colors = [
-            { bg: "from-yellow-500/10 to-yellow-600/5", icon: "bg-yellow-500/20", text: "text-yellow-500" },
+            { bg: "from-secondary/10 to-secondary/5", icon: "bg-secondary/20", text: "text-secondary" },
             { bg: "from-primary/10 to-primary/5", icon: "bg-primary/20", text: "text-primary" },
           ];
           const colorScheme = colors[index] || colors[0];
@@ -160,21 +160,6 @@ const TestimonialBento = () => {
           </Card>
         )}
 
-        {/* Additional Stat Card */}
-        {stats[2] && (() => {
-          const Icon = iconMap[stats[2].icon_name] || Users;
-          return (
-            <Card className="md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br from-accent/10 to-accent/5">
-              <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-                <div className="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center mb-2">
-                  <Icon className="h-5 w-5 text-accent" />
-                </div>
-                <div className="text-4xl font-bold text-foreground mb-1">{stats[2].stat_value}</div>
-                <p className="text-xs text-muted-foreground text-center">{stats[2].stat_label}</p>
-              </CardContent>
-            </Card>
-          );
-        })()}
 
         {/* Two Medium Cards */}
         {secondary.map((testimonial) => (
