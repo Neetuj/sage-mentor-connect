@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +23,7 @@ const QuoteForm = ({ onQuoteAdded, editingQuote, onCancelEdit }: QuoteFormProps)
   const [isFeatured, setIsFeatured] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (editingQuote) {
@@ -33,6 +34,17 @@ const QuoteForm = ({ onQuoteAdded, editingQuote, onCancelEdit }: QuoteFormProps)
       setDisplayOrder(editingQuote.display_order?.toString() || "0");
       setIsFeatured(editingQuote.is_featured ?? false);
       setIsVisible(editingQuote.is_visible ?? true);
+
+      // Focus the textarea when entering edit mode
+      setTimeout(() => {
+        const el = textareaRef.current;
+        if (el) {
+          el.focus();
+          const len = (editingQuote.quote_text || "").length;
+          try { el.setSelectionRange(len, len); } catch {}
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 0);
     }
   }, [editingQuote]);
 
@@ -98,6 +110,7 @@ const QuoteForm = ({ onQuoteAdded, editingQuote, onCancelEdit }: QuoteFormProps)
             <Label htmlFor="quote-text">Quote Text</Label>
             <Textarea
               id="quote-text"
+              ref={textareaRef}
               value={quoteText}
               onChange={(e) => setQuoteText(e.target.value)}
               placeholder="Enter the quote..."

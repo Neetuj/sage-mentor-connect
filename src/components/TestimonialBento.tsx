@@ -110,7 +110,7 @@ const TestimonialBento = () => {
   return (
     <div className="space-y-4">
       {/* Bento Grid - Stats + Featured */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 md:auto-rows-fr gap-4">
         {/* Dynamic Stat Cards */}
         {stats.slice(0, 2).map((stat, index) => {
           const Icon = iconMap[stat.icon_name] || Users;
@@ -122,12 +122,14 @@ const TestimonialBento = () => {
           
           return (
             <Card key={stat.id} className={`md:col-span-3 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br ${colorScheme.bg}`}>
-              <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-                <div className={`w-10 h-10 ${colorScheme.icon} rounded-lg flex items-center justify-center mb-2`}>
+              <CardContent className="p-4 flex flex-col h-full justify-between">
+                <div className={`w-10 h-10 ${colorScheme.icon} rounded-lg flex items-center justify-center`}>
                   <Icon className={`h-5 w-5 ${colorScheme.text}`} />
                 </div>
-                <div className="text-4xl font-bold text-foreground mb-1">{stat.stat_value}</div>
-                <p className="text-xs text-muted-foreground text-center">{stat.stat_label}</p>
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="text-5xl md:text-6xl font-bold leading-none text-foreground">{stat.stat_value}</div>
+                </div>
+                <p className="text-sm md:text-base text-muted-foreground text-center">{stat.stat_label}</p>
               </CardContent>
             </Card>
           );
