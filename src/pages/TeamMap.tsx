@@ -43,32 +43,29 @@ const TeamMap = () => {
     if (!mapContainer.current || map.current) return;
 
     console.log('[TeamMap] Initializing Leaflet map');
-    map.current = L.map(mapContainer.current, {
+    const mapInstance = L.map(mapContainer.current, {
       zoomControl: true,
       scrollWheelZoom: true,
     }).setView([39.8283, -98.5795], 4);
 
+    map.current = mapInstance;
+
     const tile = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap contributors",
       maxZoom: 19,
-    }).addTo(map.current);
+    }).addTo(mapInstance);
 
     tile.on('load', () => console.log('[TeamMap] Tiles loaded'));
     tile.on('tileerror', (e) => console.error('[TeamMap] Tile error', e));
 
     setTimeout(() => {
-      if (map.current) {
-        map.current.invalidateSize(true);
-        console.log('[TeamMap] Map size invalidated');
-      }
+      mapInstance.invalidateSize(true);
+      console.log('[TeamMap] Map size invalidated');
     }, 100);
 
     return () => {
       console.log('[TeamMap] Cleaning up map');
-      if (map.current) {
-        map.current.remove();
-        map.current = null;
-      }
+      mapInstance.remove();
     };
   }, []);
 
