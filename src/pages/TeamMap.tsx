@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import type mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -19,7 +18,6 @@ interface TeamMember {
   location: string;
   latitude: number;
   longitude: number;
-  bio: string | null;
   profile_image_url: string | null;
   email: string | null;
   school: string | null;
@@ -29,7 +27,6 @@ const TeamMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
-  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
   const { data: teamMembers = [], isLoading } = useQuery({
     queryKey: ["team-members"],
@@ -129,11 +126,31 @@ const TeamMap = () => {
         marker.setPopup(popup);
 
         el.addEventListener("click", () => {
-          setSelectedMember(member);
+          // Open popup with full details on click
+          const detailPopup = new mapboxgl.Popup({
+            offset: 25,
+            maxWidth: "300px",
+            className: "team-detail-popup",
+          }).setHTML(`
+            <div style="padding: 16px;">
+              <div style="text-align: center; margin-bottom: 12px;">
+                ${member.profile_image_url ? `<img src="${member.profile_image_url}" alt="${member.name}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px;" />` : ''}
+                <h3 style="font-weight: 600; margin: 0 0 6px 0; font-size: 18px; color: hsl(var(--primary));">${member.name}</h3>
+                <p style="margin: 0 0 4px 0; font-size: 14px; font-weight: 500; color: hsl(var(--secondary));">${member.role}</p>
+                ${member.school ? `<p style="margin: 0 0 8px 0; font-size: 13px; color: hsl(var(--muted-foreground));">${member.school}</p>` : ''}
+                <span style="display: inline-block; padding: 4px 8px; background: hsl(var(--muted)); border-radius: 4px; font-size: 12px;">${member.location}</span>
+              </div>
+              ${member.email ? `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid hsl(var(--border)); text-align: center;"><a href="mailto:${member.email}" style="font-size: 13px; color: hsl(var(--primary)); text-decoration: underline;">${member.email}</a></div>` : ''}
+            </div>
+          `);
+          
+          marker.setPopup(detailPopup);
+          detailPopup.addTo(map.current!);
+          
           map.current?.flyTo({
             center: [member.longitude, member.latitude],
-            zoom: 8,
-            duration: 1500,
+            zoom: 6,
+            duration: 1000,
           });
         });
 
@@ -156,130 +173,25 @@ const TeamMap = () => {
                 SAGE Team Around the World
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Meet the passionate students and professionals making SAGE possible from across the globe.
+                Click on a team member to learn more about them.
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8">
-              {/* Map Section */}
-              <div className="lg:col-span-2">
-                <Card className="overflow-hidden shadow-card">
-                  <CardContent className="p-0">
-                    {isLoading ? (
-                      <div className="h-[600px] flex items-center justify-center bg-muted/30">
-                        <p className="text-muted-foreground">Loading map...</p>
-                      </div>
-                    ) : (
-                      <div
-                        ref={mapContainer}
-                        className="h-[600px] w-full rounded-lg"
-                      />
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Selected Member Details */}
-              <div className="lg:col-span-1">
-                {selectedMember ? (
-                  <Card className="shadow-card sticky top-24">
-                    <CardContent className="p-6">
-                      <div className="text-center mb-6">
-                        <Avatar className="w-24 h-24 mx-auto mb-4 shadow-lg">
-                          <AvatarImage
-                            src={selectedMember.profile_image_url || ""}
-                            alt={selectedMember.name}
-                          />
-                          <AvatarFallback className="bg-hero-gradient text-2xl font-bold text-primary-foreground">
-                            {selectedMember.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
-                        </Avatar>
-                        <h3 className="text-xl font-semibold text-primary mb-2">
-                          {selectedMember.name}
-                        </h3>
-                        <p className="text-secondary font-medium mb-1">
-                          {selectedMember.role}
-                        </p>
-                        {selectedMember.school && (
-                          <p className="text-sm text-muted-foreground mb-3">
-                            {selectedMember.school}
-                          </p>
-                        )}
-                        <Badge variant="outline">{selectedMember.location}</Badge>
-                      </div>
-
-                      {selectedMember.email && (
-                        <div className="mt-4 pt-4 border-t">
-                          <a
-                            href={`mailto:${selectedMember.email}`}
-                            className="text-sm text-primary hover:underline"
-                          >
-                            {selectedMember.email}
-                          </a>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
+            {/* Map Section */}
+            <Card className="overflow-hidden shadow-card">
+              <CardContent className="p-0">
+                {isLoading ? (
+                  <div className="h-[700px] flex items-center justify-center bg-muted/30">
+                    <p className="text-muted-foreground">Loading map...</p>
+                  </div>
                 ) : (
-                  <Card className="shadow-card sticky top-24">
-                    <CardContent className="p-6 text-center">
-                      <p className="text-muted-foreground">
-                        Click on a team member marker to view their details
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <div
+                    ref={mapContainer}
+                    className="h-[700px] w-full rounded-lg"
+                  />
                 )}
-              </div>
-            </div>
-
-            {/* Team List */}
-            {!isLoading && teamMembers.length > 0 && (
-              <div className="mt-12">
-                <h2 className="text-2xl font-bold text-primary mb-6 text-center">
-                  All Team Members
-                </h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {teamMembers.map((member) => (
-                    <Card
-                      key={member.id}
-                      className="shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer"
-                      onClick={() => {
-                        setSelectedMember(member);
-                        map.current?.flyTo({
-                          center: [member.longitude, member.latitude],
-                          zoom: 8,
-                          duration: 1500,
-                        });
-                      }}
-                    >
-                      <CardContent className="p-4 text-center">
-                        <Avatar className="w-16 h-16 mx-auto mb-3">
-                          <AvatarImage
-                            src={member.profile_image_url || ""}
-                            alt={member.name}
-                          />
-                          <AvatarFallback className="bg-hero-gradient text-lg font-bold text-primary-foreground">
-                            {member.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
-                        </Avatar>
-                        <h4 className="font-semibold text-sm mb-1">
-                          {member.name}
-                        </h4>
-                        <p className="text-xs text-muted-foreground">
-                          {member.location}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            )}
+              </CardContent>
+            </Card>
           </div>
         </section>
       </main>
