@@ -108,9 +108,9 @@ const TestimonialBento = () => {
   const scrollable = featuredQuote ? testimonials.slice(2) : testimonials.slice(3);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Bento Grid - Stats + Featured */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         {/* Dynamic Stat Cards */}
         {stats.slice(0, 2).map((stat, index) => {
           const Icon = iconMap[stat.icon_name] || Users;
@@ -122,12 +122,12 @@ const TestimonialBento = () => {
           
           return (
             <Card key={stat.id} className={`md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br ${colorScheme.bg}`}>
-              <CardContent className="p-6 flex flex-col items-center justify-center h-full">
-                <div className={`w-12 h-12 ${colorScheme.icon} rounded-lg flex items-center justify-center mb-3`}>
-                  <Icon className={`h-6 w-6 ${colorScheme.text}`} />
+              <CardContent className="p-4 flex flex-col items-center justify-center h-full">
+                <div className={`w-10 h-10 ${colorScheme.icon} rounded-lg flex items-center justify-center mb-2`}>
+                  <Icon className={`h-5 w-5 ${colorScheme.text}`} />
                 </div>
-                <div className="text-5xl font-bold text-foreground mb-2">{stat.stat_value}</div>
-                <p className="text-sm text-muted-foreground text-center">{stat.stat_label}</p>
+                <div className="text-4xl font-bold text-foreground mb-1">{stat.stat_value}</div>
+                <p className="text-xs text-muted-foreground text-center">{stat.stat_label}</p>
               </CardContent>
             </Card>
           );
@@ -136,9 +136,9 @@ const TestimonialBento = () => {
         {/* Featured Large Content (Quote or Testimonial) */}
         {featured && (
           <Card className="md:col-span-6 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient">
-            <CardContent className="p-8 h-full flex flex-col">
-              <Quote className="h-8 w-8 text-primary/40 mb-4" />
-              <blockquote className="text-lg text-foreground leading-relaxed mb-6 flex-1">
+            <CardContent className="p-6 h-full flex flex-col">
+              <Quote className="h-6 w-6 text-primary/40 mb-3" />
+              <blockquote className="text-base text-foreground leading-relaxed mb-4 flex-1">
                 "{featuredQuote ? featured.quote_text : featured.content}"
               </blockquote>
               {!featuredQuote && (
@@ -146,11 +146,11 @@ const TestimonialBento = () => {
                   {renderStars(featured.rating)}
                 </div>
               )}
-              <div className="border-t pt-4">
-                <div className="font-semibold text-primary">
+              <div className="border-t pt-3">
+                <div className="font-semibold text-primary text-sm">
                   {featuredQuote ? featured.author_name : featured.name}
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-xs text-muted-foreground">
                   {featuredQuote ? featured.author_role : featured.role}
                   {(featuredQuote ? featured.author_organization : featured.organization) && 
                     ` • ${featuredQuote ? featured.author_organization : featured.organization}`}
@@ -165,12 +165,12 @@ const TestimonialBento = () => {
           const Icon = iconMap[stats[2].icon_name] || Users;
           return (
             <Card className="md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br from-accent/10 to-accent/5">
-              <CardContent className="p-6 flex flex-col items-center justify-center h-full">
-                <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-3">
-                  <Icon className="h-6 w-6 text-accent" />
+              <CardContent className="p-4 flex flex-col items-center justify-center h-full">
+                <div className="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center mb-2">
+                  <Icon className="h-5 w-5 text-accent" />
                 </div>
-                <div className="text-5xl font-bold text-foreground mb-2">{stats[2].stat_value}</div>
-                <p className="text-sm text-muted-foreground text-center">{stats[2].stat_label}</p>
+                <div className="text-4xl font-bold text-foreground mb-1">{stats[2].stat_value}</div>
+                <p className="text-xs text-muted-foreground text-center">{stats[2].stat_label}</p>
               </CardContent>
             </Card>
           );
@@ -182,7 +182,7 @@ const TestimonialBento = () => {
             key={testimonial.id}
             className="md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300"
           >
-            <CardContent className="p-6 flex flex-col h-full">
+            <CardContent className="p-4 flex flex-col h-full">
               <div className="flex items-center mb-3">
                 {renderStars(testimonial.rating)}
               </div>
@@ -205,13 +205,13 @@ const TestimonialBento = () => {
       {/* Scrollable Testimonials Row */}
       {scrollable.length > 0 && (
         <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex space-x-4 pb-4">
+          <div className="flex space-x-3 pb-3">
             {scrollable.map((testimonial) => (
               <Card
                 key={testimonial.id}
-                className="w-72 h-56 flex-shrink-0 shadow-card hover:shadow-card-hover transition-all duration-300"
+                className="w-64 h-48 flex-shrink-0 shadow-card hover:shadow-card-hover transition-all duration-300"
               >
-                <CardContent className="p-6 h-full flex flex-col">
+                <CardContent className="p-4 h-full flex flex-col">
                   <div className="flex items-center mb-3">
                     {renderStars(testimonial.rating)}
                   </div>

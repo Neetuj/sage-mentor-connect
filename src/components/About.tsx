@@ -62,16 +62,7 @@ const About = () => {
         </div>
 
         {/* Community Testimonials */}
-        <div className="mb-16">
-          <div className="text-center mb-8">
-            <Badge variant="secondary" className="mb-4">
-              Community Voices
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">What People Are Saying</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Hear from students, parents, and educators who have experienced SAGE
-            </p>
-          </div>
+        <div className="mb-12">
           <TestimonialBento />
         </div>
 
