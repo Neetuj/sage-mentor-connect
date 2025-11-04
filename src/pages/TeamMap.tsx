@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
@@ -24,6 +24,7 @@ const TeamMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const [mapReady, setMapReady] = useState(false);
 
   const { data: teamMembers = [], isLoading } = useQuery({
     queryKey: ["team-members"],
@@ -64,10 +65,26 @@ const TeamMap = () => {
         maxZoom: 19,
       });
 
-      tile.on('load', () => console.log('[TeamMap] Tiles loaded successfully'));
-      tile.on('tileerror', (e) => console.error('[TeamMap] Tile loading error:', e));
+      tile.on('load', () => {
+        console.log('[TeamMap] Tiles loaded successfully');
+        setMapReady(true);
+      });
+      tile.on('tileerror', (e) => {
+        console.error('[TeamMap] Tile loading error:', e);
+        // Proceed to render markers even if tiles fail
+        setMapReady(true);
+      });
       
       tile.addTo(mapInstance);
+
+      // Fallback in case the tile 'load' event is delayed
+      setTimeout(() => {
+        // don't rely on stale closure; just try to enable rendering
+        setMapReady((prev) => {
+          if (!prev) console.warn('[TeamMap] Tiles load timeout, proceeding to render markers');
+          return true;
+        });
+      }, 1500);
       
       // Set map.current AFTER tiles are added
       map.current = mapInstance;
@@ -96,8 +113,8 @@ const TeamMap = () => {
   }, []);
 
   useEffect(() => {
-    if (!map.current || !teamMembers.length) {
-      console.log('[TeamMap] Not adding markers:', { hasMap: !!map.current, memberCount: teamMembers.length });
+    if (!mapReady || !map.current || !teamMembers.length) {
+      console.log('[TeamMap] Not adding markers:', { hasMap: !!map.current, mapReady, memberCount: teamMembers.length });
       return;
     }
 
@@ -131,11 +148,18 @@ const TeamMap = () => {
         html: iconHtml,
         className: "custom-team-marker",
         iconSize: [35, 50],
-        iconAnchor: [17.5, 50],
+        iconAnchor: [18, 50],
         popupAnchor: [0, -50],
       });
 
-      const marker = L.marker([member.latitude, member.longitude], { 
+      const lat = Number(member.latitude);
+      const lng = Number(member.longitude);
+      if (Number.isNaN(lat) || Number.isNaN(lng)) {
+        console.error(`[TeamMap] Invalid coordinates for ${member.name}:`, member.latitude, member.longitude);
+        return;
+      }
+
+      const marker = L.marker([lat, lng], { 
         icon: customIcon,
         interactive: true,
         keyboard: true
@@ -214,7 +238,7 @@ const TeamMap = () => {
         }
       }, 300);
     }
-  }, [teamMembers]);
+  }, [teamMembers, mapReady]);
 
   return (
     <div className="min-h-screen bg-background">
