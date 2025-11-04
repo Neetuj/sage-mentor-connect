@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import L from "leaflet";
@@ -20,7 +18,7 @@ interface TeamMember {
   school: string | null;
 }
 
-const TeamMap = () => {
+export const TeamMapEmbed = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
 
@@ -40,38 +38,28 @@ const TeamMap = () => {
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    // Initialize map with OpenStreetMap
+    console.log('[TeamMapEmbed] Initializing Leaflet map');
     map.current = L.map(mapContainer.current, {
       zoomControl: true,
       scrollWheelZoom: true,
     }).setView([39.8283, -98.5795], 4);
 
-    let fallbackAdded = false;
-    const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '© OpenStreetMap contributors',
+    const tile = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors",
       maxZoom: 19,
+      crossOrigin: true as any,
     }).addTo(map.current);
 
-    osm.on('load', () => console.log('[TeamMap] OSM tiles loaded'));
-    osm.on('tileerror', () => {
-      if (fallbackAdded) return;
-      fallbackAdded = true;
-      const esri = L.tileLayer(
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
-        { attribution: 'Tiles © Esri' }
-      );
-      esri.addTo(map.current!);
-    });
+    tile.on('load', () => console.log('[TeamMapEmbed] Tiles loaded'));
+    tile.on('tileerror', (e) => console.error('[TeamMapEmbed] Tile error', e));
 
-    // Ensure proper sizing
+    // Ensure proper sizing when first displayed
     setTimeout(() => map.current?.invalidateSize(true), 0);
-    const onResize = () => map.current?.invalidateSize();
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', () => map.current?.invalidateSize());
 
-    // Cleanup
     return () => {
-      window.removeEventListener('resize', onResize);
       map.current?.remove();
+      window.removeEventListener('resize', () => map.current?.invalidateSize());
     };
   }, []);
 
@@ -79,10 +67,9 @@ const TeamMap = () => {
     if (!map.current || !teamMembers.length) return;
 
     teamMembers.forEach((member) => {
-      // Create custom icon with profile image
       const iconHtml = member.profile_image_url
         ? `<div style="width:50px;height:50px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);background-image:url(${member.profile_image_url});background-size:cover;background-position:center;cursor:pointer;transition:transform 0.2s;" class="team-marker"></div>`
-        : `<div style="width:50px;height:50px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);background:linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;cursor:pointer;transition:transform 0.2s;" class="team-marker">${member.name.charAt(0)}</div>`;
+        : `<div style="width:50px;height:50px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);background:linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;cursor:pointer;transition:transform 0.2s;" class="team-marker">${member.name.charAt(0)}</div>`;
 
       const customIcon = L.divIcon({
         html: iconHtml,
@@ -91,11 +78,9 @@ const TeamMap = () => {
         iconAnchor: [25, 25],
       });
 
-      // Create marker
       const marker = L.marker([member.latitude, member.longitude], { icon: customIcon })
         .addTo(map.current!);
 
-      // Brief popup for hover
       const briefPopup = L.popup({
         closeButton: false,
         autoClose: false,
@@ -108,7 +93,6 @@ const TeamMap = () => {
         </div>
       `);
 
-      // Detailed popup for click
       const detailedPopup = L.popup({
         maxWidth: 300,
         offset: [0, -25],
@@ -129,7 +113,6 @@ const TeamMap = () => {
         </div>
       `);
 
-      // Get marker element for hover effects
       marker.on('add', () => {
         const markerElement = marker.getElement();
         if (markerElement) {
@@ -148,56 +131,34 @@ const TeamMap = () => {
         }
       });
 
-      // Click effects
       marker.on('click', () => {
         map.current!.closePopup(briefPopup);
         detailedPopup.setLatLng([member.latitude, member.longitude]).openOn(map.current!);
-        map.current!.flyTo([member.latitude, member.longitude], 6, {
-          duration: 1.5,
-        });
+        map.current!.flyTo([member.latitude, member.longitude], 6, { duration: 1.5 });
       });
     });
   }, [teamMembers]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="pt-20">
-        <section className="py-20 bg-muted/30">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <Badge variant="secondary" className="mb-4">
-                Our Team
-              </Badge>
-              <h1 className="text-4xl sm:text-5xl font-bold text-primary mb-6">
-                SAGE Team Around the World
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Click on a team member to learn more about them.
-              </p>
-            </div>
-
-            {/* Map Section */}
-            <Card className="overflow-hidden shadow-card">
-              <CardContent className="p-0">
-                {isLoading ? (
-                  <div className="h-[700px] flex items-center justify-center bg-muted/30">
-                    <p className="text-muted-foreground">Loading map...</p>
-                  </div>
-                ) : (
-                  <div
-                    ref={mapContainer}
-                    className="h-[700px] w-full rounded-lg"
-                  />
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </div>
+    <section className="py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-6">
+          <Badge variant="secondary" className="mb-2">Our Team</Badge>
+          <h2 className="text-3xl font-bold text-primary mb-2">SAGE Team Around the World</h2>
+          <p className="text-muted-foreground">Click on a team member to learn more about them.</p>
+        </div>
+        <Card className="overflow-hidden shadow-card">
+          <CardContent className="p-0">
+            {isLoading ? (
+              <div className="h-[600px] flex items-center justify-center bg-muted/30">
+                <p className="text-muted-foreground">Loading map...</p>
+              </div>
+            ) : (
+              <div ref={mapContainer} className="h-[600px] w-full" />
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </section>
   );
 };
-
-export default TeamMap;
