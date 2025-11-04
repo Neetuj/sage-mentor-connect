@@ -1,15 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import type mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-
-// Note: Replace with actual Mapbox token or store in Supabase secrets
-const MAPBOX_TOKEN = "pk.eyJ1IjoibG92YWJsZS1kZW1vIiwiYSI6ImNtNXF5azJqYjBhY2Qya3EwZWM0Z202bGYifQ.example";
 
 interface TeamMember {
   id: string;
@@ -27,6 +26,8 @@ const TeamMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const [mapboxToken, setMapboxToken] = useState("");
+  const [tokenSubmitted, setTokenSubmitted] = useState(false);
 
   const { data: teamMembers = [], isLoading } = useQuery({
     queryKey: ["team-members"],
@@ -42,12 +43,12 @@ const TeamMap = () => {
   });
 
   useEffect(() => {
-    if (!mapContainer.current || map.current) return;
+    if (!mapContainer.current || map.current || !tokenSubmitted || !mapboxToken) return;
 
     // Lazy load mapbox-gl to avoid React duplicate instance issues
     import("mapbox-gl").then((mapboxModule) => {
       const mapboxgl = mapboxModule.default;
-      mapboxgl.accessToken = MAPBOX_TOKEN;
+      mapboxgl.accessToken = mapboxToken;
 
       map.current = new mapboxgl.Map({
         container: mapContainer.current!,
@@ -68,21 +69,23 @@ const TeamMap = () => {
     return () => {
       map.current?.remove();
     };
-  }, []);
+  }, [tokenSubmitted, mapboxToken]);
 
   useEffect(() => {
-    if (!map.current || !teamMembers.length) return;
+    if (!map.current || !teamMembers.length || !tokenSubmitted) return;
 
-    // Lazy load mapbox-gl for marker creation
-    import("mapbox-gl").then((mapboxModule) => {
-      const mapboxgl = mapboxModule.default;
-      
-      // Remove existing markers
-      markersRef.current.forEach((marker) => marker.remove());
-      markersRef.current = [];
+    // Wait for map to be fully loaded
+    const addMarkers = () => {
+      // Lazy load mapbox-gl for marker creation
+      import("mapbox-gl").then((mapboxModule) => {
+        const mapboxgl = mapboxModule.default;
+        
+        // Remove existing markers
+        markersRef.current.forEach((marker) => marker.remove());
+        markersRef.current = [];
 
-      // Add markers for each team member
-      teamMembers.forEach((member) => {
+        // Add markers for each team member
+        teamMembers.forEach((member) => {
         const el = document.createElement("div");
         el.className = "team-marker";
         el.style.cssText = `
@@ -154,10 +157,17 @@ const TeamMap = () => {
           });
         });
 
-        markersRef.current.push(marker);
+          markersRef.current.push(marker);
+        });
       });
-    });
-  }, [teamMembers]);
+    };
+
+    if (map.current.loaded()) {
+      addMarkers();
+    } else {
+      map.current.on('load', addMarkers);
+    }
+  }, [teamMembers, tokenSubmitted]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -177,12 +187,55 @@ const TeamMap = () => {
               </p>
             </div>
 
+            {/* Mapbox Token Input */}
+            {!tokenSubmitted && (
+              <Card className="mb-6 shadow-card">
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Enter Your Mapbox Token</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Get your free token at{" "}
+                        <a 
+                          href="https://account.mapbox.com/access-tokens/" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-primary underline"
+                        >
+                          mapbox.com/account/access-tokens
+                        </a>
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Input
+                        type="text"
+                        placeholder="pk.eyJ1Ijoi..."
+                        value={mapboxToken}
+                        onChange={(e) => setMapboxToken(e.target.value)}
+                        className="flex-1"
+                      />
+                      <Button 
+                        onClick={() => setTokenSubmitted(true)}
+                        disabled={!mapboxToken.startsWith("pk.")}
+                      >
+                        Load Map
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Map Section */}
             <Card className="overflow-hidden shadow-card">
               <CardContent className="p-0">
                 {isLoading ? (
                   <div className="h-[700px] flex items-center justify-center bg-muted/30">
                     <p className="text-muted-foreground">Loading map...</p>
+                  </div>
+                ) : !tokenSubmitted ? (
+                  <div className="h-[700px] flex items-center justify-center bg-muted/30">
+                    <p className="text-muted-foreground">Enter your Mapbox token above to view the map</p>
                   </div>
                 ) : (
                   <div
