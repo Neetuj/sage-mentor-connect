@@ -13,24 +13,24 @@ import SeminarForm from "@/components/SeminarForm";
 import TutorManagement from "@/components/TutorManagement";
 import SeminarManagement from "@/components/SeminarManagement";
 import SubmissionManagement from "@/components/SubmissionManagement";
+import TestimonialForm from "@/components/TestimonialForm";
+import TestimonialManagement from "@/components/TestimonialManagement";
 import NotificationForm from "@/components/NotificationForm";
 import NotificationManagement from "@/components/NotificationManagement";
 import TeamMemberForm from "@/components/TeamMemberForm";
 import TeamMemberManagement from "@/components/TeamMemberManagement";
 import StatForm from "@/components/StatForm";
 import StatManagement from "@/components/StatManagement";
-import QuoteForm from "@/components/QuoteForm";
-import QuoteManagement from "@/components/QuoteManagement";
 
 const Admin = () => {
   logger.log('Admin component rendering');
   const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [editingSeminar, setEditingSeminar] = useState(null);
+  const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [editingNotification, setEditingNotification] = useState(null);
   const [editingTeamMember, setEditingTeamMember] = useState(null);
   const [editingStat, setEditingStat] = useState(null);
-  const [editingQuote, setEditingQuote] = useState(null);
   const navigate = useNavigate();
 
   const refreshData = () => {
@@ -136,8 +136,8 @@ const Admin = () => {
             <TabsTrigger value="submissions">Submissions</TabsTrigger>
             <TabsTrigger value="tutors">Tutors</TabsTrigger>
             <TabsTrigger value="seminars">Seminars</TabsTrigger>
+            <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
             <TabsTrigger value="stats">Statistics</TabsTrigger>
-            <TabsTrigger value="quotes">Quotes</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
             <TabsTrigger value="team">Team Map</TabsTrigger>
           </TabsList>
@@ -167,6 +167,20 @@ const Admin = () => {
             </div>
           </TabsContent>
           
+          <TabsContent value="testimonials">
+            <div className="space-y-6">
+              <TestimonialForm 
+                onTestimonialAdded={refreshData} 
+                editingTestimonial={editingTestimonial}
+                onCancelEdit={() => setEditingTestimonial(null)}
+              />
+              <TestimonialManagement 
+                onTestimonialDeleted={refreshData} 
+                onEditTestimonial={setEditingTestimonial}
+              />
+            </div>
+          </TabsContent>
+          
           <TabsContent value="notifications">
             <div className="space-y-6">
               <NotificationForm 
@@ -191,21 +205,6 @@ const Admin = () => {
               <StatManagement 
                 onStatDeleted={refreshData} 
                 onEditStat={setEditingStat}
-              />
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="quotes">
-            <div className="space-y-6">
-              <QuoteForm 
-                onQuoteAdded={refreshData} 
-                editingQuote={editingQuote}
-                onCancelEdit={() => setEditingQuote(null)}
-              />
-              <QuoteManagement 
-                onQuoteDeleted={refreshData} 
-                onEditQuote={setEditingQuote}
-                refreshTrigger={refreshTrigger}
               />
             </div>
           </TabsContent>
