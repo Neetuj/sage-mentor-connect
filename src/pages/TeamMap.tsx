@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import mapboxgl from "mapbox-gl";
+import type mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 // Note: Replace with actual Mapbox token or store in Supabase secrets
@@ -47,22 +47,26 @@ const TeamMap = () => {
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    mapboxgl.accessToken = MAPBOX_TOKEN;
+    // Lazy load mapbox-gl to avoid React duplicate instance issues
+    import("mapbox-gl").then((mapboxModule) => {
+      const mapboxgl = mapboxModule.default;
+      mapboxgl.accessToken = MAPBOX_TOKEN;
 
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/light-v11",
-      center: [-95, 40], // Centered on US
-      zoom: 3,
-      pitch: 0,
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current!,
+        style: "mapbox://styles/mapbox/light-v11",
+        center: [-95, 40], // Centered on US
+        zoom: 3,
+        pitch: 0,
+      });
+
+      map.current.addControl(
+        new mapboxgl.NavigationControl({
+          visualizePitch: false,
+        }),
+        "top-right"
+      );
     });
-
-    map.current.addControl(
-      new mapboxgl.NavigationControl({
-        visualizePitch: false,
-      }),
-      "top-right"
-    );
 
     return () => {
       map.current?.remove();
@@ -72,64 +76,69 @@ const TeamMap = () => {
   useEffect(() => {
     if (!map.current || !teamMembers.length) return;
 
-    // Remove existing markers
-    markersRef.current.forEach((marker) => marker.remove());
-    markersRef.current = [];
+    // Lazy load mapbox-gl for marker creation
+    import("mapbox-gl").then((mapboxModule) => {
+      const mapboxgl = mapboxModule.default;
+      
+      // Remove existing markers
+      markersRef.current.forEach((marker) => marker.remove());
+      markersRef.current = [];
 
-    // Add markers for each team member
-    teamMembers.forEach((member) => {
-      const el = document.createElement("div");
-      el.className = "team-marker";
-      el.style.cssText = `
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        cursor: pointer;
-        background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-        border: 3px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        background-image: url('${member.profile_image_url || ""}');
-        background-size: cover;
-        background-position: center;
-        transition: transform 0.2s;
-      `;
+      // Add markers for each team member
+      teamMembers.forEach((member) => {
+        const el = document.createElement("div");
+        el.className = "team-marker";
+        el.style.cssText = `
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          cursor: pointer;
+          background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+          border: 3px solid white;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          background-image: url('${member.profile_image_url || ""}');
+          background-size: cover;
+          background-position: center;
+          transition: transform 0.2s;
+        `;
 
-      el.addEventListener("mouseenter", () => {
-        el.style.transform = "scale(1.2)";
-      });
-
-      el.addEventListener("mouseleave", () => {
-        el.style.transform = "scale(1)";
-      });
-
-      const marker = new mapboxgl.Marker(el)
-        .setLngLat([member.longitude, member.latitude])
-        .addTo(map.current!);
-
-      const popup = new mapboxgl.Popup({
-        offset: 25,
-        closeButton: false,
-        className: "team-popup",
-      }).setHTML(`
-        <div style="padding: 8px;">
-          <h3 style="font-weight: 600; margin: 0 0 4px 0; color: hsl(var(--primary));">${member.name}</h3>
-          <p style="margin: 0; font-size: 14px; color: hsl(var(--muted-foreground));">${member.role}</p>
-          <p style="margin: 4px 0 0 0; font-size: 12px; color: hsl(var(--muted-foreground));">${member.location}</p>
-        </div>
-      `);
-
-      marker.setPopup(popup);
-
-      el.addEventListener("click", () => {
-        setSelectedMember(member);
-        map.current?.flyTo({
-          center: [member.longitude, member.latitude],
-          zoom: 8,
-          duration: 1500,
+        el.addEventListener("mouseenter", () => {
+          el.style.transform = "scale(1.2)";
         });
-      });
 
-      markersRef.current.push(marker);
+        el.addEventListener("mouseleave", () => {
+          el.style.transform = "scale(1)";
+        });
+
+        const marker = new mapboxgl.Marker(el)
+          .setLngLat([member.longitude, member.latitude])
+          .addTo(map.current!);
+
+        const popup = new mapboxgl.Popup({
+          offset: 25,
+          closeButton: false,
+          className: "team-popup",
+        }).setHTML(`
+          <div style="padding: 8px;">
+            <h3 style="font-weight: 600; margin: 0 0 4px 0; color: hsl(var(--primary));">${member.name}</h3>
+            <p style="margin: 0; font-size: 14px; color: hsl(var(--muted-foreground));">${member.role}</p>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: hsl(var(--muted-foreground));">${member.location}</p>
+          </div>
+        `);
+
+        marker.setPopup(popup);
+
+        el.addEventListener("click", () => {
+          setSelectedMember(member);
+          map.current?.flyTo({
+            center: [member.longitude, member.latitude],
+            zoom: 8,
+            duration: 1500,
+          });
+        });
+
+        markersRef.current.push(marker);
+      });
     });
   }, [teamMembers]);
 
