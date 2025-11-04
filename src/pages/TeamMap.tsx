@@ -95,26 +95,52 @@ const TeamMap = () => {
     console.log('[TeamMap] Adding markers for', teamMembers.length, 'members');
 
     // Clear existing markers
-    markersRef.current.forEach(m => m.remove());
+    markersRef.current.forEach(m => {
+      try {
+        m.remove();
+      } catch (e) {
+        console.warn('[TeamMap] Error removing marker:', e);
+      }
+    });
     markersRef.current = [];
 
     teamMembers.forEach((member) => {
       console.log(`[TeamMap] Creating marker for ${member.name} at [${member.latitude}, ${member.longitude}]`);
 
-      const iconHtml = member.profile_image_url
-        ? `<div style="width:70px;height:70px;border-radius:50%;border:5px solid #4a7c59;box-shadow:0 6px 20px rgba(74,124,89,0.6), 0 0 0 3px rgba(255,255,255,0.8);background-image:url(${member.profile_image_url});background-size:cover;background-position:center;cursor:pointer;transition:all 0.3s ease;"></div>`
-        : `<div style="width:70px;height:70px;border-radius:50%;border:5px solid #4a7c59;box-shadow:0 6px 20px rgba(74,124,89,0.6), 0 0 0 3px rgba(255,255,255,0.8);background:#4a7c59;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:28px;cursor:pointer;transition:all 0.3s ease;">${member.name.charAt(0)}</div>`;
+      // Create a map pin icon with profile image
+      const iconHtml = `
+        <div class="marker-container" style="position: relative; width: 50px; height: 65px;">
+          <svg width="50" height="65" viewBox="0 0 50 65" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
+            <path d="M25 0C11.2 0 0 11.2 0 25c0 18.8 25 40 25 40s25-21.2 25-40C50 11.2 38.8 0 25 0z" fill="#4a7c59"/>
+            <circle cx="25" cy="23" r="15" fill="white"/>
+          </svg>
+          ${member.profile_image_url ? `
+            <img 
+              src="${member.profile_image_url}" 
+              alt="${member.name}"
+              style="position: absolute; top: 8px; left: 10px; width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid white;"
+            />
+          ` : `
+            <div style="position: absolute; top: 8px; left: 10px; width: 30px; height: 30px; border-radius: 50%; background: #4a7c59; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; border: 2px solid white;">
+              ${member.name.charAt(0)}
+            </div>
+          `}
+        </div>
+      `;
 
       const customIcon = L.divIcon({
         html: iconHtml,
         className: "custom-team-marker",
-        iconSize: [70, 70],
-        iconAnchor: [35, 70],
-        popupAnchor: [0, -70],
+        iconSize: [50, 65],
+        iconAnchor: [25, 65],
+        popupAnchor: [0, -65],
       });
 
-      const marker = L.marker([member.latitude, member.longitude], { icon: customIcon })
-        .addTo(map.current!);
+      const marker = L.marker([member.latitude, member.longitude], { 
+        icon: customIcon,
+        interactive: true,
+        keyboard: true
+      }).addTo(map.current!);
 
       // Detailed popup
       const popupContent = `
@@ -150,18 +176,23 @@ const TeamMap = () => {
       marker.on('mouseover', function() {
         const el = this.getElement();
         if (el) {
-          el.style.transform = 'scale(1.3)';
+          const container = el.querySelector('.marker-container') as HTMLElement;
+          if (container) {
+            container.style.transform = 'scale(1.15)';
+            container.style.transition = 'transform 0.2s ease';
+          }
           el.style.zIndex = '1000';
-          el.style.filter = 'brightness(1.1)';
         }
       });
 
       marker.on('mouseout', function() {
         const el = this.getElement();
         if (el) {
-          el.style.transform = 'scale(1)';
-          el.style.zIndex = '';
-          el.style.filter = 'brightness(1)';
+          const container = el.querySelector('.marker-container') as HTMLElement;
+          if (container) {
+            container.style.transform = 'scale(1)';
+          }
+          el.style.zIndex = '600';
         }
       });
 
@@ -171,18 +202,25 @@ const TeamMap = () => {
       });
 
       markersRef.current.push(marker);
+      
+      // Force marker to persist
+      const markerElement = marker.getElement();
+      if (markerElement) {
+        markerElement.style.willChange = 'transform';
+        markerElement.style.zIndex = '600';
+      }
     });
 
     console.log('[TeamMap] Total markers added:', markersRef.current.length);
 
-    // If only one marker, center on it
+    // If only one marker, center on it with slight delay
     if (teamMembers.length === 1) {
       setTimeout(() => {
         if (map.current) {
           map.current.setView([teamMembers[0].latitude, teamMembers[0].longitude], 6);
           console.log('[TeamMap] Centered on single marker');
         }
-      }, 200);
+      }, 300);
     }
   }, [teamMembers]);
 
