@@ -3,11 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Lightbulb, Heart, Target } from "lucide-react";
 import rohanProfile from "@/assets/rohan-profile.jpg";
 import isabelProfile from "@/assets/isabel-profile.jpg";
 import hannahProfile from "@/assets/hannah-profile.jpg";
 import CardTrickAnimation from "./CardTrickAnimation";
+import TestimonialBento from "./TestimonialBento";
 
 const About = () => {
   const [showCardTrick, setShowCardTrick] = useState(false);
@@ -61,50 +61,18 @@ const About = () => {
           </div>
         </div>
 
-        {/* Mission & Values */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <Card className="shadow-card hover:shadow-card-hover transition-all duration-300">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-secondary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Target className="h-6 w-6 text-secondary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Our Mission</h3>
-              <p className="text-muted-foreground">
-                SAGE empowers students to explore engineering through engaging, student/professional-led learning
-                experiences, both online and in person. Our goal is to make engineering education and exploration more
-                accessible, inclusive, and inspiring by fostering curiosity, tutoring, and creativity.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-card hover:shadow-card-hover transition-all duration-300">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Lightbulb className="h-6 w-6 text-accent" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Our Vision</h3>
-              <p className="text-muted-foreground">
-                SAGE envisions a future where all students, regardless of background or resources, see themselves as
-                capable engineers and problem solvers. We aim to build a world where tutoring, exploration, and access
-                to engineering opportunities are the norm, empowering young minds to shape and solve the challenges our
-                world might face.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-card hover:shadow-card-hover transition-all duration-300">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Heart className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Our Values</h3>
-              <p className="text-muted-foreground">
-                At SAGE, we believe that engineering exploration should be open to everyone. We value inclusivity,
-                curiosity, and collaboration, creating spaces where students feel encouraged to ask questions, explore
-                ideas, and support each other.
-              </p>
-            </CardContent>
-          </Card>
+        {/* Community Testimonials */}
+        <div className="mb-16">
+          <div className="text-center mb-8">
+            <Badge variant="secondary" className="mb-4">
+              Community Voices
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">What People Are Saying</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Hear from students, parents, and educators who have experienced SAGE
+            </p>
+          </div>
+          <TestimonialBento />
         </div>
 
         {/* Founders */}
