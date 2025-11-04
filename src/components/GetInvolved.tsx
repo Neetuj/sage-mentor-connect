@@ -10,7 +10,6 @@ import { useToast } from "@/hooks/use-toast";
 import { applicationFormSchema, volunteerFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_MESSAGES } from "@/lib/security";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import Testimonials from "@/components/Testimonials";
 import { logger } from "@/lib/logger";
 
 const GetInvolved = () => {
@@ -482,9 +481,6 @@ const GetInvolved = () => {
           </Card>
         </div>
       </div>
-      
-      {/* Testimonials Section */}
-      <Testimonials />
     </section>
   );
 };
