@@ -41,6 +41,10 @@ const TeamMap = () => {
   });
 
   useEffect(() => {
+    if (isLoading) {
+      console.log('[TeamMap] Waiting for data before initializing map');
+      return;
+    }
     if (!mapContainer.current) {
       console.error('[TeamMap] Map container ref not found');
       return;
@@ -110,7 +114,7 @@ const TeamMap = () => {
         map.current = null;
       }
     };
-  }, []);
+  }, [isLoading]);
 
   useEffect(() => {
     if (!mapReady || !map.current || !teamMembers.length) {
