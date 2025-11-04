@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Star, Users, Quote } from "lucide-react";
+import { Star, Users, Quote, GraduationCap, Award, TrendingUp, Heart, Clock, MapPin, Presentation, BookOpen, Target } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+
+const iconMap: Record<string, any> = {
+  Users, GraduationCap, Award, TrendingUp, Heart, Clock, MapPin, Presentation, BookOpen, Target, Star, Quote
+};
 
 interface Testimonial {
   id: string;
@@ -15,27 +19,54 @@ interface Testimonial {
 
 const TestimonialBento = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [stats, setStats] = useState<any[]>([]);
+  const [featuredQuote, setFeaturedQuote] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTestimonials = async () => {
+    const fetchData = async () => {
       try {
-        const { data, error } = await supabase
+        // Fetch testimonials
+        const { data: testimonialsData, error: testimonialsError } = await supabase
           .from('testimonials')
           .select('*')
           .eq('is_visible', true)
           .order('created_at', { ascending: false });
 
-        if (error) throw error;
-        setTestimonials(data || []);
+        if (testimonialsError) throw testimonialsError;
+        setTestimonials(testimonialsData || []);
+
+        // Fetch stats
+        const { data: statsData, error: statsError } = await supabase
+          .from('site_stats')
+          .select('*')
+          .eq('is_visible', true)
+          .order('display_order', { ascending: true });
+
+        if (statsError) throw statsError;
+        setStats(statsData || []);
+
+        // Fetch featured quote
+        const { data: quoteData, error: quoteError } = await supabase
+          .from('featured_quotes')
+          .select('*')
+          .eq('is_visible', true)
+          .eq('is_featured', true)
+          .order('display_order', { ascending: true })
+          .limit(1)
+          .single();
+
+        if (!quoteError && quoteData) {
+          setFeaturedQuote(quoteData);
+        }
       } catch (error) {
-        console.error('Error fetching testimonials:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTestimonials();
+    fetchData();
   }, []);
 
   const averageRating = testimonials.length > 0
@@ -63,67 +94,87 @@ const TestimonialBento = () => {
     );
   }
 
-  if (testimonials.length === 0) {
+  if (testimonials.length === 0 && stats.length === 0 && !featuredQuote) {
     return (
       <div className="py-8">
-        <p className="text-center text-muted-foreground">No testimonials yet. Check back soon!</p>
+        <p className="text-center text-muted-foreground">No content yet. Check back soon!</p>
       </div>
     );
   }
 
-  // Split testimonials for layout
-  const featured = testimonials[0];
-  const secondary = testimonials.slice(1, 3);
-  const scrollable = testimonials.slice(3);
+  // Use featured quote or first testimonial
+  const featured = featuredQuote || testimonials[0];
+  const secondary = featuredQuote ? testimonials.slice(0, 2) : testimonials.slice(1, 3);
+  const scrollable = featuredQuote ? testimonials.slice(2) : testimonials.slice(3);
 
   return (
     <div className="space-y-6">
       {/* Bento Grid - Stats + Featured */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Stat Card 1 - Average Rating */}
-        <Card className="md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br from-yellow-500/10 to-yellow-600/5">
-          <CardContent className="p-6 flex flex-col items-center justify-center h-full">
-            <div className="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-3">
-              <Star className="h-6 w-6 text-yellow-500 fill-current" />
-            </div>
-            <div className="text-5xl font-bold text-foreground mb-2">{averageRating}</div>
-            <div className="flex gap-1 mb-2">
-              {renderStars(Math.round(parseFloat(averageRating)))}
-            </div>
-            <p className="text-sm text-muted-foreground text-center">Average Rating</p>
-          </CardContent>
-        </Card>
+        {/* Dynamic Stat Cards */}
+        {stats.slice(0, 2).map((stat, index) => {
+          const Icon = iconMap[stat.icon_name] || Users;
+          const colors = [
+            { bg: "from-yellow-500/10 to-yellow-600/5", icon: "bg-yellow-500/20", text: "text-yellow-500" },
+            { bg: "from-primary/10 to-primary/5", icon: "bg-primary/20", text: "text-primary" },
+          ];
+          const colorScheme = colors[index] || colors[0];
+          
+          return (
+            <Card key={stat.id} className={`md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br ${colorScheme.bg}`}>
+              <CardContent className="p-6 flex flex-col items-center justify-center h-full">
+                <div className={`w-12 h-12 ${colorScheme.icon} rounded-lg flex items-center justify-center mb-3`}>
+                  <Icon className={`h-6 w-6 ${colorScheme.text}`} />
+                </div>
+                <div className="text-5xl font-bold text-foreground mb-2">{stat.stat_value}</div>
+                <p className="text-sm text-muted-foreground text-center">{stat.stat_label}</p>
+              </CardContent>
+            </Card>
+          );
+        })}
 
-        {/* Featured Large Testimonial */}
-        <Card className="md:col-span-6 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient">
-          <CardContent className="p-8 h-full flex flex-col">
-            <Quote className="h-8 w-8 text-primary/40 mb-4" />
-            <blockquote className="text-lg text-foreground leading-relaxed mb-6 flex-1">
-              "{featured.content}"
-            </blockquote>
-            <div className="flex items-center mb-4">
-              {renderStars(featured.rating)}
-            </div>
-            <div className="border-t pt-4">
-              <div className="font-semibold text-primary">{featured.name}</div>
-              <div className="text-sm text-muted-foreground">
-                {featured.role}
-                {featured.organization && ` • ${featured.organization}`}
+        {/* Featured Large Content (Quote or Testimonial) */}
+        {featured && (
+          <Card className="md:col-span-6 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient">
+            <CardContent className="p-8 h-full flex flex-col">
+              <Quote className="h-8 w-8 text-primary/40 mb-4" />
+              <blockquote className="text-lg text-foreground leading-relaxed mb-6 flex-1">
+                "{featuredQuote ? featured.quote_text : featured.content}"
+              </blockquote>
+              {!featuredQuote && (
+                <div className="flex items-center mb-4">
+                  {renderStars(featured.rating)}
+                </div>
+              )}
+              <div className="border-t pt-4">
+                <div className="font-semibold text-primary">
+                  {featuredQuote ? featured.author_name : featured.name}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {featuredQuote ? featured.author_role : featured.role}
+                  {(featuredQuote ? featured.author_organization : featured.organization) && 
+                    ` • ${featuredQuote ? featured.author_organization : featured.organization}`}
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
-        {/* Stat Card 2 - Total Testimonials */}
-        <Card className="md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br from-primary/10 to-primary/5">
-          <CardContent className="p-6 flex flex-col items-center justify-center h-full">
-            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-3">
-              <Users className="h-6 w-6 text-primary" />
-            </div>
-            <div className="text-5xl font-bold text-foreground mb-2">{testimonials.length}</div>
-            <p className="text-sm text-muted-foreground text-center">Community Members</p>
-          </CardContent>
-        </Card>
+        {/* Additional Stat Card */}
+        {stats[2] && (() => {
+          const Icon = iconMap[stats[2].icon_name] || Users;
+          return (
+            <Card className="md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br from-accent/10 to-accent/5">
+              <CardContent className="p-6 flex flex-col items-center justify-center h-full">
+                <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-3">
+                  <Icon className="h-6 w-6 text-accent" />
+                </div>
+                <div className="text-5xl font-bold text-foreground mb-2">{stats[2].stat_value}</div>
+                <p className="text-sm text-muted-foreground text-center">{stats[2].stat_label}</p>
+              </CardContent>
+            </Card>
+          );
+        })()}
 
         {/* Two Medium Cards */}
         {secondary.map((testimonial) => (

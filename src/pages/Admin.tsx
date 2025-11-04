@@ -19,6 +19,10 @@ import NotificationForm from "@/components/NotificationForm";
 import NotificationManagement from "@/components/NotificationManagement";
 import TeamMemberForm from "@/components/TeamMemberForm";
 import TeamMemberManagement from "@/components/TeamMemberManagement";
+import StatForm from "@/components/StatForm";
+import StatManagement from "@/components/StatManagement";
+import QuoteForm from "@/components/QuoteForm";
+import QuoteManagement from "@/components/QuoteManagement";
 
 const Admin = () => {
   logger.log('Admin component rendering');
@@ -28,6 +32,8 @@ const Admin = () => {
   const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [editingNotification, setEditingNotification] = useState(null);
   const [editingTeamMember, setEditingTeamMember] = useState(null);
+  const [editingStat, setEditingStat] = useState(null);
+  const [editingQuote, setEditingQuote] = useState(null);
   const navigate = useNavigate();
 
   const refreshData = () => {
@@ -129,11 +135,13 @@ const Admin = () => {
         </Card>
 
         <Tabs defaultValue="submissions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="submissions">Form Submissions</TabsTrigger>
-            <TabsTrigger value="tutors">Manage Tutors</TabsTrigger>
-            <TabsTrigger value="seminars">Manage Seminars</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
+            <TabsTrigger value="submissions">Submissions</TabsTrigger>
+            <TabsTrigger value="tutors">Tutors</TabsTrigger>
+            <TabsTrigger value="seminars">Seminars</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+            <TabsTrigger value="stats">Statistics</TabsTrigger>
+            <TabsTrigger value="quotes">Quotes</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
             <TabsTrigger value="team">Team Map</TabsTrigger>
           </TabsList>
@@ -187,6 +195,34 @@ const Admin = () => {
               <NotificationManagement 
                 onNotificationDeleted={refreshData} 
                 onEditNotification={setEditingNotification}
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="stats">
+            <div className="space-y-6">
+              <StatForm 
+                onStatAdded={refreshData} 
+                editingStat={editingStat}
+                onCancelEdit={() => setEditingStat(null)}
+              />
+              <StatManagement 
+                onStatDeleted={refreshData} 
+                onEditStat={setEditingStat}
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="quotes">
+            <div className="space-y-6">
+              <QuoteForm 
+                onQuoteAdded={refreshData} 
+                editingQuote={editingQuote}
+                onCancelEdit={() => setEditingQuote(null)}
+              />
+              <QuoteManagement 
+                onQuoteDeleted={refreshData} 
+                onEditQuote={setEditingQuote}
               />
             </div>
           </TabsContent>

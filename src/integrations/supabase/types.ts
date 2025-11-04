@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      featured_quotes: {
+        Row: {
+          author_name: string
+          author_organization: string | null
+          author_role: string
+          created_at: string
+          display_order: number
+          id: string
+          is_featured: boolean
+          is_visible: boolean
+          quote_text: string
+          updated_at: string
+        }
+        Insert: {
+          author_name: string
+          author_organization?: string | null
+          author_role: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_featured?: boolean
+          is_visible?: boolean
+          quote_text: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string
+          author_organization?: string | null
+          author_role?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_featured?: boolean
+          is_visible?: boolean
+          quote_text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
@@ -154,6 +193,42 @@ export type Database = {
           id?: string
           setting_key?: string
           setting_value?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_stats: {
+        Row: {
+          created_at: string
+          display_order: number
+          icon_name: string
+          id: string
+          is_visible: boolean
+          stat_key: string
+          stat_label: string
+          stat_value: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          icon_name?: string
+          id?: string
+          is_visible?: boolean
+          stat_key: string
+          stat_label: string
+          stat_value: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          icon_name?: string
+          id?: string
+          is_visible?: boolean
+          stat_key?: string
+          stat_label?: string
+          stat_value?: string
           updated_at?: string
         }
         Relationships: []
