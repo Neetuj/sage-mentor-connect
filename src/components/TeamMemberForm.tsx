@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -21,7 +20,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
     location: "",
     latitude: "",
     longitude: "",
-    bio: "",
     profile_image_url: "",
     email: "",
     school: "",
@@ -35,7 +33,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
         location: editingMember.location || "",
         latitude: editingMember.latitude?.toString() || "",
         longitude: editingMember.longitude?.toString() || "",
-        bio: editingMember.bio || "",
         profile_image_url: editingMember.profile_image_url || "",
         email: editingMember.email || "",
         school: editingMember.school || "",
@@ -57,7 +54,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
       location: formData.location,
       latitude: parseFloat(formData.latitude),
       longitude: parseFloat(formData.longitude),
-      bio: formData.bio || null,
       profile_image_url: formData.profile_image_url || null,
       email: formData.email || null,
       school: formData.school || null,
@@ -87,7 +83,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
         location: "",
         latitude: "",
         longitude: "",
-        bio: "",
         profile_image_url: "",
         email: "",
         school: "",
@@ -107,7 +102,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
       location: "",
       latitude: "",
       longitude: "",
-      bio: "",
       profile_image_url: "",
       email: "",
       school: "",
@@ -224,17 +218,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
                 placeholder="https://..."
               />
             </div>
-          </div>
-
-          <div>
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea
-              id="bio"
-              value={formData.bio}
-              onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-              placeholder="Tell us about this team member..."
-              rows={3}
-            />
           </div>
 
           <div className="flex gap-2">

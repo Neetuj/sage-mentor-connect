@@ -211,14 +211,6 @@ const TeamMap = () => {
                         <Badge variant="outline">{selectedMember.location}</Badge>
                       </div>
 
-                      {selectedMember.bio && (
-                        <div className="bg-muted/30 rounded-lg p-4">
-                          <p className="text-muted-foreground text-sm leading-relaxed">
-                            {selectedMember.bio}
-                          </p>
-                        </div>
-                      )}
-
                       {selectedMember.email && (
                         <div className="mt-4 pt-4 border-t">
                           <a
