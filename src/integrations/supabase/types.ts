@@ -197,6 +197,51 @@ export type Database = {
         }
         Relationships: []
       }
+      team_members: {
+        Row: {
+          bio: string | null
+          created_at: string
+          email: string | null
+          id: string
+          latitude: number
+          location: string
+          longitude: number
+          name: string
+          profile_image_url: string | null
+          role: string
+          school: string | null
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          latitude: number
+          location: string
+          longitude: number
+          name: string
+          profile_image_url?: string | null
+          role: string
+          school?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          latitude?: number
+          location?: string
+          longitude?: number
+          name?: string
+          profile_image_url?: string | null
+          role?: string
+          school?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       testimonials: {
         Row: {
           content: string
@@ -286,10 +331,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      is_admin: {
-        Args: { user_id?: string }
-        Returns: boolean
-      }
+      is_admin: { Args: { user_id?: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

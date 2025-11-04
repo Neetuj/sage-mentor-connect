@@ -17,6 +17,8 @@ import TestimonialForm from "@/components/TestimonialForm";
 import TestimonialManagement from "@/components/TestimonialManagement";
 import NotificationForm from "@/components/NotificationForm";
 import NotificationManagement from "@/components/NotificationManagement";
+import TeamMemberForm from "@/components/TeamMemberForm";
+import TeamMemberManagement from "@/components/TeamMemberManagement";
 
 const Admin = () => {
   logger.log('Admin component rendering');
@@ -25,6 +27,7 @@ const Admin = () => {
   const [editingSeminar, setEditingSeminar] = useState(null);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [editingNotification, setEditingNotification] = useState(null);
+  const [editingTeamMember, setEditingTeamMember] = useState(null);
   const navigate = useNavigate();
 
   const refreshData = () => {
@@ -126,12 +129,13 @@ const Admin = () => {
         </Card>
 
         <Tabs defaultValue="submissions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="submissions">Form Submissions</TabsTrigger>
             <TabsTrigger value="tutors">Manage Tutors</TabsTrigger>
             <TabsTrigger value="seminars">Manage Seminars</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="team">Team Map</TabsTrigger>
           </TabsList>
           
           <TabsContent value="submissions">
@@ -183,6 +187,20 @@ const Admin = () => {
               <NotificationManagement 
                 onNotificationDeleted={refreshData} 
                 onEditNotification={setEditingNotification}
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="team">
+            <div className="space-y-6">
+              <TeamMemberForm 
+                onMemberAdded={refreshData} 
+                editingMember={editingTeamMember}
+                onCancelEdit={() => setEditingTeamMember(null)}
+              />
+              <TeamMemberManagement 
+                onMemberDeleted={refreshData} 
+                onEditMember={setEditingTeamMember}
               />
             </div>
           </TabsContent>

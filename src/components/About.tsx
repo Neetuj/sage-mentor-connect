@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Lightbulb, Heart, Target } from "lucide-react";
 import rohanProfile from "@/assets/rohan-profile.jpg";
 import isabelProfile from "@/assets/isabel-profile.jpg";
@@ -167,6 +168,15 @@ const About = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Team Map Button */}
+        <div className="text-center mt-12">
+          <a href="/team-map">
+            <Button size="lg" variant="secondary" className="shadow-lg hover:shadow-xl transition-all">
+              View Our Global Team Map
+            </Button>
+          </a>
         </div>
       </div>
 
