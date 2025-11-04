@@ -6,8 +6,23 @@ import SeminarCalendar from "@/components/SeminarCalendar";
 import GetInvolved from "@/components/GetInvolved";
 import Footer from "@/components/Footer";
 import NotificationPopup from "@/components/NotificationPopup";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const Index = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      setTimeout(() => {
+        const element = document.getElementById(location.state.scrollTo);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [location.state]);
+
   return (
     <div className="min-h-screen">
       <Header />

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, LogOut, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import DuckAnimation from "./DuckAnimation";
 
@@ -11,6 +11,7 @@ const Header = () => {
   const [showDucks, setShowDucks] = useState(false);
   const { user, profile, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (showDucks) {
@@ -20,11 +21,19 @@ const Header = () => {
   }, [showDucks]);
 
   const scrollToSection = (sectionId: string) => {
+    setIsMenuOpen(false);
+    
+    // If not on home page, navigate to home first
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollTo: sectionId } });
+      return;
+    }
+    
+    // If on home page, scroll to section
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-    setIsMenuOpen(false);
   };
 
   const handleSignOut = async () => {
