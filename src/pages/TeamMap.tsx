@@ -40,32 +40,49 @@ const TeamMap = () => {
   });
 
   useEffect(() => {
-    if (!mapContainer.current || map.current) return;
+    if (!mapContainer.current) {
+      console.error('[TeamMap] Map container ref not found');
+      return;
+    }
+    
+    if (map.current) {
+      console.log('[TeamMap] Map already exists');
+      return;
+    }
 
     console.log('[TeamMap] Initializing Leaflet map');
-    const mapInstance = L.map(mapContainer.current, {
-      zoomControl: true,
-      scrollWheelZoom: true,
-    }).setView([37.0902, -95.7129], 4);
+    
+    try {
+      const mapInstance = L.map(mapContainer.current, {
+        zoomControl: true,
+        scrollWheelZoom: true,
+        preferCanvas: true,
+      }).setView([39.8283, -98.5795], 4); // Center on USA
 
-    map.current = mapInstance;
+      map.current = mapInstance;
 
-    const tile = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap contributors",
-      maxZoom: 19,
-    }).addTo(mapInstance);
+      const tile = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+        maxZoom: 19,
+      }).addTo(mapInstance);
 
-    tile.on('load', () => console.log('[TeamMap] Tiles loaded'));
-    tile.on('tileerror', (e) => console.error('[TeamMap] Tile error', e));
+      tile.on('load', () => console.log('[TeamMap] Tiles loaded successfully'));
+      tile.on('tileerror', (e) => console.error('[TeamMap] Tile loading error:', e));
 
-    setTimeout(() => {
-      mapInstance.invalidateSize(true);
-      console.log('[TeamMap] Map size invalidated');
-    }, 100);
+      setTimeout(() => {
+        mapInstance.invalidateSize(true);
+        console.log('[TeamMap] Map size invalidated and ready');
+      }, 250);
+    } catch (error) {
+      console.error('[TeamMap] Error initializing map:', error);
+    }
 
     return () => {
       console.log('[TeamMap] Cleaning up map');
-      mapInstance.remove();
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
     };
   }, []);
 
@@ -85,15 +102,15 @@ const TeamMap = () => {
       console.log(`[TeamMap] Creating marker for ${member.name} at [${member.latitude}, ${member.longitude}]`);
 
       const iconHtml = member.profile_image_url
-        ? `<div style="width:60px;height:60px;border-radius:50%;border:4px solid #4a7c59;box-shadow:0 4px 12px rgba(0,0,0,0.4);background-image:url(${member.profile_image_url});background-size:cover;background-position:center;cursor:pointer;transition:transform 0.2s;"></div>`
-        : `<div style="width:60px;height:60px;border-radius:50%;border:4px solid white;box-shadow:0 4px 12px rgba(0,0,0,0.4);background:#4a7c59;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:24px;cursor:pointer;transition:transform 0.2s;">${member.name.charAt(0)}</div>`;
+        ? `<div style="width:70px;height:70px;border-radius:50%;border:5px solid #4a7c59;box-shadow:0 6px 20px rgba(74,124,89,0.6), 0 0 0 3px rgba(255,255,255,0.8);background-image:url(${member.profile_image_url});background-size:cover;background-position:center;cursor:pointer;transition:all 0.3s ease;"></div>`
+        : `<div style="width:70px;height:70px;border-radius:50%;border:5px solid #4a7c59;box-shadow:0 6px 20px rgba(74,124,89,0.6), 0 0 0 3px rgba(255,255,255,0.8);background:#4a7c59;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:28px;cursor:pointer;transition:all 0.3s ease;">${member.name.charAt(0)}</div>`;
 
       const customIcon = L.divIcon({
         html: iconHtml,
         className: "custom-team-marker",
-        iconSize: [60, 60],
-        iconAnchor: [30, 60],
-        popupAnchor: [0, -60],
+        iconSize: [70, 70],
+        iconAnchor: [35, 70],
+        popupAnchor: [0, -70],
       });
 
       const marker = L.marker([member.latitude, member.longitude], { icon: customIcon })
@@ -133,8 +150,9 @@ const TeamMap = () => {
       marker.on('mouseover', function() {
         const el = this.getElement();
         if (el) {
-          el.style.transform = 'scale(1.2)';
+          el.style.transform = 'scale(1.3)';
           el.style.zIndex = '1000';
+          el.style.filter = 'brightness(1.1)';
         }
       });
 
@@ -143,6 +161,7 @@ const TeamMap = () => {
         if (el) {
           el.style.transform = 'scale(1)';
           el.style.zIndex = '';
+          el.style.filter = 'brightness(1)';
         }
       });
 
