@@ -46,7 +46,7 @@ const TeamMap = () => {
     const mapInstance = L.map(mapContainer.current, {
       zoomControl: true,
       scrollWheelZoom: true,
-    }).setView([39.8283, -98.5795], 4);
+    }).setView([37.0902, -95.7129], 4);
 
     map.current = mapInstance;
 
@@ -85,15 +85,15 @@ const TeamMap = () => {
       console.log(`[TeamMap] Creating marker for ${member.name} at [${member.latitude}, ${member.longitude}]`);
 
       const iconHtml = member.profile_image_url
-        ? `<div style="width:50px;height:50px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);background-image:url(${member.profile_image_url});background-size:cover;background-position:center;cursor:pointer;transition:transform 0.2s;"></div>`
-        : `<div style="width:50px;height:50px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);background:#4a7c59;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;cursor:pointer;transition:transform 0.2s;">${member.name.charAt(0)}</div>`;
+        ? `<div style="width:60px;height:60px;border-radius:50%;border:4px solid #4a7c59;box-shadow:0 4px 12px rgba(0,0,0,0.4);background-image:url(${member.profile_image_url});background-size:cover;background-position:center;cursor:pointer;transition:transform 0.2s;"></div>`
+        : `<div style="width:60px;height:60px;border-radius:50%;border:4px solid white;box-shadow:0 4px 12px rgba(0,0,0,0.4);background:#4a7c59;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:24px;cursor:pointer;transition:transform 0.2s;">${member.name.charAt(0)}</div>`;
 
       const customIcon = L.divIcon({
         html: iconHtml,
         className: "custom-team-marker",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-        popupAnchor: [0, -50],
+        iconSize: [60, 60],
+        iconAnchor: [30, 60],
+        popupAnchor: [0, -60],
       });
 
       const marker = L.marker([member.latitude, member.longitude], { icon: customIcon })
