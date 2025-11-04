@@ -107,33 +107,23 @@ const TeamMap = () => {
     teamMembers.forEach((member) => {
       console.log(`[TeamMap] Creating marker for ${member.name} at [${member.latitude}, ${member.longitude}]`);
 
-      // Create a map pin icon with profile image
+      // Create a simple map pin icon
       const iconHtml = `
-        <div class="marker-container" style="position: relative; width: 50px; height: 65px;">
-          <svg width="50" height="65" viewBox="0 0 50 65" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
-            <path d="M25 0C11.2 0 0 11.2 0 25c0 18.8 25 40 25 40s25-21.2 25-40C50 11.2 38.8 0 25 0z" fill="#4a7c59"/>
-            <circle cx="25" cy="23" r="15" fill="white"/>
+        <div class="marker-container" style="position: relative; width: 35px; height: 50px;">
+          <svg width="35" height="50" viewBox="0 0 35 50" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));">
+            <path d="M17.5 0C7.84 0 0 7.84 0 17.5c0 13.16 17.5 32.5 17.5 32.5S35 30.66 35 17.5C35 7.84 27.16 0 17.5 0z" fill="#4a7c59"/>
+            <circle cx="17.5" cy="16" r="10" fill="white"/>
+            <text x="17.5" y="20" text-anchor="middle" font-size="12" font-weight="bold" fill="#4a7c59">${member.name.charAt(0)}</text>
           </svg>
-          ${member.profile_image_url ? `
-            <img 
-              src="${member.profile_image_url}" 
-              alt="${member.name}"
-              style="position: absolute; top: 8px; left: 10px; width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid white;"
-            />
-          ` : `
-            <div style="position: absolute; top: 8px; left: 10px; width: 30px; height: 30px; border-radius: 50%; background: #4a7c59; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; border: 2px solid white;">
-              ${member.name.charAt(0)}
-            </div>
-          `}
         </div>
       `;
 
       const customIcon = L.divIcon({
         html: iconHtml,
         className: "custom-team-marker",
-        iconSize: [50, 65],
-        iconAnchor: [25, 65],
-        popupAnchor: [0, -65],
+        iconSize: [35, 50],
+        iconAnchor: [17.5, 50],
+        popupAnchor: [0, -50],
       });
 
       const marker = L.marker([member.latitude, member.longitude], { 
@@ -145,13 +135,6 @@ const TeamMap = () => {
       // Detailed popup
       const popupContent = `
         <div style="padding: 12px; text-align: center; min-width: 200px;">
-          ${member.profile_image_url ? `
-            <img 
-              src="${member.profile_image_url}" 
-              alt="${member.name}"
-              style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; border: 3px solid #4a7c59;"
-            />
-          ` : ''}
           <h3 style="margin: 8px 0; font-size: 1.1em; font-weight: bold; color: #4a7c59;">${member.name}</h3>
           <p style="margin: 4px 0; color: #6b8e7d; font-weight: 600;">${member.role}</p>
           ${member.school ? `<p style="margin: 4px 0; font-size: 0.9em; color: #666;"><strong>School:</strong> ${member.school}</p>` : ''}

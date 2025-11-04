@@ -20,7 +20,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
     location: "",
     latitude: "",
     longitude: "",
-    profile_image_url: "",
     email: "",
     school: "",
   });
@@ -33,7 +32,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
         location: editingMember.location || "",
         latitude: editingMember.latitude?.toString() || "",
         longitude: editingMember.longitude?.toString() || "",
-        profile_image_url: editingMember.profile_image_url || "",
         email: editingMember.email || "",
         school: editingMember.school || "",
       });
@@ -54,7 +52,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
       location: formData.location,
       latitude: parseFloat(formData.latitude),
       longitude: parseFloat(formData.longitude),
-      profile_image_url: formData.profile_image_url || null,
       email: formData.email || null,
       school: formData.school || null,
     };
@@ -83,7 +80,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
         location: "",
         latitude: "",
         longitude: "",
-        profile_image_url: "",
         email: "",
         school: "",
       });
@@ -102,7 +98,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
       location: "",
       latitude: "",
       longitude: "",
-      profile_image_url: "",
       email: "",
       school: "",
     });
@@ -206,16 +201,6 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="john@example.com"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="profile_image_url">Profile Image URL</Label>
-              <Input
-                id="profile_image_url"
-                value={formData.profile_image_url}
-                onChange={(e) => setFormData({ ...formData, profile_image_url: e.target.value })}
-                placeholder="https://..."
               />
             </div>
           </div>
