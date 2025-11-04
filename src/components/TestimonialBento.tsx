@@ -108,9 +108,9 @@ const TestimonialBento = () => {
   const scrollable = featuredQuote ? testimonials.slice(2) : testimonials.slice(3);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Bento Grid - Stats + Featured */}
-      <div className="grid grid-cols-1 md:grid-cols-12 md:auto-rows-fr gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 md:auto-rows-fr gap-3">
         {/* Dynamic Stat Cards */}
         {stats.slice(0, 2).map((stat, index) => {
           const Icon = iconMap[stat.icon_name] || Users;
@@ -122,12 +122,12 @@ const TestimonialBento = () => {
           
           return (
             <Card key={stat.id} className={`md:col-span-3 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br ${colorScheme.bg}`}>
-              <CardContent className="p-6 flex flex-col items-center justify-center h-full gap-4">
-                <div className={`w-12 h-12 ${colorScheme.icon} rounded-lg flex items-center justify-center`}>
-                  <Icon className={`h-6 w-6 ${colorScheme.text}`} />
+              <CardContent className="p-4 flex flex-col items-center justify-center h-full gap-3">
+                <div className={`w-10 h-10 ${colorScheme.icon} rounded-lg flex items-center justify-center`}>
+                  <Icon className={`h-5 w-5 ${colorScheme.text}`} />
                 </div>
-                <div className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none text-foreground">{stat.stat_value}</div>
-                <p className="text-sm md:text-base text-muted-foreground text-center">{stat.stat_label}</p>
+                <div className="text-4xl md:text-5xl font-bold leading-none text-foreground">{stat.stat_value}</div>
+                <p className="text-xs md:text-sm text-muted-foreground text-center">{stat.stat_label}</p>
               </CardContent>
             </Card>
           );
@@ -136,17 +136,17 @@ const TestimonialBento = () => {
         {/* Featured Large Content (Quote or Testimonial) */}
         {featured && (
           <Card className="md:col-span-6 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-card-gradient">
-            <CardContent className="p-6 h-full flex flex-col">
-              <Quote className="h-6 w-6 text-primary/40 mb-3" />
-              <blockquote className="text-base text-foreground leading-relaxed mb-4 flex-1">
+            <CardContent className="p-4 h-full flex flex-col">
+              <Quote className="h-5 w-5 text-primary/40 mb-2" />
+              <blockquote className="text-sm text-foreground leading-relaxed mb-3 flex-1">
                 "{featuredQuote ? featured.quote_text : featured.content}"
               </blockquote>
               {!featuredQuote && (
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-3">
                   {renderStars(featured.rating)}
                 </div>
               )}
-              <div className="border-t pt-3">
+              <div className="border-t pt-2">
                 <div className="font-semibold text-primary text-sm">
                   {featuredQuote ? featured.author_name : featured.name}
                 </div>
@@ -167,15 +167,15 @@ const TestimonialBento = () => {
             key={testimonial.id}
             className="md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300"
           >
-            <CardContent className="p-4 flex flex-col h-full">
-              <div className="flex items-center mb-3">
+            <CardContent className="p-3 flex flex-col h-full">
+              <div className="flex items-center mb-2">
                 {renderStars(testimonial.rating)}
               </div>
-              <blockquote className="text-sm text-foreground leading-relaxed mb-4 flex-1 line-clamp-4">
+              <blockquote className="text-xs text-foreground leading-relaxed mb-3 flex-1 line-clamp-4">
                 "{testimonial.content}"
               </blockquote>
-              <div className="border-t pt-3 mt-auto">
-                <div className="font-medium text-primary text-sm truncate">
+              <div className="border-t pt-2 mt-auto">
+                <div className="font-medium text-primary text-xs truncate">
                   {testimonial.name}
                 </div>
                 <div className="text-xs text-muted-foreground truncate">
@@ -190,23 +190,23 @@ const TestimonialBento = () => {
       {/* Scrollable Testimonials Row */}
       {scrollable.length > 0 && (
         <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex space-x-3 pb-3">
+          <div className="flex space-x-3 pb-2">
             {scrollable.map((testimonial) => (
               <Card
                 key={testimonial.id}
-                className="w-64 h-48 flex-shrink-0 shadow-card hover:shadow-card-hover transition-all duration-300"
+                className="w-56 h-40 flex-shrink-0 shadow-card hover:shadow-card-hover transition-all duration-300"
               >
-                <CardContent className="p-4 h-full flex flex-col">
-                  <div className="flex items-center mb-3">
+                <CardContent className="p-3 h-full flex flex-col">
+                  <div className="flex items-center mb-2">
                     {renderStars(testimonial.rating)}
                   </div>
-                  <blockquote className="text-sm text-foreground leading-relaxed mb-4 flex-1 overflow-hidden">
+                  <blockquote className="text-xs text-foreground leading-relaxed mb-3 flex-1 overflow-hidden">
                     <div className="line-clamp-3 whitespace-normal">
                       "{testimonial.content}"
                     </div>
                   </blockquote>
-                  <div className="border-t pt-3 mt-auto">
-                    <div className="font-medium text-primary text-sm truncate">
+                  <div className="border-t pt-2 mt-auto">
+                    <div className="font-medium text-primary text-xs truncate">
                       {testimonial.name}
                     </div>
                     <div className="text-xs text-muted-foreground truncate">
