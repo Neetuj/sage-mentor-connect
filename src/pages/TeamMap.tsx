@@ -57,22 +57,27 @@ const TeamMap = () => {
         zoomControl: true,
         scrollWheelZoom: true,
         preferCanvas: true,
-      }).setView([39.8283, -98.5795], 4); // Center on USA
-
-      map.current = mapInstance;
+      }).setView([39.8283, -98.5795], 4);
 
       const tile = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "© OpenStreetMap contributors",
         maxZoom: 19,
-      }).addTo(mapInstance);
+      });
 
       tile.on('load', () => console.log('[TeamMap] Tiles loaded successfully'));
       tile.on('tileerror', (e) => console.error('[TeamMap] Tile loading error:', e));
+      
+      tile.addTo(mapInstance);
+      
+      // Set map.current AFTER tiles are added
+      map.current = mapInstance;
 
       setTimeout(() => {
-        mapInstance.invalidateSize(true);
-        console.log('[TeamMap] Map size invalidated and ready');
-      }, 250);
+        if (mapInstance) {
+          mapInstance.invalidateSize(true);
+          console.log('[TeamMap] Map size invalidated and ready');
+        }
+      }, 300);
     } catch (error) {
       console.error('[TeamMap] Error initializing map:', error);
     }
@@ -80,7 +85,11 @@ const TeamMap = () => {
     return () => {
       console.log('[TeamMap] Cleaning up map');
       if (map.current) {
-        map.current.remove();
+        try {
+          map.current.remove();
+        } catch (e) {
+          console.warn('[TeamMap] Error removing map:', e);
+        }
         map.current = null;
       }
     };
