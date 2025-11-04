@@ -122,13 +122,11 @@ const TestimonialBento = () => {
           
           return (
             <Card key={stat.id} className={`md:col-span-3 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br ${colorScheme.bg}`}>
-              <CardContent className="p-4 flex flex-col h-full justify-between">
-                <div className={`w-10 h-10 ${colorScheme.icon} rounded-lg flex items-center justify-center`}>
-                  <Icon className={`h-5 w-5 ${colorScheme.text}`} />
+              <CardContent className="p-6 flex flex-col items-center justify-center h-full gap-4">
+                <div className={`w-12 h-12 ${colorScheme.icon} rounded-lg flex items-center justify-center`}>
+                  <Icon className={`h-6 w-6 ${colorScheme.text}`} />
                 </div>
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="text-5xl md:text-6xl font-bold leading-none text-foreground">{stat.stat_value}</div>
-                </div>
+                <div className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none text-foreground">{stat.stat_value}</div>
                 <p className="text-sm md:text-base text-muted-foreground text-center">{stat.stat_label}</p>
               </CardContent>
             </Card>
