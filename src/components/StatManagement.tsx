@@ -111,7 +111,7 @@ const StatManagement = ({ onStatDeleted, onEditStat }: StatManagementProps) => {
                         {stat.is_visible ? "Visible" : "Hidden"}
                       </Badge>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="flex gap-6 text-sm">
                       <div>
                         <span className="text-muted-foreground">Value: </span>
                         <span className="font-medium">{stat.stat_value}</span>
@@ -119,10 +119,6 @@ const StatManagement = ({ onStatDeleted, onEditStat }: StatManagementProps) => {
                       <div>
                         <span className="text-muted-foreground">Icon: </span>
                         <span className="font-medium">{stat.icon_name}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Key: </span>
-                        <span className="font-mono text-xs">{stat.stat_key}</span>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Order: </span>

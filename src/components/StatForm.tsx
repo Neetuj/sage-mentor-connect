@@ -15,7 +15,6 @@ interface StatFormProps {
 }
 
 const StatForm = ({ onStatAdded, editingStat, onCancelEdit }: StatFormProps) => {
-  const [statKey, setStatKey] = useState("");
   const [statValue, setStatValue] = useState("");
   const [statLabel, setStatLabel] = useState("");
   const [iconName, setIconName] = useState("Users");
@@ -30,7 +29,6 @@ const StatForm = ({ onStatAdded, editingStat, onCancelEdit }: StatFormProps) => 
 
   useEffect(() => {
     if (editingStat) {
-      setStatKey(editingStat.stat_key || "");
       setStatValue(editingStat.stat_value || "");
       setStatLabel(editingStat.stat_label || "");
       setIconName(editingStat.icon_name || "Users");
@@ -45,7 +43,6 @@ const StatForm = ({ onStatAdded, editingStat, onCancelEdit }: StatFormProps) => 
 
     try {
       const statData = {
-        stat_key: statKey,
         stat_value: statValue,
         stat_label: statLabel,
         icon_name: iconName,
@@ -72,7 +69,6 @@ const StatForm = ({ onStatAdded, editingStat, onCancelEdit }: StatFormProps) => 
       }
 
       // Reset form
-      setStatKey("");
       setStatValue("");
       setStatLabel("");
       setIconName("Users");
@@ -96,18 +92,6 @@ const StatForm = ({ onStatAdded, editingStat, onCancelEdit }: StatFormProps) => 
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="stat-key">Stat Key (unique identifier)</Label>
-              <Input
-                id="stat-key"
-                value={statKey}
-                onChange={(e) => setStatKey(e.target.value)}
-                placeholder="e.g., students_impacted"
-                required
-                disabled={!!editingStat}
-              />
-            </div>
-
             <div className="space-y-2">
               <Label htmlFor="stat-value">Value</Label>
               <Input

@@ -204,7 +204,6 @@ export type Database = {
           icon_name: string
           id: string
           is_visible: boolean
-          stat_key: string
           stat_label: string
           stat_value: string
           updated_at: string
@@ -215,7 +214,6 @@ export type Database = {
           icon_name?: string
           id?: string
           is_visible?: boolean
-          stat_key: string
           stat_label: string
           stat_value: string
           updated_at?: string
@@ -226,7 +224,6 @@ export type Database = {
           icon_name?: string
           id?: string
           is_visible?: boolean
-          stat_key?: string
           stat_label?: string
           stat_value?: string
           updated_at?: string

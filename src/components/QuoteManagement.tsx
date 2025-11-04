@@ -20,15 +20,16 @@ import {
 interface QuoteManagementProps {
   onQuoteDeleted?: () => void;
   onEditQuote?: (quote: any) => void;
+  refreshTrigger?: number;
 }
 
-const QuoteManagement = ({ onQuoteDeleted, onEditQuote }: QuoteManagementProps) => {
+const QuoteManagement = ({ onQuoteDeleted, onEditQuote, refreshTrigger }: QuoteManagementProps) => {
   const [quotes, setQuotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchQuotes();
-  }, []);
+  }, [refreshTrigger]);
 
   const fetchQuotes = async () => {
     try {

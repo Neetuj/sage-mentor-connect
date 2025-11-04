@@ -121,7 +121,7 @@ const TestimonialBento = () => {
           const colorScheme = colors[index] || colors[0];
           
           return (
-            <Card key={stat.id} className={`md:col-span-3 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br ${colorScheme.bg}`}>
+            <Card key={stat.id} className={`md:col-span-3 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br ${colorScheme.bg}`}>
               <CardContent className="p-4 flex flex-col items-center justify-center h-full">
                 <div className={`w-10 h-10 ${colorScheme.icon} rounded-lg flex items-center justify-center mb-2`}>
                   <Icon className={`h-5 w-5 ${colorScheme.text}`} />

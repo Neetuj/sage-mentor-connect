@@ -223,6 +223,7 @@ const Admin = () => {
               <QuoteManagement 
                 onQuoteDeleted={refreshData} 
                 onEditQuote={setEditingQuote}
+                refreshTrigger={refreshTrigger}
               />
             </div>
           </TabsContent>
