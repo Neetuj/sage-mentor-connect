@@ -25,6 +25,8 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
     email: "",
     school: "",
     grade: "",
+    city: "",
+    state: "",
     subject: "",
     availability: "",
     additional_info: "",
@@ -127,6 +129,8 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
         email: "",
         school: "",
         grade: "",
+        city: "",
+        state: "",
         subject: "",
         availability: "",
         additional_info: "",
@@ -198,6 +202,27 @@ const TutorForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="city">City</Label>
+              <Input
+                id="city"
+                value={formData.city}
+                onChange={(e) => setFormData({...formData, city: e.target.value})}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="state">State</Label>
+              <Input
+                id="state"
+                value={formData.state}
+                onChange={(e) => setFormData({...formData, state: e.target.value})}
+                required
+              />
             </div>
           </div>
 
