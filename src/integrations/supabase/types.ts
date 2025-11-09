@@ -233,6 +233,7 @@ export type Database = {
       submissions: {
         Row: {
           additional_info: string | null
+          city: string | null
           created_at: string
           email: string
           form_type: string
@@ -242,9 +243,11 @@ export type Database = {
           name: string
           parent_email: string | null
           school: string | null
+          state: string | null
         }
         Insert: {
           additional_info?: string | null
+          city?: string | null
           created_at?: string
           email: string
           form_type: string
@@ -254,9 +257,11 @@ export type Database = {
           name: string
           parent_email?: string | null
           school?: string | null
+          state?: string | null
         }
         Update: {
           additional_info?: string | null
+          city?: string | null
           created_at?: string
           email?: string
           form_type?: string
@@ -266,6 +271,7 @@ export type Database = {
           name?: string
           parent_email?: string | null
           school?: string | null
+          state?: string | null
         }
         Relationships: []
       }
