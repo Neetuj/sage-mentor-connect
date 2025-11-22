@@ -8,6 +8,7 @@ import Admin from "./pages/Admin";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import TeamMap from "./pages/TeamMap";
+import PastEvents from "./pages/PastEvents";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/team-map" element={<TeamMap />} />
+          <Route path="/past-events" element={<PastEvents />} />
           <Route path="/admin" element={
             <ProtectedRoute requireAdmin>
               <Admin />

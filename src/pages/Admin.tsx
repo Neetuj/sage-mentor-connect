@@ -21,6 +21,8 @@ import TeamMemberForm from "@/components/TeamMemberForm";
 import TeamMemberManagement from "@/components/TeamMemberManagement";
 import StatForm from "@/components/StatForm";
 import StatManagement from "@/components/StatManagement";
+import PastEventForm from "@/components/PastEventForm";
+import PastEventManagement from "@/components/PastEventManagement";
 
 const Admin = () => {
   logger.log('Admin component rendering');
@@ -136,6 +138,7 @@ const Admin = () => {
             <TabsTrigger value="submissions">Submissions</TabsTrigger>
             <TabsTrigger value="tutors">Tutors</TabsTrigger>
             <TabsTrigger value="seminars">Seminars</TabsTrigger>
+            <TabsTrigger value="past-events">Past Events</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
             <TabsTrigger value="stats">Statistics</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
@@ -164,6 +167,31 @@ const Admin = () => {
                 onSeminarDeleted={refreshData} 
                 onEditSeminar={setEditingSeminar}
               />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="past-events">
+            <div className="space-y-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Add New Past Event</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Document your organization's past events and their impact on the community.
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <PastEventForm onSuccess={refreshData} />
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Manage Past Events</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <PastEventManagement refreshTrigger={refreshTrigger} />
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
           

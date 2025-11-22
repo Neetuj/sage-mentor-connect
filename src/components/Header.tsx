@@ -89,15 +89,21 @@ const Header = () => {
             >
               Tutors
             </button>
-            <button 
-              onClick={() => scrollToSection('seminars')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Seminars
-            </button>
-            <Button variant="default" onClick={() => scrollToSection('get-involved')}>
-              Get Involved
-            </Button>
+          <button 
+            onClick={() => scrollToSection('seminars')}
+            className="text-foreground hover:text-primary transition-colors"
+          >
+            Seminars
+          </button>
+          <button 
+            onClick={() => navigate('/past-events')}
+            className="text-foreground hover:text-primary transition-colors"
+          >
+            Past Events
+          </button>
+          <Button variant="default" onClick={() => scrollToSection('get-involved')}>
+            Get Involved
+          </Button>
             
             {user ? (
               <div className="flex items-center space-x-2">
@@ -168,6 +174,12 @@ const Header = () => {
                 className="text-left text-foreground hover:text-primary transition-colors"
               >
                 Seminars
+              </button>
+              <button 
+                onClick={() => navigate('/past-events')}
+                className="text-left text-foreground hover:text-primary transition-colors"
+              >
+                Past Events
               </button>
               <Button 
                 variant="default" 
