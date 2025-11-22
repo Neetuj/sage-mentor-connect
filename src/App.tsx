@@ -24,7 +24,7 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/team-map" element={<TeamMap />} />
           <Route path="/past-events" element={<PastEvents />} />
-          <Route path="/admin" element={
+          <Route path="/admin/*" element={
             <ProtectedRoute requireAdmin>
               <Admin />
             </ProtectedRoute>
