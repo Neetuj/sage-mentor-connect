@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Upload, X, Loader2 } from "lucide-react";
+import { Upload, X, Loader2, Link } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ImageUploadProps {
   bucket: string;
@@ -16,6 +18,7 @@ interface ImageUploadProps {
 export function ImageUpload({ bucket, value, onChange, label, accept = "image/*" }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(value || null);
+  const [urlInput, setUrlInput] = useState<string>(value || "");
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -79,11 +82,22 @@ export function ImageUpload({ bucket, value, onChange, label, accept = "image/*"
         await supabase.storage.from(bucket).remove([path]);
       }
       setPreview(null);
+      setUrlInput("");
       onChange(null);
       toast.success("Image removed");
     } catch (error: any) {
       toast.error(error.message || "Failed to remove image");
     }
+  };
+
+  const handleUrlSubmit = () => {
+    if (!urlInput.trim()) {
+      toast.error("Please enter a valid URL");
+      return;
+    }
+    setPreview(urlInput);
+    onChange(urlInput);
+    toast.success("Image URL added");
   };
 
   return (
@@ -103,34 +117,65 @@ export function ImageUpload({ bucket, value, onChange, label, accept = "image/*"
           </Button>
         </div>
       ) : (
-        <div className="relative">
-          <input
-            type="file"
-            accept={accept}
-            onChange={handleFileChange}
-            disabled={uploading}
-            className="hidden"
-            id={`file-upload-${bucket}`}
-          />
-          <Label
-            htmlFor={`file-upload-${bucket}`}
-            className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted/80 transition-colors"
-          >
-            {uploading ? (
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            ) : (
-              <>
-                <Upload className="h-8 w-8 text-muted-foreground mb-2" />
-                <span className="text-sm text-muted-foreground">
-                  Click to upload image
-                </span>
-                <span className="text-xs text-muted-foreground mt-1">
-                  Max 5MB • JPG, PNG, WEBP
-                </span>
-              </>
-            )}
-          </Label>
-        </div>
+        <Tabs defaultValue="upload" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="upload">Upload File</TabsTrigger>
+            <TabsTrigger value="url">Enter URL</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="upload">
+            <div className="relative">
+              <input
+                type="file"
+                accept={accept}
+                onChange={handleFileChange}
+                disabled={uploading}
+                className="hidden"
+                id={`file-upload-${bucket}`}
+              />
+              <Label
+                htmlFor={`file-upload-${bucket}`}
+                className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted/80 transition-colors"
+              >
+                {uploading ? (
+                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                ) : (
+                  <>
+                    <Upload className="h-8 w-8 text-muted-foreground mb-2" />
+                    <span className="text-sm text-muted-foreground">
+                      Click to upload image
+                    </span>
+                    <span className="text-xs text-muted-foreground mt-1">
+                      Max 5MB • JPG, PNG, WEBP
+                    </span>
+                  </>
+                )}
+              </Label>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="url">
+            <div className="space-y-2">
+              <div className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg bg-muted/50 p-4">
+                <Link className="h-8 w-8 text-muted-foreground mb-4" />
+                <Input
+                  type="url"
+                  placeholder="https://example.com/image.jpg"
+                  value={urlInput}
+                  onChange={(e) => setUrlInput(e.target.value)}
+                  className="mb-2"
+                />
+                <Button
+                  type="button"
+                  onClick={handleUrlSubmit}
+                  className="w-full"
+                >
+                  Add Image URL
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       )}
     </div>
   );
