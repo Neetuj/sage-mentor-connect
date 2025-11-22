@@ -134,15 +134,15 @@ const Admin = () => {
         </Card>
 
         <Tabs defaultValue="submissions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7">
-            <TabsTrigger value="submissions">Submissions</TabsTrigger>
-            <TabsTrigger value="tutors">Tutors</TabsTrigger>
-            <TabsTrigger value="seminars">Seminars</TabsTrigger>
-            <TabsTrigger value="past-events">Past Events</TabsTrigger>
-            <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
-            <TabsTrigger value="stats">Statistics</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            <TabsTrigger value="team">Team Map</TabsTrigger>
+          <TabsList className="inline-flex h-auto flex-wrap gap-1 bg-muted p-1">
+            <TabsTrigger value="submissions" className="data-[state=active]:bg-background">Submissions</TabsTrigger>
+            <TabsTrigger value="tutors" className="data-[state=active]:bg-background">Tutors</TabsTrigger>
+            <TabsTrigger value="seminars" className="data-[state=active]:bg-background">Seminars</TabsTrigger>
+            <TabsTrigger value="past-events" className="data-[state=active]:bg-background">Past Events</TabsTrigger>
+            <TabsTrigger value="testimonials" className="data-[state=active]:bg-background">Testimonials</TabsTrigger>
+            <TabsTrigger value="stats" className="data-[state=active]:bg-background">Statistics</TabsTrigger>
+            <TabsTrigger value="notifications" className="data-[state=active]:bg-background">Notifications</TabsTrigger>
+            <TabsTrigger value="team" className="data-[state=active]:bg-background">Team Map</TabsTrigger>
           </TabsList>
           
           <TabsContent value="submissions">

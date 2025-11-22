@@ -62,8 +62,21 @@ const About = () => {
         </div>
 
         {/* Community Testimonials */}
-        <div className="mb-12">
+        <div className="mb-8">
           <TestimonialBento />
+        </div>
+
+        {/* Past Events CTA */}
+        <div className="text-center mb-12">
+          <a href="/past-events">
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="border-primary/30 hover:bg-primary/5 hover:border-primary text-primary transition-all"
+            >
+              View Past Events & Impact →
+            </Button>
+          </a>
         </div>
 
         {/* Founders */}
