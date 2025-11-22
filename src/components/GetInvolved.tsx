@@ -7,7 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UserPlus, GraduationCap, Heart, Mail, Phone, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { applicationFormSchema, volunteerFormSchema, sanitizeString, checkRateLimit, SECURITY_ERROR_MESSAGES } from "@/lib/security";
+import {
+  applicationFormSchema,
+  volunteerFormSchema,
+  sanitizeString,
+  checkRateLimit,
+  SECURITY_ERROR_MESSAGES,
+} from "@/lib/security";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
@@ -25,7 +31,7 @@ const GetInvolved = () => {
     interests: "",
     additionalInfo: "",
     parentEmail: "",
-    selectedTutor: ""
+    selectedTutor: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,15 +42,12 @@ const GetInvolved = () => {
   useEffect(() => {
     const fetchTutors = async () => {
       try {
-        const { data, error } = await supabase
-          .from('tutors')
-          .select('name')
-          .order('name');
+        const { data, error } = await supabase.from("tutors").select("name").order("name");
 
         if (error) throw error;
         setTutors(data || []);
       } catch (error) {
-        logger.error('Error fetching tutors:', error);
+        logger.error("Error fetching tutors:", error);
       }
     };
 
@@ -56,12 +59,12 @@ const GetInvolved = () => {
     const handleTutorSelection = (event: CustomEvent) => {
       const { tutorName, formType: selectedFormType } = event.detail;
       setFormType(selectedFormType);
-      setFormData(prev => ({ ...prev, selectedTutor: tutorName }));
+      setFormData((prev) => ({ ...prev, selectedTutor: tutorName }));
     };
 
-    window.addEventListener('selectTutor', handleTutorSelection as EventListener);
+    window.addEventListener("selectTutor", handleTutorSelection as EventListener);
     return () => {
-      window.removeEventListener('selectTutor', handleTutorSelection as EventListener);
+      window.removeEventListener("selectTutor", handleTutorSelection as EventListener);
     };
   }, []);
 
@@ -69,44 +72,46 @@ const GetInvolved = () => {
     {
       icon: UserPlus,
       title: "Get Tutoring",
-      description: "Elementary and middle school students can join our program to connect with inspiring high school tutors.",
+      description:
+        "Elementary and middle school students can join our program to connect with inspiring high school tutors.",
       requirements: "Grades 3-8 • Curiosity about engineering • Weekly commitment",
-      action: "Apply as Student"
+      action: "Apply as Student",
     },
     {
-      icon: GraduationCap, 
+      icon: GraduationCap,
       title: "Become a Tutor",
-      description: "High school students with engineering passion can guide younger students and share their knowledge.",
+      description:
+        "High school students with engineering passion can guide younger students and share their knowledge.",
       requirements: "Grades 9-12 • Engineering interest • 1-2 hours per week",
-      action: "Apply as Tutor"
+      action: "Apply as Tutor",
     },
     {
       icon: Heart,
       title: "Volunteer & Support",
       description: "Parents, teachers, and community members can help with events, coordination, and program support.",
       requirements: "Background check • Flexible schedule • Passion for education",
-      action: "Volunteer"
-    }
+      action: "Volunteer",
+    },
   ];
 
   const handleInputChange = (field: string, value: string) => {
     const sanitizedValue = sanitizeString(value);
-    setFormData(prev => ({ ...prev, [field]: sanitizedValue }));
+    setFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: "" }));
+      setErrors((prev) => ({ ...prev, [field]: "" }));
     }
   };
 
   const validateForm = () => {
     try {
-      if (formType === 'volunteer') {
+      if (formType === "volunteer") {
         const dataToValidate = {
           name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
-          additionalInfo: formData.additionalInfo
+          additionalInfo: formData.additionalInfo,
         };
-        logger.log('Validating volunteer data:', dataToValidate);
+        logger.log("Validating volunteer data:", dataToValidate);
         volunteerFormSchema.parse(dataToValidate);
       } else {
         const dataToValidate = {
@@ -118,20 +123,20 @@ const GetInvolved = () => {
           state: formData.state,
           interests: formData.interests,
           additionalInfo: formData.additionalInfo,
-          ...(formType === 'student' && { parentEmail: formData.parentEmail })
+          ...(formType === "student" && { parentEmail: formData.parentEmail }),
         };
-        logger.log('Validating student/tutor data:', dataToValidate);
+        logger.log("Validating student/tutor data:", dataToValidate);
         applicationFormSchema.parse(dataToValidate);
       }
-      
+
       setErrors({});
       return true;
     } catch (error) {
-      logger.error('Validation error:', error);
+      logger.error("Validation error:", error);
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
         error.issues.forEach((issue) => {
-          logger.log('Validation issue:', issue);
+          logger.log("Validation issue:", issue);
           if (issue.path[0]) {
             newErrors[issue.path[0].toString()] = issue.message;
           }
@@ -144,15 +149,16 @@ const GetInvolved = () => {
 
   const handleSubmitApplication = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (isSubmitting) return;
-    
+
     // Rate limiting check
-    if (!checkRateLimit(`application_${formType}`, 3, 300000)) { // 3 attempts per 5 minutes
+    if (!checkRateLimit(`application_${formType}`, 3, 300000)) {
+      // 3 attempts per 5 minutes
       toast({
         title: "Error",
         description: SECURITY_ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -161,39 +167,37 @@ const GetInvolved = () => {
       toast({
         title: "Validation Error",
         description: "Please check your inputs and try again.",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       // Submit to Supabase
-      const { error } = await supabase
-        .from('submissions')
-        .insert({
-          form_type: formType,
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-          school: formData.school || null,
-          grade_level: formData.gradeLevel || null,
-          city: formData.city || null,
-          state: formData.state || null,
-          interests: formData.interests || null,
-          additional_info: formData.additionalInfo,
-          parent_email: formData.parentEmail || null
-        });
+      const { error } = await supabase.from("submissions").insert({
+        form_type: formType,
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        school: formData.school || null,
+        grade_level: formData.gradeLevel || null,
+        city: formData.city || null,
+        state: formData.state || null,
+        interests: formData.interests || null,
+        additional_info: formData.additionalInfo,
+        parent_email: formData.parentEmail || null,
+      });
 
       if (error) {
         throw error;
       }
-      
+
       toast({
         title: "Application Submitted!",
         description: `Your ${formType} application has been received. We'll contact you within 3-5 business days.`,
       });
-      
+
       // Reset form
       setFormData({
         firstName: "",
@@ -206,14 +210,14 @@ const GetInvolved = () => {
         interests: "",
         additionalInfo: "",
         parentEmail: "",
-        selectedTutor: ""
+        selectedTutor: "",
       });
     } catch (error) {
-      console.error('Submission error:', error);
+      console.error("Submission error:", error);
       toast({
         title: "Error",
         description: "Failed to submit application. Please try again.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -224,13 +228,13 @@ const GetInvolved = () => {
     <section id="get-involved" className="py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <Badge variant="secondary" className="mb-4">Join Our Community</Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-6">
-            Get Involved with SAGE
-          </h2>
+          <Badge variant="secondary" className="mb-4">
+            Join Our Community
+          </Badge>
+          <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-6">Get Involved with SAGE</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Whether you're a student looking for tutoring, a high schooler ready to tutor, 
-            or a community member wanting to support engineering education, there's a place for you.
+            Whether you're a student looking for tutoring, a high-schooler ready to tutor, or a community member wanting
+            to support engineering, there's a place for you.
           </p>
         </div>
 
@@ -242,33 +246,27 @@ const GetInvolved = () => {
                 <div className="w-16 h-16 bg-hero-gradient rounded-lg flex items-center justify-center mx-auto mb-4">
                   <opportunity.icon className="h-8 w-8 text-primary-foreground" />
                 </div>
-                <h3 className="text-xl font-semibold text-primary mb-3">
-                  {opportunity.title}
-                </h3>
-                <p className="text-muted-foreground mb-4 leading-relaxed">
-                  {opportunity.description}
-                </p>
+                <h3 className="text-xl font-semibold text-primary mb-3">{opportunity.title}</h3>
+                <p className="text-muted-foreground mb-4 leading-relaxed">{opportunity.description}</p>
                 <div className="bg-muted/50 rounded-lg p-3 mb-4">
-                  <p className="text-sm text-muted-foreground">
-                    {opportunity.requirements}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{opportunity.requirements}</p>
                 </div>
-                <Button 
-                  className="w-full" 
+                <Button
+                  className="w-full"
                   onClick={() => {
-                    if (opportunity.action.toLowerCase().includes('student')) {
-                      setFormType('student');
+                    if (opportunity.action.toLowerCase().includes("student")) {
+                      setFormType("student");
                       // Scroll to form
                       setTimeout(() => {
-                        const formElement = document.querySelector('#tutoring-form');
+                        const formElement = document.querySelector("#tutoring-form");
                         if (formElement) {
-                          formElement.scrollIntoView({ behavior: 'smooth' });
+                          formElement.scrollIntoView({ behavior: "smooth" });
                         }
                       }, 100);
-                    } else if (opportunity.action.toLowerCase().includes('tutor')) {
-                      setFormType('tutor');
+                    } else if (opportunity.action.toLowerCase().includes("tutor")) {
+                      setFormType("tutor");
                     } else {
-                      setFormType('volunteer');
+                      setFormType("volunteer");
                     }
                   }}
                 >
@@ -285,12 +283,16 @@ const GetInvolved = () => {
             <CardContent className="p-8">
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-primary mb-2">
-                  {formType === 'student' ? 'Request Tutoring' : 
-                   formType === 'tutor' ? 'Tutor Application' : 'Volunteer Registration'}
+                  {formType === "student"
+                    ? "Request Tutoring"
+                    : formType === "tutor"
+                      ? "Tutor Application"
+                      : "Volunteer Registration"}
                 </h3>
                 <p className="text-muted-foreground">
-                  {formType === 'student' ? 'Connect with a high school engineering tutor to accelerate your learning' :
-                   'Fill out this form to get started with SAGE'}
+                  {formType === "student"
+                    ? "Connect with a high school engineering tutor to accelerate your learning"
+                    : "Fill out this form to get started with SAGE"}
                 </p>
               </div>
 
@@ -298,10 +300,10 @@ const GetInvolved = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">First Name *</label>
-                    <Input 
-                      placeholder="Enter your first name" 
+                    <Input
+                      placeholder="Enter your first name"
                       value={formData.firstName}
-                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      onChange={(e) => handleInputChange("firstName", e.target.value)}
                       maxLength={25}
                       required
                     />
@@ -309,10 +311,10 @@ const GetInvolved = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">Last Name *</label>
-                    <Input 
-                      placeholder="Enter your last name" 
+                    <Input
+                      placeholder="Enter your last name"
                       value={formData.lastName}
-                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      onChange={(e) => handleInputChange("lastName", e.target.value)}
                       maxLength={25}
                       required
                     />
@@ -321,26 +323,26 @@ const GetInvolved = () => {
 
                 <div>
                   <label className="block text-sm font-medium mb-2">Email *</label>
-                  <Input 
-                    type="email" 
-                    placeholder="Enter your email address" 
+                  <Input
+                    type="email"
+                    placeholder="Enter your email address"
                     value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     maxLength={100}
                     required
                   />
                   {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
                 </div>
 
-                {formType !== 'volunteer' && (
+                {formType !== "volunteer" && (
                   <>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">School *</label>
-                        <Input 
-                          placeholder="Enter your school name" 
+                        <Input
+                          placeholder="Enter your school name"
                           value={formData.school}
-                          onChange={(e) => handleInputChange('school', e.target.value)}
+                          onChange={(e) => handleInputChange("school", e.target.value)}
                           maxLength={100}
                           required
                         />
@@ -348,12 +350,15 @@ const GetInvolved = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">Grade Level *</label>
-                        <Select value={formData.gradeLevel} onValueChange={(value) => handleInputChange('gradeLevel', value)}>
+                        <Select
+                          value={formData.gradeLevel}
+                          onValueChange={(value) => handleInputChange("gradeLevel", value)}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select your grade" />
                           </SelectTrigger>
                           <SelectContent>
-                            {formType === 'student' ? (
+                            {formType === "student" ? (
                               <>
                                 <SelectItem value="3">3rd Grade</SelectItem>
                                 <SelectItem value="4">4th Grade</SelectItem>
@@ -378,10 +383,10 @@ const GetInvolved = () => {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">City *</label>
-                        <Input 
-                          placeholder="Enter your city" 
+                        <Input
+                          placeholder="Enter your city"
                           value={formData.city}
-                          onChange={(e) => handleInputChange('city', e.target.value)}
+                          onChange={(e) => handleInputChange("city", e.target.value)}
                           maxLength={100}
                           required
                         />
@@ -389,10 +394,10 @@ const GetInvolved = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">State *</label>
-                        <Input 
-                          placeholder="Enter your state" 
+                        <Input
+                          placeholder="Enter your state"
                           value={formData.state}
-                          onChange={(e) => handleInputChange('state', e.target.value)}
+                          onChange={(e) => handleInputChange("state", e.target.value)}
                           maxLength={50}
                           required
                         />
@@ -402,11 +407,20 @@ const GetInvolved = () => {
 
                     <div>
                       <label className="block text-sm font-medium mb-2">
-                        {formType === 'student' ? 'Which subject would you like tutoring in? *' : 'Subject Area of Interest *'}
+                        {formType === "student"
+                          ? "Which subject would you like tutoring in? *"
+                          : "Subject Area of Interest *"}
                       </label>
-                      <Select value={formData.interests} onValueChange={(value) => handleInputChange('interests', value)}>
+                      <Select
+                        value={formData.interests}
+                        onValueChange={(value) => handleInputChange("interests", value)}
+                      >
                         <SelectTrigger>
-                          <SelectValue placeholder={formType === 'student' ? "Select tutoring subject" : "Select your area of interest"} />
+                          <SelectValue
+                            placeholder={
+                              formType === "student" ? "Select tutoring subject" : "Select your area of interest"
+                            }
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="math">Mathematics</SelectItem>
@@ -429,39 +443,47 @@ const GetInvolved = () => {
                   </>
                 )}
 
-                {formType === 'student' && (
+                {formType === "student" && (
                   <div>
                     <label className="block text-sm font-medium mb-2">Preferred Tutor (Optional)</label>
-                    <Select value={formData.selectedTutor} onValueChange={(value) => handleInputChange('selectedTutor', value)}>
+                    <Select
+                      value={formData.selectedTutor}
+                      onValueChange={(value) => handleInputChange("selectedTutor", value)}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Choose a specific tutor or leave blank for any available tutor" />
                       </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="any">Any Available Tutor</SelectItem>
-                          {tutors
-                            .filter(tutor => tutor.name && tutor.name.trim() !== '')
-                            .map((tutor) => (
+                      <SelectContent>
+                        <SelectItem value="any">Any Available Tutor</SelectItem>
+                        {tutors
+                          .filter((tutor) => tutor.name && tutor.name.trim() !== "")
+                          .map((tutor) => (
                             <SelectItem key={tutor.name} value={tutor.name}>
                               {tutor.name}
                             </SelectItem>
                           ))}
-                        </SelectContent>
+                      </SelectContent>
                     </Select>
                   </div>
                 )}
 
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    {formType === 'student' ? 'What would you like help with? *' : 
-                     formType === 'tutor' ? 'Why do you want to be a tutor? *' : 'How would you like to help? *'}
+                    {formType === "student"
+                      ? "What would you like help with? *"
+                      : formType === "tutor"
+                        ? "Why do you want to be a tutor? *"
+                        : "How would you like to help? *"}
                   </label>
-                  <Textarea 
-                    placeholder={formType === 'student' ? 
-                      "Tell us about specific topics, projects, or skills you'd like tutoring help with..." : 
-                      "Tell us about yourself and your interests..."}
+                  <Textarea
+                    placeholder={
+                      formType === "student"
+                        ? "Tell us about specific topics, projects, or skills you'd like tutoring help with..."
+                        : "Tell us about yourself and your interests..."
+                    }
                     rows={4}
                     value={formData.additionalInfo}
-                    onChange={(e) => handleInputChange('additionalInfo', e.target.value)}
+                    onChange={(e) => handleInputChange("additionalInfo", e.target.value)}
                     maxLength={1000}
                     required
                   />
@@ -469,14 +491,14 @@ const GetInvolved = () => {
                   <p className="text-xs text-muted-foreground mt-1">{formData.additionalInfo.length}/1000 characters</p>
                 </div>
 
-                {formType === 'student' && (
+                {formType === "student" && (
                   <div>
                     <label className="block text-sm font-medium mb-2">Parent/Guardian Email *</label>
-                    <Input 
-                      type="email" 
-                      placeholder="Parent or guardian email address" 
+                    <Input
+                      type="email"
+                      placeholder="Parent or guardian email address"
                       value={formData.parentEmail}
-                      onChange={(e) => handleInputChange('parentEmail', e.target.value)}
+                      onChange={(e) => handleInputChange("parentEmail", e.target.value)}
                       maxLength={100}
                       required
                     />
@@ -485,8 +507,7 @@ const GetInvolved = () => {
                 )}
 
                 <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
-                  {isSubmitting ? "Submitting..." : 
-                   formType === 'student' ? "Request Tutoring" : "Submit Application"}
+                  {isSubmitting ? "Submitting..." : formType === "student" ? "Request Tutoring" : "Submit Application"}
                 </Button>
               </form>
             </CardContent>
@@ -497,9 +518,7 @@ const GetInvolved = () => {
         <div className="mt-16 text-center">
           <Card className="max-w-md mx-auto shadow-card">
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-primary mb-4">
-                Questions? Get in Touch
-              </h3>
+              <h3 className="text-xl font-semibold text-primary mb-4">Questions? Get in Touch</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex items-center justify-center gap-2">
                   <Mail className="h-4 w-4 text-primary" />
