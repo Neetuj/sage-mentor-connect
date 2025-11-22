@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Upload } from "lucide-react";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 interface TeamMemberFormProps {
   onMemberAdded: () => void;
@@ -22,6 +23,7 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
     longitude: "",
     email: "",
     school: "",
+    profile_image_url: null as string | null,
   });
 
   useEffect(() => {
@@ -34,6 +36,7 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
         longitude: editingMember.longitude?.toString() || "",
         email: editingMember.email || "",
         school: editingMember.school || "",
+        profile_image_url: editingMember.profile_image_url || null,
       });
     }
   }, [editingMember]);
@@ -54,6 +57,7 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
       longitude: parseFloat(formData.longitude),
       email: formData.email || null,
       school: formData.school || null,
+      profile_image_url: formData.profile_image_url,
     };
 
     try {
@@ -82,6 +86,7 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
         longitude: "",
         email: "",
         school: "",
+        profile_image_url: null,
       });
 
       onMemberAdded();
@@ -100,6 +105,7 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
       longitude: "",
       email: "",
       school: "",
+      profile_image_url: null,
     });
     if (onCancelEdit) onCancelEdit();
   };
@@ -204,6 +210,13 @@ const TeamMemberForm = ({ onMemberAdded, editingMember, onCancelEdit }: TeamMemb
               />
             </div>
           </div>
+
+          <ImageUpload
+            bucket="team-profile-images"
+            value={formData.profile_image_url}
+            onChange={(url) => setFormData({ ...formData, profile_image_url: url })}
+            label="Profile Image"
+          />
 
           <div className="flex gap-2">
             <Button type="submit" className="flex-1">

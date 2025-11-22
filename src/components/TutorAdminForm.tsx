@@ -22,7 +22,6 @@ const TutorAdminForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
     school: "",
     specialty: "",
     bio: "",
-    profile_image_url: "",
     timezone: "UTC",
     rating: 5.0,
     students: 0,
@@ -77,7 +76,6 @@ const TutorAdminForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
         school: "",
         specialty: "",
         bio: "",
-        profile_image_url: "",
         timezone: "UTC",
         rating: 5.0,
         students: 0,
@@ -159,17 +157,6 @@ const TutorAdminForm = ({ onTutorAdded }: { onTutorAdded: () => void }) => {
               onChange={(e) => setFormData({...formData, bio: e.target.value})}
               placeholder="Tell us about this tutor's background and experience..."
               required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="profile_image_url">Profile Image URL (optional)</Label>
-            <Input
-              id="profile_image_url"
-              type="url"
-              value={formData.profile_image_url}
-              onChange={(e) => setFormData({...formData, profile_image_url: e.target.value})}
-              placeholder="https://example.com/image.jpg"
             />
           </div>
 
