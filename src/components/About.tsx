@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { History } from "lucide-react";
 import rohanProfile from "@/assets/rohan-profile.jpg";
 import isabelProfile from "@/assets/isabel-profile.jpg";
 import hannahProfile from "@/assets/hannah-profile.jpg";
@@ -70,11 +71,11 @@ const About = () => {
         <div className="text-center mb-12">
           <a href="/past-events">
             <Button 
-              variant="outline" 
-              size="sm"
-              className="border-primary/30 hover:bg-primary/5 hover:border-primary text-primary transition-all"
+              size="lg"
+              className="bg-gradient-to-r from-secondary to-secondary-light hover:from-secondary-light hover:to-secondary text-secondary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-lg font-semibold"
             >
-              View Past Events & Impact →
+              <History className="h-5 w-5 mr-2" />
+              View Past Events & Impact
             </Button>
           </a>
         </div>
