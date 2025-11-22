@@ -58,6 +58,12 @@ const Footer = () => {
               >
                 Seminars
               </button>
+              <button 
+                onClick={() => navigate('/past-events')}
+                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+              >
+                Past Events
+              </button>
             </div>
           </div>
 
