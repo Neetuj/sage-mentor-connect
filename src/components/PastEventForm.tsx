@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 interface PastEventFormProps {
   onSuccess?: () => void;
@@ -23,7 +24,7 @@ const PastEventForm = ({ onSuccess, editData }: PastEventFormProps) => {
     summary: editData?.summary || "",
     impact: editData?.impact || "",
     attendees: editData?.attendees || 0,
-    event_image_url: editData?.event_image_url || "",
+    event_image_url: editData?.event_image_url || null,
     display_order: editData?.display_order || 0,
     is_visible: editData?.is_visible ?? true,
   });
@@ -59,7 +60,7 @@ const PastEventForm = ({ onSuccess, editData }: PastEventFormProps) => {
         summary: "",
         impact: "",
         attendees: 0,
-        event_image_url: "",
+        event_image_url: null,
         display_order: 0,
         is_visible: true,
       });
@@ -155,17 +156,14 @@ const PastEventForm = ({ onSuccess, editData }: PastEventFormProps) => {
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="event_image_url">Event Image URL (Optional)</Label>
-          <Input
-            id="event_image_url"
-            type="url"
-            value={formData.event_image_url}
-            onChange={(e) => setFormData({ ...formData, event_image_url: e.target.value })}
-            placeholder="https://example.com/image.jpg"
-          />
-        </div>
       </div>
+
+      <ImageUpload
+        bucket="event-images"
+        value={formData.event_image_url}
+        onChange={(url) => setFormData({ ...formData, event_image_url: url })}
+        label="Event Image"
+      />
 
       <div className="space-y-2">
         <Label htmlFor="summary">Event Summary * (Max 500 characters)</Label>

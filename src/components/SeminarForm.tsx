@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 interface Seminar {
   id?: string;
@@ -46,10 +47,10 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
     location: "",
     audience: "",
     registered: 0,
-    capacity: 50,
-    topic_image_url: "",
-    host_image_url: "",
-    is_date_tbd: false,
+        capacity: 50,
+        topic_image_url: null,
+        host_image_url: null,
+        is_date_tbd: false,
     registration_type: "website",
     google_form_url: "",
   });
@@ -85,10 +86,10 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
         location: "",
         audience: "",
         registered: 0,
-        capacity: 50,
-        topic_image_url: "",
-        host_image_url: "",
-        is_date_tbd: false,
+          capacity: 50,
+          topic_image_url: null,
+          host_image_url: null,
+          is_date_tbd: false,
         registration_type: "website",
         google_form_url: "",
       });
@@ -156,8 +157,8 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
           audience: "",
           registered: 0,
           capacity: 50,
-          topic_image_url: "",
-          host_image_url: "",
+          topic_image_url: null,
+          host_image_url: null,
           is_date_tbd: false,
           registration_type: "website",
           google_form_url: "",
@@ -301,29 +302,23 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
                 value={formData.capacity}
                 onChange={(e) => setFormData({...formData, capacity: parseInt(e.target.value)})}
               />
-            </div>
           </div>
+        </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="topic_image_url">Topic Image URL (optional)</Label>
-              <Input
-                id="topic_image_url"
-                value={formData.topic_image_url}
-                onChange={(e) => setFormData({...formData, topic_image_url: e.target.value})}
-                placeholder="https://example.com/topic-image.jpg"
-              />
-            </div>
-            <div>
-              <Label htmlFor="host_image_url">Host Image URL (optional)</Label>
-              <Input
-                id="host_image_url"
-                value={formData.host_image_url}
-                onChange={(e) => setFormData({...formData, host_image_url: e.target.value})}
-                placeholder="https://example.com/host-image.jpg"
-              />
-            </div>
-          </div>
+        <div className="grid grid-cols-2 gap-4">
+          <ImageUpload
+            bucket="seminar-images"
+            value={formData.topic_image_url}
+            onChange={(url) => setFormData({...formData, topic_image_url: url})}
+            label="Topic Image"
+          />
+          <ImageUpload
+            bucket="seminar-images"
+            value={formData.host_image_url}
+            onChange={(url) => setFormData({...formData, host_image_url: url})}
+            label="Host Image"
+          />
+        </div>
 
           <div>
             <Label htmlFor="description">Description</Label>
