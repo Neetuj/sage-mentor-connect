@@ -338,9 +338,9 @@ const GetInvolved = () => {
                   <>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2">School *</label>
+                        <label className="block text-sm font-medium mb-2">Location *</label>
                         <Input
-                          placeholder="Enter your school name"
+                          placeholder="Enter your city, state"
                           value={formData.school}
                           onChange={(e) => handleInputChange("school", e.target.value)}
                           maxLength={100}
