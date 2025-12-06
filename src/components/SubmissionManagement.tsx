@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, Mail, User, School, Calendar } from "lucide-react";
+import { Trash2, Mail, User, MapPin, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -23,7 +23,8 @@ interface Submission {
   form_type: string;
   name: string;
   email: string;
-  school?: string;
+  city?: string;
+  state?: string;
   grade_level?: string;
   interests?: string;
   additional_info?: string;
@@ -202,11 +203,11 @@ const SubmissionManagement = () => {
                     <span>{submission.email}</span>
                   </div>
                   
-                  {submission.school && (
+                  {(submission.city || submission.state) && (
                     <div className="flex items-center gap-2">
-                      <School className="h-3 w-3 text-muted-foreground" />
-                      <span className="text-muted-foreground">School:</span>
-                      <span>{submission.school}</span>
+                      <MapPin className="h-3 w-3 text-muted-foreground" />
+                      <span className="text-muted-foreground">Location:</span>
+                      <span>{[submission.city, submission.state].filter(Boolean).join(", ")}</span>
                     </div>
                   )}
                   

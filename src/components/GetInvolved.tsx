@@ -24,7 +24,6 @@ const GetInvolved = () => {
     firstName: "",
     lastName: "",
     email: "",
-    school: "",
     gradeLevel: "",
     city: "",
     state: "",
@@ -117,7 +116,6 @@ const GetInvolved = () => {
         const dataToValidate = {
           name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
-          school: formData.school,
           gradeLevel: formData.gradeLevel,
           city: formData.city,
           state: formData.state,
@@ -180,7 +178,6 @@ const GetInvolved = () => {
         form_type: formType,
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
-        school: formData.school || null,
         grade_level: formData.gradeLevel || null,
         city: formData.city || null,
         state: formData.state || null,
@@ -203,7 +200,6 @@ const GetInvolved = () => {
         firstName: "",
         lastName: "",
         email: "",
-        school: "",
         gradeLevel: "",
         city: "",
         state: "",
@@ -336,17 +332,28 @@ const GetInvolved = () => {
 
                 {formType !== "volunteer" && (
                   <>
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid md:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2">Location *</label>
+                        <label className="block text-sm font-medium mb-2">City *</label>
                         <Input
-                          placeholder="Enter your city, state"
-                          value={formData.school}
-                          onChange={(e) => handleInputChange("school", e.target.value)}
+                          placeholder="Enter your city"
+                          value={formData.city}
+                          onChange={(e) => handleInputChange("city", e.target.value)}
                           maxLength={100}
                           required
                         />
-                        {errors.school && <p className="text-sm text-destructive mt-1">{errors.school}</p>}
+                        {errors.city && <p className="text-sm text-destructive mt-1">{errors.city}</p>}
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">State *</label>
+                        <Input
+                          placeholder="Enter your state"
+                          value={formData.state}
+                          onChange={(e) => handleInputChange("state", e.target.value)}
+                          maxLength={50}
+                          required
+                        />
+                        {errors.state && <p className="text-sm text-destructive mt-1">{errors.state}</p>}
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">Grade Level *</label>
@@ -380,30 +387,6 @@ const GetInvolved = () => {
                       </div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">City *</label>
-                        <Input
-                          placeholder="Enter your city"
-                          value={formData.city}
-                          onChange={(e) => handleInputChange("city", e.target.value)}
-                          maxLength={100}
-                          required
-                        />
-                        {errors.city && <p className="text-sm text-destructive mt-1">{errors.city}</p>}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">State *</label>
-                        <Input
-                          placeholder="Enter your state"
-                          value={formData.state}
-                          onChange={(e) => handleInputChange("state", e.target.value)}
-                          maxLength={50}
-                          required
-                        />
-                        {errors.state && <p className="text-sm text-destructive mt-1">{errors.state}</p>}
-                      </div>
-                    </div>
 
                     <div>
                       <label className="block text-sm font-medium mb-2">
