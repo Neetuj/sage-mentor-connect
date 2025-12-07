@@ -3,6 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Star, Users, Quote, GraduationCap, Award, TrendingUp, Heart, Clock, MapPin, Presentation, BookOpen, Target } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { SkeletonCard } from "@/components/ui/skeleton-card";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 const iconMap: Record<string, any> = {
   Users, GraduationCap, Award, TrendingUp, Heart, Clock, MapPin, Presentation, BookOpen, Target, Star, Quote
@@ -86,9 +89,11 @@ const TestimonialBento = () => {
 
   if (loading) {
     return (
-      <div className="py-8">
-        <div className="flex justify-center">
-          <div className="animate-pulse">Loading testimonials...</div>
+      <div className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <SkeletonCard variant="testimonial" className="md:col-span-3 h-40" />
+          <SkeletonCard variant="testimonial" className="md:col-span-3 h-40" />
+          <SkeletonCard variant="testimonial" className="md:col-span-6 h-40" />
         </div>
       </div>
     );
@@ -121,12 +126,19 @@ const TestimonialBento = () => {
           const colorScheme = colors[index] || colors[0];
           
           return (
-            <Card key={stat.id} className={`md:col-span-3 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br ${colorScheme.bg}`}>
+            <Card 
+              key={stat.id} 
+              className={`md:col-span-3 md:row-span-2 shadow-card hover:shadow-card-hover transition-all duration-300 bg-gradient-to-br ${colorScheme.bg} group`}
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
               <CardContent className="p-4 flex flex-col items-center justify-center h-full gap-3">
-                <div className={`w-10 h-10 ${colorScheme.icon} rounded-lg flex items-center justify-center`}>
+                <div className={`w-10 h-10 ${colorScheme.icon} rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6`}>
                   <Icon className={`h-5 w-5 ${colorScheme.text}`} />
                 </div>
-                <div className="text-4xl md:text-5xl font-bold leading-none text-foreground">{stat.stat_value}</div>
+                <AnimatedCounter 
+                  value={stat.stat_value} 
+                  className="text-4xl md:text-5xl font-bold leading-none text-foreground"
+                />
                 <p className="text-xs md:text-sm text-muted-foreground text-center">{stat.stat_label}</p>
               </CardContent>
             </Card>

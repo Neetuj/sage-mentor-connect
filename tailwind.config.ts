@@ -95,6 +95,10 @@ export default {
             from: { opacity: "0" },
             to: { opacity: "1" },
           },
+          "fade-out": {
+            "0%": { opacity: "1" },
+            "100%": { opacity: "0" }
+          },
           "scale-in": {
             from: { transform: "scale(0.9)", opacity: "0" },
             to: { transform: "scale(1)", opacity: "1" },
@@ -147,10 +151,79 @@ export default {
               opacity: "0"
             }
           },
-          "fade-out": {
-            "0%": { opacity: "1" },
-            "100%": { opacity: "0" }
+          // New micro-animations
+          "float-bounce": {
+            "0%, 100%": {
+              transform: "translateY(0)"
+            },
+            "50%": {
+              transform: "translateY(-8px)"
+            }
           },
+          "letter-reveal": {
+            "0%": {
+              opacity: "0",
+              transform: "translateY(20px) rotateX(-90deg)"
+            },
+            "100%": {
+              opacity: "1",
+              transform: "translateY(0) rotateX(0deg)"
+            }
+          },
+          "shimmer": {
+            "0%": {
+              transform: "translateX(-100%)"
+            },
+            "100%": {
+              transform: "translateX(100%)"
+            }
+          },
+          "glow-pulse": {
+            "0%, 100%": {
+              boxShadow: "0 0 20px hsl(var(--primary) / 0.3)"
+            },
+            "50%": {
+              boxShadow: "0 0 40px hsl(var(--primary) / 0.5)"
+            }
+          },
+          "slide-up-fade": {
+            "0%": {
+              opacity: "0",
+              transform: "translateY(20px)"
+            },
+            "100%": {
+              opacity: "1",
+              transform: "translateY(0)"
+            }
+          },
+          "slide-down": {
+            "0%": {
+              opacity: "0",
+              transform: "translateY(-10px)"
+            },
+            "100%": {
+              opacity: "1",
+              transform: "translateY(0)"
+            }
+          },
+          "underline-grow": {
+            "0%": {
+              transform: "scaleX(0)",
+              transformOrigin: "left"
+            },
+            "100%": {
+              transform: "scaleX(1)",
+              transformOrigin: "left"
+            }
+          },
+          "icon-spin": {
+            "0%": {
+              transform: "rotate(0deg)"
+            },
+            "100%": {
+              transform: "rotate(360deg)"
+            }
+          }
         },
         animation: {
           "accordion-down": "accordion-down 0.2s ease-out",
@@ -160,6 +233,15 @@ export default {
           "card-trick": "card-trick 1.8s ease-in-out",
           "duck-walk": "duck-walk 8s linear",
           "duck-waddle": "duck-waddle 0.6s ease-in-out infinite",
+          // New animations
+          "float-bounce": "float-bounce 2s ease-in-out infinite",
+          "letter-reveal": "letter-reveal 0.6s ease-out forwards",
+          "shimmer": "shimmer 2s infinite",
+          "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+          "slide-up-fade": "slide-up-fade 0.5s ease-out",
+          "slide-down": "slide-down 0.3s ease-out",
+          "underline-grow": "underline-grow 0.3s ease-out forwards",
+          "icon-spin": "icon-spin 0.3s ease-out",
         },
 		}
 	},

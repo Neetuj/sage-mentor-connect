@@ -6,6 +6,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import DuckAnimation from "./DuckAnimation";
 
+// Nav link with underline animation
+const NavLink = ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => (
+  <button 
+    onClick={onClick}
+    className="relative text-foreground hover:text-primary transition-colors duration-200 group py-1"
+  >
+    {children}
+    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+  </button>
+);
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showDucks, setShowDucks] = useState(false);
@@ -47,19 +58,19 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border transition-all duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 group">
             <img 
               src="/lovable-uploads/55bfe8cb-0cef-4057-ae60-ce370c18903c.png" 
               alt="SAGE Logo" 
-              className="h-10 w-10" 
+              className="h-10 w-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" 
             />
             <div>
-              <h1 className="text-xl font-bold text-primary">SAGE</h1>
+              <h1 className="text-xl font-bold text-primary transition-colors duration-200">SAGE</h1>
               <p 
-                className="text-xs text-muted-foreground cursor-pointer hover:text-primary transition-colors"
+                className="text-xs text-muted-foreground cursor-pointer hover:text-primary transition-colors duration-200"
                 onClick={() => setShowDucks(true)}
               >
                 Student Alliance for Growth in Engineering
@@ -71,39 +82,14 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <button 
-              onClick={() => scrollToSection('home')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => scrollToSection('about')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              About
-            </button>
-            <button 
-              onClick={() => scrollToSection('tutors')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Tutors
-            </button>
-          <button 
-            onClick={() => scrollToSection('seminars')}
-            className="text-foreground hover:text-primary transition-colors"
-          >
-            Seminars
-          </button>
-          <button 
-            onClick={() => navigate('/past-events')}
-            className="text-foreground hover:text-primary transition-colors"
-          >
-            Past Events
-          </button>
-          <Button variant="default" onClick={() => scrollToSection('get-involved')}>
-            Get Involved
-          </Button>
+            <NavLink onClick={() => scrollToSection('home')}>Home</NavLink>
+            <NavLink onClick={() => scrollToSection('about')}>About</NavLink>
+            <NavLink onClick={() => scrollToSection('tutors')}>Tutors</NavLink>
+            <NavLink onClick={() => scrollToSection('seminars')}>Seminars</NavLink>
+            <NavLink onClick={() => navigate('/past-events')}>Past Events</NavLink>
+            <Button variant="default" onClick={() => scrollToSection('get-involved')}>
+              Get Involved
+            </Button>
             
             {user ? (
               <div className="flex items-center space-x-2">
@@ -140,47 +126,36 @@ const Header = () => {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden"
+            className="md:hidden transition-transform duration-200 hover:scale-110 active:scale-95"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <div className="relative w-6 h-6">
+              <Menu className={`h-6 w-6 absolute transition-all duration-300 ${isMenuOpen ? 'opacity-0 rotate-90' : 'opacity-100 rotate-0'}`} />
+              <X className={`h-6 w-6 absolute transition-all duration-300 ${isMenuOpen ? 'opacity-100 rotate-0' : 'opacity-0 -rotate-90'}`} />
+            </div>
           </button>
         </div>
 
         {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border">
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="py-4 border-t border-border">
             <nav className="flex flex-col space-y-4">
-              <button 
-                onClick={() => scrollToSection('home')}
-                className="text-left text-foreground hover:text-primary transition-colors"
-              >
-                Home
-              </button>
-              <button 
-                onClick={() => scrollToSection('about')}
-                className="text-left text-foreground hover:text-primary transition-colors"
-              >
-                About
-              </button>
-              <button 
-                onClick={() => scrollToSection('tutors')}
-                className="text-left text-foreground hover:text-primary transition-colors"
-              >
-                Tutors
-              </button>
-              <button 
-                onClick={() => scrollToSection('seminars')}
-                className="text-left text-foreground hover:text-primary transition-colors"
-              >
-                Seminars
-              </button>
-              <button 
-                onClick={() => navigate('/past-events')}
-                className="text-left text-foreground hover:text-primary transition-colors"
-              >
-                Past Events
-              </button>
+              {[
+                { label: 'Home', action: () => scrollToSection('home') },
+                { label: 'About', action: () => scrollToSection('about') },
+                { label: 'Tutors', action: () => scrollToSection('tutors') },
+                { label: 'Seminars', action: () => scrollToSection('seminars') },
+                { label: 'Past Events', action: () => navigate('/past-events') },
+              ].map((item, index) => (
+                <button 
+                  key={item.label}
+                  onClick={item.action}
+                  className="text-left text-foreground hover:text-primary transition-all duration-200 hover:translate-x-2"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  {item.label}
+                </button>
+              ))}
               <Button 
                 variant="default" 
                 className="w-full justify-start"
@@ -224,7 +199,7 @@ const Header = () => {
               )}
             </nav>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );
