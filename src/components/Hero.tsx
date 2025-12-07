@@ -62,14 +62,12 @@ const Hero = () => {
         </p>
         <button 
           onClick={() => scrollToSection('about')}
-          className={`text-primary hover:text-primary-light transition-all duration-300 text-sm tracking-wide animate-float-bounce group ${
+          className={`text-primary hover:text-primary-light transition-all duration-300 text-sm tracking-wide group ${
             lettersVisible ? 'opacity-100' : 'opacity-0'
           }`}
           style={{ transitionDelay: '800ms' }}
         >
-          <span className="group-hover:translate-y-1 inline-block transition-transform duration-300">
-            Learn More ↓
-          </span>
+          Learn More ↓
         </button>
       </div>
 
