@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
 import samProfile from "@/assets/sam-profile.jpg";
+import { useParallax } from "@/hooks/useParallax";
 
 const Hero = () => {
   const [showProfileImage, setShowProfileImage] = useState(false);
   const [lettersVisible, setLettersVisible] = useState(false);
+  const { scrollY, viewportHeight } = useParallax();
+
+  // Calculate parallax values - more subtle effect
+  const heroOpacity = Math.max(0.2, 1 - (scrollY / (viewportHeight * 1.2)));
+  const heroScale = Math.max(0.9, 1 - (scrollY / (viewportHeight * 5)));
+  const heroY = scrollY * 0.3;
 
   useEffect(() => {
-    // Trigger letter animation after mount
     const timer = setTimeout(() => setLettersVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);
@@ -29,10 +35,40 @@ const Hero = () => {
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden">
-      {/* Subtle animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 animate-pulse" style={{ animationDuration: '4s' }} />
+      {/* Gradient orbs with parallax */}
+      <div 
+        className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-br from-primary/10 to-transparent blur-3xl"
+        style={{ 
+          left: '10%', 
+          top: '20%',
+          transform: `translate(${scrollY * 0.1}px, ${scrollY * 0.15}px)`,
+        }}
+      />
+      <div 
+        className="absolute w-[400px] h-[400px] rounded-full bg-gradient-to-br from-secondary/10 to-transparent blur-3xl"
+        style={{ 
+          right: '15%', 
+          bottom: '30%',
+          transform: `translate(${-scrollY * 0.08}px, ${scrollY * 0.12}px)`,
+        }}
+      />
+      <div 
+        className="absolute w-[300px] h-[300px] rounded-full bg-gradient-to-br from-accent/15 to-transparent blur-2xl"
+        style={{ 
+          left: '50%', 
+          top: '60%',
+          transform: `translate(-50%, ${scrollY * 0.2}px)`,
+        }}
+      />
       
-      <div className="text-center relative z-10">
+      {/* Main content with parallax */}
+      <div 
+        className="text-center relative z-10"
+        style={{
+          opacity: heroOpacity,
+          transform: `translateY(${heroY}px) scale(${heroScale})`,
+        }}
+      >
         <h1 className="text-8xl sm:text-9xl lg:text-[12rem] font-black tracking-wider mb-8 text-primary flex justify-center perspective-1000">
           {letters.map((letter, index) => (
             <span

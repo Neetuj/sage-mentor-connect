@@ -6,6 +6,7 @@ import SeminarCalendar from "@/components/SeminarCalendar";
 import GetInvolved from "@/components/GetInvolved";
 import Footer from "@/components/Footer";
 import NotificationPopup from "@/components/NotificationPopup";
+import ParallaxShapes from "@/components/ParallaxShapes";
 import { Button } from "@/components/ui/button";
 import { History } from "lucide-react";
 import { useEffect } from "react";
@@ -27,10 +28,13 @@ const Index = () => {
   }, [location.state]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      {/* Global parallax floating shapes */}
+      <ParallaxShapes />
+      
       <Header />
       <NotificationPopup />
-      <main>
+      <main className="relative z-10">
         <Hero />
         <About />
         <TutorDirectory />
