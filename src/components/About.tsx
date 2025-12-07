@@ -15,7 +15,7 @@ const About = () => {
   const founders = [
     {
       name: "Isabel Conejo",
-      role: "Founder & President",
+      role: "Cofounder & President",
       school: "Bellevue High School, WA",
       expertise: "Mechanical & Industrial",
       bio: "Originally from Manhattan, New York, Isa was raised in Madrid, Spain from the age of ten. She is interested in machine design and manufacturing, 3D modeling and simulation and systems optimization. She enjoys singing, rock climbing and thinking every dog she meets is her new best friend.",
@@ -70,7 +70,7 @@ const About = () => {
         {/* Past Events CTA */}
         <div className="text-center mb-12">
           <a href="/past-events">
-            <Button 
+            <Button
               size="lg"
               className="bg-gradient-to-r from-secondary to-secondary-light hover:from-secondary-light hover:to-secondary text-secondary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-8 py-6 text-lg font-semibold"
             >
