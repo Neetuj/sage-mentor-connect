@@ -1,46 +1,42 @@
-import { useParallax, getParallaxOffset } from '@/hooks/useParallax';
+import { useParallax } from '@/hooks/useParallax';
 
 interface Shape {
   id: number;
-  type: 'circle' | 'square' | 'triangle' | 'ring';
+  type: 'circle' | 'ring';
   size: number;
-  x: number; // percentage
-  y: number; // percentage  
-  speed: number;
+  x: number;
+  y: number;
+  pulseSpeed: number; // seconds for one pulse cycle
   opacity: number;
-  rotation?: number;
-  delay?: number;
+  delay: number; // animation delay in seconds
 }
 
 const shapes: Shape[] = [
-  { id: 1, type: 'circle', size: 180, x: 8, y: 15, speed: 0.08, opacity: 0.04 },
-  { id: 2, type: 'ring', size: 100, x: 88, y: 12, speed: 0.12, opacity: 0.06 },
-  { id: 3, type: 'square', size: 50, x: 78, y: 55, speed: 0.06, opacity: 0.03, rotation: 45 },
-  { id: 4, type: 'circle', size: 60, x: 15, y: 65, speed: 0.1, opacity: 0.04 },
-  { id: 5, type: 'ring', size: 140, x: 92, y: 75, speed: 0.07, opacity: 0.03 },
-  { id: 6, type: 'circle', size: 35, x: 45, y: 8, speed: 0.15, opacity: 0.05 },
+  { id: 1, type: 'circle', size: 200, x: 5, y: 20, pulseSpeed: 8, opacity: 0.03, delay: 0 },
+  { id: 2, type: 'ring', size: 120, x: 90, y: 15, pulseSpeed: 10, opacity: 0.04, delay: 2 },
+  { id: 3, type: 'circle', size: 80, x: 85, y: 60, pulseSpeed: 7, opacity: 0.025, delay: 1 },
+  { id: 4, type: 'ring', size: 160, x: 10, y: 70, pulseSpeed: 12, opacity: 0.03, delay: 3 },
+  { id: 5, type: 'circle', size: 100, x: 50, y: 85, pulseSpeed: 9, opacity: 0.025, delay: 1.5 },
 ];
 
-const ShapeComponent = ({ shape, scrollY }: { shape: Shape; scrollY: number }) => {
-  const yOffset = getParallaxOffset(scrollY, shape.speed);
-  
+const ShapeComponent = ({ shape }: { shape: Shape }) => {
   const baseStyle = {
     position: 'absolute' as const,
     left: `${shape.x}%`,
     top: `${shape.y}%`,
     width: shape.size,
     height: shape.size,
-    transform: `translateY(${-yOffset}px) rotate(${(shape.rotation || 0) + scrollY * 0.02}deg)`,
     opacity: shape.opacity,
-    transition: 'transform 0.1s ease-out',
     pointerEvents: 'none' as const,
+    animation: `breathe ${shape.pulseSpeed}s ease-in-out infinite`,
+    animationDelay: `${shape.delay}s`,
   };
 
   if (shape.type === 'circle') {
     return (
       <div
         style={baseStyle}
-        className="rounded-full bg-gradient-to-br from-primary to-secondary"
+        className="rounded-full bg-primary"
       />
     );
   }
@@ -49,32 +45,7 @@ const ShapeComponent = ({ shape, scrollY }: { shape: Shape; scrollY: number }) =
     return (
       <div
         style={baseStyle}
-        className="rounded-full border-4 border-primary"
-      />
-    );
-  }
-
-  if (shape.type === 'square') {
-    return (
-      <div
-        style={baseStyle}
-        className="bg-gradient-to-br from-secondary to-accent rounded-lg"
-      />
-    );
-  }
-
-  if (shape.type === 'triangle') {
-    return (
-      <div
-        style={{
-          ...baseStyle,
-          width: 0,
-          height: 0,
-          borderLeft: `${shape.size / 2}px solid transparent`,
-          borderRight: `${shape.size / 2}px solid transparent`,
-          borderBottom: `${shape.size}px solid hsl(var(--primary))`,
-          background: 'none',
-        }}
+        className="rounded-full border-2 border-primary"
       />
     );
   }
@@ -83,12 +54,18 @@ const ShapeComponent = ({ shape, scrollY }: { shape: Shape; scrollY: number }) =
 };
 
 const ParallaxShapes = () => {
-  const { scrollY } = useParallax();
-
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      <style>{`
+        @keyframes breathe {
+          0%, 100% { transform: scale(1); opacity: var(--opacity-base); }
+          50% { transform: scale(1.15); opacity: calc(var(--opacity-base) * 1.5); }
+        }
+      `}</style>
       {shapes.map((shape) => (
-        <ShapeComponent key={shape.id} shape={shape} scrollY={scrollY} />
+        <div key={shape.id} style={{ '--opacity-base': shape.opacity } as React.CSSProperties}>
+          <ShapeComponent shape={shape} />
+        </div>
       ))}
     </div>
   );
