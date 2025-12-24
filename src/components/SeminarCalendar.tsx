@@ -133,8 +133,19 @@ const SeminarCalendar = () => {
   };
 
   
-  const getRegistrationStatus = (registered: number, capacity: number) => {
-    const percentage = (registered / capacity) * 100;
+  const getRegistrationStatus = (seminar: any) => {
+    const registrationStatus = seminar.registration_status || "open";
+    
+    if (registrationStatus === "not_open_yet") {
+      return { status: "Registration Opens Soon", color: "secondary" };
+    }
+    if (registrationStatus === "closed") {
+      return { status: "Registration Closed", color: "destructive" };
+    }
+    
+    // Registration is open - show capacity status
+    const percentage = (seminar.registered / seminar.capacity) * 100;
+    if (percentage >= 100) return { status: "Full", color: "destructive" };
     if (percentage >= 90) return { status: "Almost Full", color: "destructive" };
     if (percentage >= 70) return { status: "Filling Up", color: "secondary" };
     return { status: "Available", color: "default" };
@@ -161,8 +172,11 @@ const SeminarCalendar = () => {
           </div>
         ) : (
           <div className={`grid ${seminars.length === 1 ? 'max-w-2xl mx-auto' : 'lg:grid-cols-2'} gap-6 ${isComingSoonHidden ? '' : 'blur-sm'}`}>
-            {seminars.map((seminar) => {
-              const regStatus = getRegistrationStatus(seminar.registered, seminar.capacity);
+          {seminars.map((seminar) => {
+              const regStatus = getRegistrationStatus(seminar);
+              const isRegistrationOpen = seminar.registration_status === "open" || !seminar.registration_status;
+              const isFull = seminar.registered >= seminar.capacity;
+              const canRegister = isRegistrationOpen && !isFull;
               
               return (
                  <Card key={seminar.id} data-seminar={seminar.title} className="shadow-card hover:shadow-card-hover transition-all duration-300">
@@ -236,19 +250,33 @@ const SeminarCalendar = () => {
                       </div>
                     </div>
 
-                    <SeminarRegistration 
-                      seminarTitle={seminar.title} 
-                      seminarId={seminar.id}
-                      registrationType={seminar.registration_type || "website"}
-                      googleFormUrl={seminar.google_form_url}
-                    >
+                    {canRegister ? (
+                      <SeminarRegistration 
+                        seminarTitle={seminar.title} 
+                        seminarId={seminar.id}
+                        registrationType={seminar.registration_type || "website"}
+                        googleFormUrl={seminar.google_form_url}
+                      >
+                        <Button 
+                          className="w-full" 
+                          variant="default"
+                        >
+                          Register Now
+                        </Button>
+                      </SeminarRegistration>
+                    ) : (
                       <Button 
                         className="w-full" 
-                        variant="default"
+                        variant="secondary"
+                        disabled
                       >
-                        Register Now
+                        {seminar.registration_status === "not_open_yet" 
+                          ? "Registration Opens Soon" 
+                          : isFull 
+                            ? "Seminar Full" 
+                            : "Registration Closed"}
                       </Button>
-                    </SeminarRegistration>
+                    )}
                   </CardContent>
                 </Card>
               );

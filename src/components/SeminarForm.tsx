@@ -24,6 +24,7 @@ interface Seminar {
   topic_image_url?: string;
   host_image_url?: string;
   registration_type: string;
+  registration_status?: string;
   google_form_url?: string;
 }
 
@@ -47,11 +48,12 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
     location: "",
     audience: "",
     registered: 0,
-        capacity: 50,
-        topic_image_url: null,
-        host_image_url: null,
-        is_date_tbd: false,
+    capacity: 50,
+    topic_image_url: null,
+    host_image_url: null,
+    is_date_tbd: false,
     registration_type: "website",
+    registration_status: "open",
     google_form_url: "",
   });
 
@@ -73,6 +75,7 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
         host_image_url: editingSeminar.host_image_url || "",
         is_date_tbd: !editingSeminar.date,
         registration_type: editingSeminar.registration_type || "website",
+        registration_status: editingSeminar.registration_status || "open",
         google_form_url: editingSeminar.google_form_url || "",
       });
     } else {
@@ -86,11 +89,12 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
         location: "",
         audience: "",
         registered: 0,
-          capacity: 50,
-          topic_image_url: null,
-          host_image_url: null,
-          is_date_tbd: false,
+        capacity: 50,
+        topic_image_url: null,
+        host_image_url: null,
+        is_date_tbd: false,
         registration_type: "website",
+        registration_status: "open",
         google_form_url: "",
       });
     }
@@ -161,6 +165,7 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
           host_image_url: null,
           is_date_tbd: false,
           registration_type: "website",
+          registration_status: "open",
           google_form_url: "",
         });
       }
@@ -333,6 +338,26 @@ const SeminarForm = ({ onSeminarAdded, editingSeminar, onCancelEdit }: SeminarFo
           <div className="space-y-4 border-t pt-4">
             <h3 className="font-semibold text-lg">Registration Settings</h3>
             
+            <div>
+              <Label htmlFor="registration_status">Registration Status</Label>
+              <Select 
+                value={formData.registration_status} 
+                onValueChange={(value) => setFormData({...formData, registration_status: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select registration status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="open">Open</SelectItem>
+                  <SelectItem value="not_open_yet">Not Open Yet</SelectItem>
+                  <SelectItem value="closed">Closed</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-sm text-muted-foreground mt-1">
+                Control whether registration is available for this seminar
+              </p>
+            </div>
+
             <div>
               <Label htmlFor="registration_type">Registration Type</Label>
               <Select 
