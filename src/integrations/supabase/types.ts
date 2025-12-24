@@ -177,6 +177,7 @@ export type Database = {
           id: string
           location: string
           registered: number
+          registration_status: string
           registration_type: string
           speaker: string
           time: string
@@ -196,6 +197,7 @@ export type Database = {
           id?: string
           location: string
           registered?: number
+          registration_status?: string
           registration_type?: string
           speaker: string
           time: string
@@ -215,6 +217,7 @@ export type Database = {
           id?: string
           location?: string
           registered?: number
+          registration_status?: string
           registration_type?: string
           speaker?: string
           time?: string
