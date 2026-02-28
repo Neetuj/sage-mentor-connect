@@ -8,7 +8,8 @@ import {
   Bell, 
   MapPin,
   FileText,
-  Settings
+  Settings,
+  ListOrdered
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -28,6 +29,7 @@ const adminItems = [
   { title: "Submissions", url: "/admin/submissions", icon: FileText },
   { title: "Tutors", url: "/admin/tutors", icon: Users },
   { title: "Seminars", url: "/admin/seminars", icon: Calendar },
+  { title: "Schedules", url: "/admin/schedule", icon: ListOrdered },
   { title: "Past Events", url: "/admin/past-events", icon: History },
   { title: "Testimonials", url: "/admin/testimonials", icon: MessageSquare },
   { title: "Statistics", url: "/admin/stats", icon: BarChart3 },
