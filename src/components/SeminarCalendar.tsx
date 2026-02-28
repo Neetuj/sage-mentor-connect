@@ -1,20 +1,39 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, MapPin, Users } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, ListOrdered } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import SeminarRegistration from "./SeminarRegistration";
+import ScheduleDialog from "./ScheduleDialog";
 
 const SeminarCalendar = () => {
   const { toast } = useToast();
   const [isComingSoonHidden, setIsComingSoonHidden] = useState(false);
   const [seminars, setSeminars] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [scheduleCounts, setScheduleCounts] = useState<Record<string, number>>({});
+
+  const fetchScheduleCounts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("seminar_schedule_items")
+        .select("seminar_id");
+      if (error) throw error;
+      const counts: Record<string, number> = {};
+      (data || []).forEach((item) => {
+        counts[item.seminar_id] = (counts[item.seminar_id] || 0) + 1;
+      });
+      setScheduleCounts(counts);
+    } catch (error) {
+      console.error("Error fetching schedule counts:", error);
+    }
+  };
 
   useEffect(() => {
     fetchSeminars();
+    fetchScheduleCounts();
     
     // Set up real-time subscription for seminars
     const channel = supabase
@@ -249,6 +268,15 @@ const SeminarCalendar = () => {
                         <span>{seminar.audience} • {seminar.registered}/{seminar.capacity} registered</span>
                       </div>
                     </div>
+
+                    {(scheduleCounts[seminar.id] || 0) > 0 && (
+                      <ScheduleDialog seminarId={seminar.id} seminarTitle={seminar.title}>
+                        <Button variant="outline" className="w-full mb-2">
+                          <ListOrdered className="h-4 w-4 mr-2" />
+                          View Schedule
+                        </Button>
+                      </ScheduleDialog>
+                    )}
 
                     {canRegister ? (
                       <SeminarRegistration 

@@ -10,6 +10,7 @@ import AdminStats from "./admin/AdminStats";
 import AdminNotifications from "./admin/AdminNotifications";
 import AdminTeam from "./admin/AdminTeam";
 import AdminControls from "./admin/AdminControls";
+import AdminSchedule from "./admin/AdminSchedule";
 
 const Admin = () => {
   return (
@@ -25,6 +26,7 @@ const Admin = () => {
         <Route path="/stats" element={<AdminStats />} />
         <Route path="/notifications" element={<AdminNotifications />} />
         <Route path="/team" element={<AdminTeam />} />
+        <Route path="/schedule" element={<AdminSchedule />} />
       </Routes>
     </AdminLayout>
   );

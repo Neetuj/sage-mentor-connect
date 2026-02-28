@@ -164,6 +164,50 @@ export type Database = {
         }
         Relationships: []
       }
+      seminar_schedule_items: {
+        Row: {
+          created_at: string
+          display_order: number
+          event_description: string | null
+          event_title: string
+          id: string
+          seminar_id: string
+          speaker: string | null
+          time_slot: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          event_description?: string | null
+          event_title: string
+          id?: string
+          seminar_id: string
+          speaker?: string | null
+          time_slot: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          event_description?: string | null
+          event_title?: string
+          id?: string
+          seminar_id?: string
+          speaker?: string | null
+          time_slot?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seminar_schedule_items_seminar_id_fkey"
+            columns: ["seminar_id"]
+            isOneToOne: false
+            referencedRelation: "seminars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seminars: {
         Row: {
           audience: string
