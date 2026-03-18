@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { History } from "lucide-react";
 import rohanProfile from "@/assets/rohan-profile.jpg";
 import isabelProfile from "@/assets/isabel-profile.jpg";
-import hannahProfile from "@/assets/hannah-profile.jpg";
 import CardTrickAnimation from "./CardTrickAnimation";
 import TestimonialBento from "./TestimonialBento";
 
@@ -27,13 +26,6 @@ const About = () => {
       expertise: "Aerospace Engineering",
       bio: "From Dallas, Texas, Rohan is interested in flight mechanics, aerospace thermal managment systems, and fluid dynamics. He loves spending time mastering new card tricks, with a good book and his giant playlist, teaching taekwondo to toddlers, and making really good guacamole. ",
     },
-    {
-      name: "Hannah Shin",
-      role: "Cofounder, Marketing & Outreach Director",
-      school: "West Ranch High School, CA",
-      expertise: "Biomedical Engineering",
-      bio: "Hannah is located in Los Angeles, California and is passionate about biomedical engineering like tissue engineering, medical robotics and artificial intelligence in medicine. In her free time she enjoys reading, snowboarding and curating her 100 Spotify playlists. ",
-    },
   ];
 
   return (
@@ -47,7 +39,7 @@ const About = () => {
           <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-6">How SAGE Started</h2>
           <div className="max-w-4xl mx-auto text-lg text-muted-foreground leading-relaxed">
             <p className="mb-6">
-              We founded SAGE as three high school students who met at an engineering exploration camp at the University
+              We founded SAGE as two high school students who met at an engineering exploration camp at the University
               of Michigan. That experience sparked a shared passion for building, designing, and solving problems, but
               more than anything, it made us feel empowered, inspired, and capable. We left wondering:{" "}
               <em>What if more students had access to opportunities like this?</em>
@@ -87,11 +79,11 @@ const About = () => {
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-6">The Students Behind SAGE</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Three passionate high school students who saw a gap and decided to fill it.
+            Two passionate high school students who saw a gap and decided to fill it.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 max-w-3xl mx-auto gap-8">
           {founders.map((founder, index) => (
             <Card
               key={index}
@@ -112,9 +104,7 @@ const About = () => {
                           ? rohanProfile
                           : founder.name === "Isabel Conejo"
                             ? isabelProfile
-                            : founder.name === "Hannah Shin"
-                              ? hannahProfile
-                              : ""
+                            : ""
                       }
                       alt={`${founder.name} profile photo`}
                     />
