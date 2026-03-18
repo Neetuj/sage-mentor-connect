@@ -55,6 +55,9 @@ const About = () => {
           </div>
         </div>
 
+        {/* Partner Logos */}
+        <PartnerScroll />
+
         {/* Community Testimonials */}
         <div className="mb-8">
           <TestimonialBento />
