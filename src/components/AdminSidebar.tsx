@@ -9,7 +9,8 @@ import {
   MapPin,
   FileText,
   Settings,
-  ListOrdered
+  ListOrdered,
+  Handshake
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -35,6 +36,7 @@ const adminItems = [
   { title: "Statistics", url: "/admin/stats", icon: BarChart3 },
   { title: "Notifications", url: "/admin/notifications", icon: Bell },
   { title: "Team Map", url: "/admin/team", icon: MapPin },
+  { title: "Partners", url: "/admin/partners", icon: Handshake },
 ];
 
 export function AdminSidebar() {
