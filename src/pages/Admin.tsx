@@ -11,6 +11,7 @@ import AdminNotifications from "./admin/AdminNotifications";
 import AdminTeam from "./admin/AdminTeam";
 import AdminControls from "./admin/AdminControls";
 import AdminSchedule from "./admin/AdminSchedule";
+import AdminPartners from "./admin/AdminPartners";
 
 const Admin = () => {
   return (
@@ -27,6 +28,7 @@ const Admin = () => {
         <Route path="/notifications" element={<AdminNotifications />} />
         <Route path="/team" element={<AdminTeam />} />
         <Route path="/schedule" element={<AdminSchedule />} />
+        <Route path="/partners" element={<AdminPartners />} />
       </Routes>
     </AdminLayout>
   );

@@ -8,6 +8,7 @@ import rohanProfile from "@/assets/rohan-profile.jpg";
 import isabelProfile from "@/assets/isabel-profile.jpg";
 import CardTrickAnimation from "./CardTrickAnimation";
 import TestimonialBento from "./TestimonialBento";
+import PartnerScroll from "./PartnerScroll";
 
 const About = () => {
   const [showCardTrick, setShowCardTrick] = useState(false);
