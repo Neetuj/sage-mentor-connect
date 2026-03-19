@@ -33,7 +33,7 @@ const PartnerScroll = () => {
       href={partner.website_url || "#"}
       target={partner.website_url ? "_blank" : undefined}
       rel="noopener noreferrer"
-      className="flex-shrink-0 flex items-center justify-center h-16 w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+      className="flex-shrink-0 flex items-center justify-center h-16 w-40 opacity-60 hover:opacity-100 transition-all duration-500"
       title={partner.name}
     >
       <img
