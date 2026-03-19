@@ -18,8 +18,41 @@ const PartnerScroll = () => {
 
   if (partners.length === 0) return null;
 
-  // Double the logos for seamless infinite scroll
-  const scrollLogos = [...partners, ...partners];
+  // Split partners into two rows
+  const mid = Math.ceil(partners.length / 2);
+  const row1 = partners.slice(0, mid);
+  const row2 = partners.slice(mid);
+
+  // Double each row for seamless infinite scroll
+  const scrollRow1 = [...row1, ...row1];
+  const scrollRow2 = [...row2, ...row2];
+
+  const renderLogo = (partner: typeof partners[0], index: number) => (
+    <a
+      key={`${partner.id}-${index}`}
+      href={partner.website_url || "#"}
+      target={partner.website_url ? "_blank" : undefined}
+      rel="noopener noreferrer"
+      className="flex-shrink-0 flex items-center justify-center h-16 w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+      title={partner.name}
+    >
+      <img
+        src={partner.logo_url}
+        alt={`${partner.name} logo`}
+        className="max-h-full max-w-full object-contain"
+        style={{
+          filter: "sepia(100%) hue-rotate(70deg) saturate(60%) brightness(80%)",
+        }}
+        onMouseEnter={(e) => {
+          (e.target as HTMLImageElement).style.filter = "none";
+        }}
+        onMouseLeave={(e) => {
+          (e.target as HTMLImageElement).style.filter =
+            "sepia(100%) hue-rotate(70deg) saturate(60%) brightness(80%)";
+        }}
+      />
+    </a>
+  );
 
   return (
     <div className="mb-16">
@@ -37,33 +70,14 @@ const PartnerScroll = () => {
         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-muted/30 to-transparent z-10" />
         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-muted/30 to-transparent z-10" />
 
-        <div className="flex animate-scroll-x gap-12 py-6">
-          {scrollLogos.map((partner, index) => (
-            <a
-              key={`${partner.id}-${index}`}
-              href={partner.website_url || "#"}
-              target={partner.website_url ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              className="flex-shrink-0 flex items-center justify-center h-16 w-40 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-              title={partner.name}
-            >
-              <img
-                src={partner.logo_url}
-                alt={`${partner.name} logo`}
-                className="max-h-full max-w-full object-contain"
-                style={{
-                  filter: "sepia(100%) hue-rotate(70deg) saturate(60%) brightness(80%)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.target as HTMLImageElement).style.filter = "none";
-                }}
-                onMouseLeave={(e) => {
-                  (e.target as HTMLImageElement).style.filter =
-                    "sepia(100%) hue-rotate(70deg) saturate(60%) brightness(80%)";
-                }}
-              />
-            </a>
-          ))}
+        {/* Row 1 - scrolls left */}
+        <div className="flex animate-scroll-x gap-12 py-4">
+          {scrollRow1.map((partner, index) => renderLogo(partner, index))}
+        </div>
+
+        {/* Row 2 - scrolls right (reverse) */}
+        <div className="flex animate-scroll-x-reverse gap-12 py-4">
+          {scrollRow2.map((partner, index) => renderLogo(partner, index))}
         </div>
       </div>
     </div>
