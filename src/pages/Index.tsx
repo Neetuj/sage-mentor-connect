@@ -35,8 +35,8 @@ const Index = () => {
       <main className="relative z-10">
         <Hero />
         <About />
-        <TutorDirectory />
         <SeminarCalendar />
+        <TutorDirectory />
         
         {/* Past Events CTA Button */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
